@@ -12529,11 +12529,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "d:\\C#\\GitHub\\CookieBook-WebAPI\\CookieBook.WebAPI\\CookieBook.WebAPI.csproj",
+      "projectUniqueName": "D:\\C#\\GitHub\\CookieBook-WebAPI\\CookieBook.WebAPI\\CookieBook.WebAPI.csproj",
       "projectName": "CookieBook.WebAPI",
-      "projectPath": "d:\\C#\\GitHub\\CookieBook-WebAPI\\CookieBook.WebAPI\\CookieBook.WebAPI.csproj",
+      "projectPath": "D:\\C#\\GitHub\\CookieBook-WebAPI\\CookieBook.WebAPI\\CookieBook.WebAPI.csproj",
       "packagesPath": "C:\\Users\\Cyber\\.nuget\\packages\\",
-      "outputPath": "d:\\C#\\GitHub\\CookieBook-WebAPI\\CookieBook.WebAPI\\obj\\",
+      "outputPath": "D:\\C#\\GitHub\\CookieBook-WebAPI\\CookieBook.WebAPI\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackagesFallback\\",
@@ -12554,8 +12554,8 @@
       "frameworks": {
         "netcoreapp2.1": {
           "projectReferences": {
-            "d:\\C#\\GitHub\\CookieBook-WebAPI\\CookieBook.Infrastructure\\CookieBook.Infrastructure.csproj": {
-              "projectPath": "d:\\C#\\GitHub\\CookieBook-WebAPI\\CookieBook.Infrastructure\\CookieBook.Infrastructure.csproj"
+            "D:\\C#\\GitHub\\CookieBook-WebAPI\\CookieBook.Infrastructure\\CookieBook.Infrastructure.csproj": {
+              "projectPath": "D:\\C#\\GitHub\\CookieBook-WebAPI\\CookieBook.Infrastructure\\CookieBook.Infrastructure.csproj"
             }
           }
         }
