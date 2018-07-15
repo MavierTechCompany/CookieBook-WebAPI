@@ -1,14 +1,14 @@
 namespace CookieBook.Domain.Models.Base
 {
-    public class Account
+    public abstract class Account
     {
-        public int Id { get; private set; }
-        public string Nick { get; private set; }
-        public string Login { get; private set; }
-        public string Email { get; private set; }
-        public byte[] Salt { get; private set; }
-        public byte[] PasswordHash { get; private set; }
-        public string Role { get; private set; }
+        public int Id { get; protected set; }
+        public string Nick { get; protected set; }
+        public string Login { get; protected set; }
+        public string Email { get; protected set; }
+        public byte[] Salt { get; protected set; }
+        public byte[] PasswordHash { get; protected set; }
+        public string Role { get; protected set; }
 
         public Account() { }
     }
