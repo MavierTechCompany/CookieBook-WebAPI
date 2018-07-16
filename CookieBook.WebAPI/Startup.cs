@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CookieBook.Domain.JWT;
 using CookieBook.Infrastructure.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -50,6 +51,8 @@ namespace CookieBook.WebAPI
                     .GetBytes(Configuration.GetSection("JwtSettings:Key").Value))
                     };
                 });
+
+            services.Configure<JwtSettings>(Configuration.GetSection("JwtSettings"));
             #endregion
         }
 
