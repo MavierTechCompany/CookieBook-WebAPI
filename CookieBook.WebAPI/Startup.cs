@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using CookieBook.Domain.JWT;
 using CookieBook.Infrastructure.Data;
+using CookieBook.Infrastructure.Services;
+using CookieBook.Infrastructure.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -31,7 +33,9 @@ namespace CookieBook.WebAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc()
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
+                .AddJsonOptions(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
             #region DatabaseSettings
             services.AddDbContext<CookieContext>(options => options
@@ -53,6 +57,7 @@ namespace CookieBook.WebAPI
                 });
 
             services.Configure<JwtSettings>(Configuration.GetSection("JwtSettings"));
+            services.AddScoped<IJwtHandler, JwtHandler>();
             #endregion
         }
 

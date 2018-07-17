@@ -24,9 +24,8 @@ namespace CookieBook.Infrastructure.Services
             var dateNow = DateTime.UtcNow;
             var claims = new Claim[]
             {
-                new Claim(JwtRegisteredClaimNames.Sub, userId.ToString()),
-                new Claim(JwtRegisteredClaimNames.UniqueName, userId.ToString()),
-                new Claim(ClaimTypes.Role, role),
+                new Claim("Id", userId.ToString()),
+                new Claim("Role", role),
                 new Claim(JwtRegisteredClaimNames.Iat, dateNow.Ticks.ToString()),
             };
 
