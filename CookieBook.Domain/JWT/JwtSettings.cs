@@ -4,5 +4,6 @@ namespace CookieBook.Domain.JWT
     {
         public string Key { get; set; }
         public string Issuer { get; set; }
+        public double ExpiryDays { get; set; }
     }
 }

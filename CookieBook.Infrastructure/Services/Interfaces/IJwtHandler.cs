@@ -1,9 +1,9 @@
-using CookieBook.Infrastructure.DTO;
+using System.Threading.Tasks;
 
 namespace CookieBook.Infrastructure.Services.Interfaces
 {
     public interface IJwtHandler
     {
-        JwtDto CreateToken(int userId, string role);
+        Task<string> CreateTokenAsync(int userId, string role);
     }
 }

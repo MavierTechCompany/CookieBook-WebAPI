@@ -2,8 +2,8 @@ using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Threading.Tasks;
 using CookieBook.Domain.JWT;
-using CookieBook.Infrastructure.DTO;
 using CookieBook.Infrastructure.Services.Interfaces;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -19,30 +19,26 @@ namespace CookieBook.Infrastructure.Services
             _jwtSettings = jwtSettings.Value;
         }
 
-        public JwtDto CreateToken(int userId, string role)
+        public async Task<string> CreateTokenAsync(int userId, string role)
         {
-            var dateNow = DateTime.UtcNow;
-            var claims = new Claim[]
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var tokenKey = Encoding.ASCII.GetBytes(_jwtSettings.Key);
+            var credentials = new SigningCredentials(new SymmetricSecurityKey(tokenKey), SecurityAlgorithms.HmacSha512Signature);
+
+            var tokenDescriptor = new SecurityTokenDescriptor
             {
-                new Claim("Id", userId.ToString()),
-                new Claim("Role", role),
-                new Claim(JwtRegisteredClaimNames.Iat, dateNow.Ticks.ToString()),
+                Subject = new ClaimsIdentity(new Claim[]
+                {
+                new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
+                new Claim(ClaimTypes.Role, role)
+                }),
+                Issuer = _jwtSettings.Issuer,
+                Expires = DateTime.Now.AddDays(_jwtSettings.ExpiryDays),
+                SigningCredentials = credentials
             };
 
-            var credentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8
-                .GetBytes(_jwtSettings.Key)), SecurityAlgorithms.HmacSha256);
-
-            var jwt = new JwtSecurityToken(issuer: _jwtSettings.Issuer,
-                claims: claims,
-                notBefore: dateNow,
-                signingCredentials: credentials);
-
-            var token = new JwtSecurityTokenHandler().WriteToken(jwt);
-
-            return new JwtDto
-            {
-                Token = token,
-            };
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return await Task.FromResult(tokenHandler.WriteToken(token));
         }
     }
 }

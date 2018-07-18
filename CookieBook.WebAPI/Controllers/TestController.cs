@@ -16,9 +16,9 @@ namespace CookieBook.WebAPI.Controllers
         }
 
         [HttpGet("token")]
-        public IActionResult GetTokenAsync()
+        public async Task<IActionResult> GetTokenAsync()
         {
-            var token = _jwtHandler.CreateToken(1, "admin");
+            var token = await _jwtHandler.CreateTokenAsync(1, "admin");
             return Json(token);
         }
     }
