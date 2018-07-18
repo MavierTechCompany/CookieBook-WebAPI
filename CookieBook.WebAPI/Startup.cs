@@ -35,7 +35,10 @@ namespace CookieBook.WebAPI
         {
             services.AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
-                .AddJsonOptions(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+                .AddJsonOptions(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json
+                    .ReferenceLoopHandling.Ignore);
+            services.AddAuthorization(x => x.AddPolicy("admin", p => p.RequireRole("admin")));
+            services.AddAuthorization(x => x.AddPolicy("user", p => p.RequireRole("user")));
 
             #region DatabaseSettings
             services.AddDbContext<CookieContext>(options => options
