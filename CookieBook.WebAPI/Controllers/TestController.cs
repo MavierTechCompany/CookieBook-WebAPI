@@ -26,14 +26,14 @@ namespace CookieBook.WebAPI.Controllers
         [Authorize(Roles = "admin")]
         public async Task<IActionResult> GetAdminAsync()
         {
-            return await Task.FromResult(Json($"{UserId}. Adam Nowak"));
+            return await Task.FromResult(Json($"{AccountID}. Adam Nowak"));
         }
 
         [HttpGet("user")]
         [Authorize(Roles = "user")]
         public async Task<IActionResult> GetUserAsync()
         {
-            return await Task.FromResult(Json($"{UserId}. Anna Nowak"));
+            return await Task.FromResult(Json($"{AccountID}. Anna Nowak"));
         }
     }
 }

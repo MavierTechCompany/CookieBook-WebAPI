@@ -6,7 +6,7 @@ namespace CookieBook.WebAPI.Controllers.Base
     [Route("[controller]")]
     public class ApiControllerBase : Controller
     {
-        protected int UserId => User?.Identity?.IsAuthenticated == true ?
+        protected int AccountID => User?.Identity?.IsAuthenticated == true ?
             int.Parse(User.Claims.ToList().First().Value) : 0;
     }
 }
