@@ -9,6 +9,7 @@ namespace CookieBook.Domain.Models.Base
         public byte[] Salt { get; protected set; }
         public byte[] PasswordHash { get; protected set; }
         public string Role { get; protected set; }
+        public string RestoreKey { get; protected set; }
 
         public Account() { }
     }
