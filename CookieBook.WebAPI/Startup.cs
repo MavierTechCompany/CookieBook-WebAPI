@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CookieBook.Domain.JWT;
 using CookieBook.Infrastructure.Data;
+using CookieBook.Infrastructure.Extensions.Security;
 using CookieBook.Infrastructure.Services;
 using CookieBook.Infrastructure.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -61,6 +62,13 @@ namespace CookieBook.WebAPI
 
             services.Configure<JwtSettings>(Configuration.GetSection("JwtSettings"));
             services.AddScoped<IJwtHandler, JwtHandler>();
+            #endregion
+
+            #region Services
+            #endregion
+
+            #region Extensions
+            services.AddScoped<IDataHashManager, DataHashManager>();
             #endregion
         }
 
