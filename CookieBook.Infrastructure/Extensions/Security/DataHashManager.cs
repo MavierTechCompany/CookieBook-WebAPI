@@ -31,7 +31,7 @@ namespace CookieBook.Infrastructure.Extensions.Security
             var hmac512 = new HMACSHA512();
             var computedHash = hmac512.ComputeHash(Encoding.UTF8.GetBytes(password));
             for (int i = 0; i < passwordHash.Length; i++)
-                if (passwordHash[i] != passwordHash[i]) return false;
+                if (computedHash[i] != passwordHash[i]) return false;
             return true;
         }
 
