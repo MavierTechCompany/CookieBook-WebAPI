@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using CookieBook.Infrastructure.Extensions.Security;
 using CookieBook.Infrastructure.Services.Interfaces;
 using CookieBook.WebAPI.Controllers.Base;
 using Microsoft.AspNetCore.Authorization;
@@ -8,32 +9,27 @@ namespace CookieBook.WebAPI.Controllers
 {
     public class TestController : ApiControllerBase
     {
-        private readonly IJwtHandler _jwtHandler;
+        private readonly IDataHashManager _service;
 
-        public TestController(IJwtHandler jwtHandler)
+        public TestController(IDataHashManager service)
         {
-            _jwtHandler = jwtHandler;
+            _service = service;
         }
 
-        [HttpGet("token")]
-        public async Task<IActionResult> GetTokenAsync()
+        [HttpGet("testHash")]
+        public IActionResult TestHashMethods()
         {
-            var token = await _jwtHandler.CreateTokenAsync(1, "admin");
-            return Json(token);
-        }
+            var password = "password";
+            byte[] salt;
+            byte[] hash;
+            _service.CalculatePasswordHash(password, out hash, out salt);
+            var passwordResoult = _service.VerifyPasswordHash(password, hash, salt);
 
-        [HttpGet("admin")]
-        [Authorize(Roles = "admin")]
-        public async Task<IActionResult> GetAdminAsync()
-        {
-            return await Task.FromResult(Json($"{AccountID}. Adam Nowak"));
-        }
+            var data = "adam.nowak@gmail.com";
+            var dataHash = _service.CalculateDataHash(data);
+            var dataResoult = _service.VerifyDataHash(data, dataHash);
 
-        [HttpGet("user")]
-        [Authorize(Roles = "user")]
-        public async Task<IActionResult> GetUserAsync()
-        {
-            return await Task.FromResult(Json($"{AccountID}. Anna Nowak"));
+            return Json($"{passwordResoult}, {dataResoult}");
         }
     }
 }
