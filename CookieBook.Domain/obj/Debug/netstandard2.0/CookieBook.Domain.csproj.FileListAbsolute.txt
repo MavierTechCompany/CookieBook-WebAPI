@@ -1,9 +1,0 @@
-D:\C#\GitHub\CookieBook-WebAPI\CookieBook.Domain\bin\Debug\netstandard2.0\CookieBook.Domain.deps.json
-D:\C#\GitHub\CookieBook-WebAPI\CookieBook.Domain\bin\Debug\netstandard2.0\CookieBook.Domain.dll
-D:\C#\GitHub\CookieBook-WebAPI\CookieBook.Domain\bin\Debug\netstandard2.0\CookieBook.Domain.pdb
-D:\C#\GitHub\CookieBook-WebAPI\CookieBook.Domain\obj\Debug\netstandard2.0\CookieBook.Domain.csprojAssemblyReference.cache
-D:\C#\GitHub\CookieBook-WebAPI\CookieBook.Domain\obj\Debug\netstandard2.0\CookieBook.Domain.csproj.CoreCompileInputs.cache
-D:\C#\GitHub\CookieBook-WebAPI\CookieBook.Domain\obj\Debug\netstandard2.0\CookieBook.Domain.AssemblyInfoInputs.cache
-D:\C#\GitHub\CookieBook-WebAPI\CookieBook.Domain\obj\Debug\netstandard2.0\CookieBook.Domain.AssemblyInfo.cs
-D:\C#\GitHub\CookieBook-WebAPI\CookieBook.Domain\obj\Debug\netstandard2.0\CookieBook.Domain.dll
-D:\C#\GitHub\CookieBook-WebAPI\CookieBook.Domain\obj\Debug\netstandard2.0\CookieBook.Domain.pdb
