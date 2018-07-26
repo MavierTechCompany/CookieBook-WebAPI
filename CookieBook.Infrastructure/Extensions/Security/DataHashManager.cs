@@ -1,6 +1,7 @@
 using System;
 using System.Security.Cryptography;
 using System.Text;
+using CookieBook.Infrastructure.Extensions.Security.Interface;
 
 namespace CookieBook.Infrastructure.Extensions.Security
 {

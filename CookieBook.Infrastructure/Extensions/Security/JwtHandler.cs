@@ -4,7 +4,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using CookieBook.Domain.JWT;
-using CookieBook.Infrastructure.Services.Interfaces;
+using CookieBook.Infrastructure.Extensions.Security.Interface;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 

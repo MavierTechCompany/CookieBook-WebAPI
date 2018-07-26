@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using CookieBook.Domain.JWT;
 using CookieBook.Infrastructure.Data;
 using CookieBook.Infrastructure.Extensions.Security;
+using CookieBook.Infrastructure.Extensions.Security.Interface;
 using CookieBook.Infrastructure.Services;
 using CookieBook.Infrastructure.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -65,6 +66,7 @@ namespace CookieBook.WebAPI
             #endregion
 
             #region Services
+            services.AddScoped<IUserService, UserService>();
             #endregion
 
             #region Extensions
