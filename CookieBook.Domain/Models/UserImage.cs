@@ -6,9 +6,6 @@ namespace CookieBook.Domain.Models
     {
         public User User { get; set; }
 
-        public UserImage() : base()
-        {
-
-        }
+        public UserImage() : base() { }
     }
 }
