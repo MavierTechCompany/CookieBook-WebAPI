@@ -4,6 +4,6 @@ namespace CookieBook.Infrastructure.Commands.User
 {
     public class CreateUser : CreateAccount
     {
-        public string UserEmail { get; set; }
+        public ulong UserEmail { get; set; }
     }
 }
