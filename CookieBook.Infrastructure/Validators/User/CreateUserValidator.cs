@@ -14,22 +14,13 @@ namespace CookieBook.Infrastructure.Validators.User
 				.Matches(@"^[A-Za-z][A-Za-z0-9_-]+$");
 
 			RuleFor(req => req.Login)
-				.NotEmpty()
-				.MinimumLength(19)
-				.MaximumLength(20)
-				.Matches(@"^[1-9]\d[0-9]\d+$");
+				.NotEmpty();
 
 			RuleFor(req => req.Password)
-				.NotEmpty()
-				.MinimumLength(19)
-				.MaximumLength(20)
-				.Matches(@"^[1-9]\d[0-9]\d+$");
+				.NotEmpty();
 
 			RuleFor(req => req.UserEmail)
-				.NotEmpty()
-				.MinimumLength(19)
-				.MaximumLength(20)
-				.Matches(@"^[1-9]\d[0-9]\d+$");
+				.NotEmpty();
 		}
 	}
 }
