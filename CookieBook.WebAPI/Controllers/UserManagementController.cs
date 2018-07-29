@@ -26,7 +26,7 @@ namespace CookieBook.WebAPI.Controllers
             }
             catch (System.Exception ex)
             {
-                return Json(ex.Message);
+                return BadRequest(ex.Message);
             }
         }
     }

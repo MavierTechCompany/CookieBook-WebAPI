@@ -9,7 +9,7 @@ namespace CookieBook.WebAPI.Settings
         {
             if (!context.ModelState.IsValid)
             {
-                context.Result = new BadRequestObjectResult("Something went wrong. Try again!");
+                context.Result = new BadRequestObjectResult(context.ModelState);
             }
         }
 
