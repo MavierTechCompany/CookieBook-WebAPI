@@ -14,7 +14,7 @@ namespace CookieBook.Infrastructure.Services
             _context = context;
         }
 
-        public Task AddUserAsync(AddUser command)
+        public Task AddUserAsync(CreateUser command)
         {
             throw new System.NotImplementedException();
         }

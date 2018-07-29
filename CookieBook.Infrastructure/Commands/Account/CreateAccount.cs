@@ -1,6 +1,6 @@
 namespace CookieBook.Infrastructure.Commands.Account
 {
-    public class AddAccount
+    public class CreateAccount
     {
         public string Nick { get; set; }
         public string Login { get; set; }
