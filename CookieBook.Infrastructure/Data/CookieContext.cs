@@ -8,8 +8,8 @@ namespace CookieBook.Infrastructure.Data
     public class CookieContext : DbContext
     {
         public DbSet<Account> Accounts { get; set; }
-        public DbSet<Image> Images { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<Image> Images { get; set; }
         public DbSet<UserImage> UserImages { get; set; }
 
         public CookieContext(DbContextOptions<CookieContext> options) : base(options) { }
@@ -23,7 +23,7 @@ namespace CookieBook.Infrastructure.Data
 
             modelBuilder.Entity<UserImage>()
                 .HasOne(x => x.User)
-                .WithOne(c => c.UserImage)
+                .WithOne(y => y.UserImage)
                 .HasForeignKey<User>(x => x.UserImageId);
         }
     }

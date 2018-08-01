@@ -21,8 +21,8 @@ namespace CookieBook.WebAPI.Controllers
         {
             try
             {
-                await _userService.AddUserAsync(command);
-                return StatusCode(201); //Should use Creater(uri, value) instead
+                var user = await _userService.AddUserAsync(command);
+                return Created($"/users/{user.Id}", user);
             }
             catch (System.Exception ex)
             {

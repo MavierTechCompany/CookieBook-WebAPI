@@ -17,8 +17,8 @@ namespace CookieBook.Infrastructure.Extensions.Security
         {
             if (opts == null) opts = new PasswordGenerator()
             {
-            RequiredLength = 8,
-            RequiredUniqueChars = 4,
+            RequiredLength = 12,
+            RequiredUniqueChars = 5,
             RequireDigit = true,
             RequireLowercase = true,
             RequireNonAlphanumeric = true,
