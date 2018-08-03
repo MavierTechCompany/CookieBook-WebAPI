@@ -24,29 +24,28 @@ namespace CookieBook.Infrastructure.Services
         public async Task<User> AddUserAsync(CreateUser command)
         {
             byte[] salt, passwordHash;
-            string restoreKey;
-            ulong loginHash, emailHash;
 
-            loginHash = _hashManager.CalculateDataHash(command.Login);
-            emailHash = _hashManager.CalculateDataHash(command.UserEmail);
+            var loginHash = _hashManager.CalculateDataHash(command.Login);
+            var emailHash = _hashManager.CalculateDataHash(command.UserEmail);
 
-            var user = await _context.Users
-                .SingleOrDefaultAsync(x => x.Nick == command.Nick || x.Login == loginHash || x.UserEmail == emailHash);
-
-            if (user != null)
-            {
+            if (await UserExistsInDatabaseAsync(command.Nick, loginHash, emailHash) == true)
                 throw new Exception("User already exists.");
-            }
 
             _hashManager.CalculatePasswordHash(command.Password, out passwordHash, out salt);
-            restoreKey = PasswordGenerator.GenerateRandomPassword();
+            var restoreKey = PasswordGenerator.GenerateRandomPassword();
 
-            user = new User(command.Nick, loginHash, salt, passwordHash, restoreKey, emailHash);
+            var user = new User(command.Nick, loginHash, salt, passwordHash, restoreKey, emailHash);
 
             await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
 
             return user;
+        }
+
+        public async Task<bool> UserExistsInDatabaseAsync(string nick, ulong login, ulong email)
+        {
+            return (await _context.Users.SingleOrDefaultAsync(x => x.Nick == nick || x.Login == login ||
+                x.UserEmail == email)) != null;
         }
     }
 }

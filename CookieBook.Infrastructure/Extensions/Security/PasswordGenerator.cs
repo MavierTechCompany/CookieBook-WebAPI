@@ -18,7 +18,7 @@ namespace CookieBook.Infrastructure.Extensions.Security
             if (opts == null) opts = new PasswordGenerator()
             {
             RequiredLength = 12,
-            RequiredUniqueChars = 5,
+            RequiredUniqueChars = 4,
             RequireDigit = true,
             RequireLowercase = true,
             RequireNonAlphanumeric = true,
@@ -30,7 +30,7 @@ namespace CookieBook.Infrastructure.Extensions.Security
                 "ABCDEFGHJKLMNOPQRSTUVWXYZ",
                 "abcdefghijkmnopqrstuvwxyz",
                 "0123456789",
-                "!@$?_-"
+                "!@$?"
             };
             Random rand = new Random(Environment.TickCount);
             List<char> chars = new List<char>();
