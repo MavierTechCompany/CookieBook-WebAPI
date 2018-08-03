@@ -1,6 +1,6 @@
 using System;
 
-namespace CookieBook.Infrastructure.Extensions.Security
+namespace CookieBook.Infrastructure.Extensions.Security.Interface
 {
     public interface IDataHashManager
     {

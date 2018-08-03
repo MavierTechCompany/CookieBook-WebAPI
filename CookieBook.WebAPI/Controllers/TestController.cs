@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 using CookieBook.Infrastructure.Extensions.Security;
-using CookieBook.Infrastructure.Services.Interfaces;
+using CookieBook.Infrastructure.Extensions.Security.Interface;
 using CookieBook.WebAPI.Controllers.Base;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

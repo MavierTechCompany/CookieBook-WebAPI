@@ -4,10 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CookieBook.Domain.JWT;
+using CookieBook.Infrastructure.Commands.User;
 using CookieBook.Infrastructure.Data;
 using CookieBook.Infrastructure.Extensions.Security;
+using CookieBook.Infrastructure.Extensions.Security.Interface;
 using CookieBook.Infrastructure.Services;
 using CookieBook.Infrastructure.Services.Interfaces;
+using CookieBook.Infrastructure.Validators.User;
+using CookieBook.WebAPI.Settings;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -34,12 +40,16 @@ namespace CookieBook.WebAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc()
+            services.AddMvc(conf => conf.Filters.Add(typeof(ValidationFilter)))
+                .AddFluentValidation()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
                 .AddJsonOptions(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json
                     .ReferenceLoopHandling.Ignore);
+
+            #region PolicySettings
             services.AddAuthorization(x => x.AddPolicy("admin", p => p.RequireRole("admin")));
             services.AddAuthorization(x => x.AddPolicy("user", p => p.RequireRole("user")));
+            #endregion
 
             #region DatabaseSettings
             services.AddDbContext<CookieContext>(options => options
@@ -64,7 +74,12 @@ namespace CookieBook.WebAPI
             services.AddScoped<IJwtHandler, JwtHandler>();
             #endregion
 
+            #region Validators
+            services.AddTransient<IValidator<CreateUser>, CreateUserValidator>();
+            #endregion
+
             #region Services
+            services.AddScoped<IUserService, UserService>();
             #endregion
 
             #region Extensions

@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace CookieBook.Infrastructure.Services.Interfaces
+namespace CookieBook.Infrastructure.Extensions.Security.Interface
 {
     public interface IJwtHandler
     {
