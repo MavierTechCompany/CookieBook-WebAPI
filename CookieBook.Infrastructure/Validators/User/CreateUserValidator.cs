@@ -14,7 +14,7 @@ namespace CookieBook.Infrastructure.Validators.User
 				.MinimumLength(3)
 				.MaximumLength(20)
 				.Matches(RegularExpressions.Nick)
-				.WithMessage(@"Nick must starts with the letter and can contains only letters, digits, '_' and '-'.");
+				.WithMessage(@"Nick must starts with the letter and can contains only letters and digits.");
 
 			RuleFor(req => req.Login)
 				.NotEmpty()
