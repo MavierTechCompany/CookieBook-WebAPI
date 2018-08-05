@@ -1,8 +1,10 @@
 using System;
 using System.Threading.Tasks;
 using CookieBook.Domain.Models;
+using CookieBook.Infrastructure.Commands.Auth;
 using CookieBook.Infrastructure.Commands.User;
 using CookieBook.Infrastructure.Data;
+using CookieBook.Infrastructure.Data.QueryExtensions;
 using CookieBook.Infrastructure.Extensions.Security;
 using CookieBook.Infrastructure.Extensions.Security.Interface;
 using CookieBook.Infrastructure.Services.Interfaces;
@@ -28,7 +30,7 @@ namespace CookieBook.Infrastructure.Services
             var loginHash = _hashManager.CalculateDataHash(command.Login);
             var emailHash = _hashManager.CalculateDataHash(command.UserEmail);
 
-            if (await UserExistsInDatabaseAsync(command.Nick, loginHash, emailHash) == true)
+            if (_context.Users.UserExistsInDatabaseAsync(command.Nick, loginHash, emailHash) == true)
                 throw new Exception("User already exists.");
 
             _hashManager.CalculatePasswordHash(command.Password, out passwordHash, out salt);
@@ -42,10 +44,9 @@ namespace CookieBook.Infrastructure.Services
             return user;
         }
 
-        public async Task<bool> UserExistsInDatabaseAsync(string nick, ulong login, ulong email)
+        public async Task<string> LoginUserAsync(LoginUser command)
         {
-            return (await _context.Users.SingleOrDefaultAsync(x => x.Nick == nick || x.Login == login ||
-                x.UserEmail == email)) != null;
+            throw new NotImplementedException();
         }
     }
 }

@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using CookieBook.Infrastructure.Commands.Auth;
 using CookieBook.Infrastructure.Commands.User;
 using CookieBook.Infrastructure.Services.Interfaces;
 using CookieBook.WebAPI.Controllers.Base;
@@ -23,6 +24,20 @@ namespace CookieBook.WebAPI.Controllers
             {
                 var user = await _userService.AddUserAsync(command);
                 return Created($"/users/{user.Id}", user);
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost("users/session")]
+        public async Task<IActionResult> LoginUserAsync([FromBody] LoginUser command)
+        {
+            try
+            {
+                var token = await _userService.LoginUserAsync(command);
+                return Ok(token);
             }
             catch (System.Exception ex)
             {

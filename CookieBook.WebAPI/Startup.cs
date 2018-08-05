@@ -4,12 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CookieBook.Domain.JWT;
+using CookieBook.Infrastructure.Commands.Auth;
 using CookieBook.Infrastructure.Commands.User;
 using CookieBook.Infrastructure.Data;
 using CookieBook.Infrastructure.Extensions.Security;
 using CookieBook.Infrastructure.Extensions.Security.Interface;
 using CookieBook.Infrastructure.Services;
 using CookieBook.Infrastructure.Services.Interfaces;
+using CookieBook.Infrastructure.Validators.Auth;
 using CookieBook.Infrastructure.Validators.User;
 using CookieBook.WebAPI.Settings;
 using FluentValidation;
@@ -76,6 +78,7 @@ namespace CookieBook.WebAPI
 
             #region Validators
             services.AddTransient<IValidator<CreateUser>, CreateUserValidator>();
+            services.AddTransient<IValidator<LoginUser>, LoginUserValidator>();
             #endregion
 
             #region Services
