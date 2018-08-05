@@ -31,7 +31,7 @@ namespace CookieBook.WebAPI.Controllers
             }
         }
 
-        [HttpPost("users/session")]
+        [HttpPost("users/token")]
         public async Task<IActionResult> LoginUserAsync([FromBody] LoginUser command)
         {
             try
