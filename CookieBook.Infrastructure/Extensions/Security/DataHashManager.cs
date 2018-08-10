@@ -29,7 +29,7 @@ namespace CookieBook.Infrastructure.Extensions.Security
         public bool VerifyPasswordHash(string password, byte[] passwordHash,
             byte[] passwordSalt)
         {
-            var hmac512 = new HMACSHA512();
+            var hmac512 = new HMACSHA512(passwordSalt);
             var computedHash = hmac512.ComputeHash(Encoding.UTF8.GetBytes(password));
             for (int i = 0; i < passwordHash.Length; i++)
                 if (computedHash[i] != passwordHash[i]) return false;
