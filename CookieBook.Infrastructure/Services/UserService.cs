@@ -1,8 +1,11 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using CookieBook.Domain.Models;
+using CookieBook.Infrastructure.Commands.Auth;
 using CookieBook.Infrastructure.Commands.User;
 using CookieBook.Infrastructure.Data;
+using CookieBook.Infrastructure.Data.QueryExtensions;
 using CookieBook.Infrastructure.Extensions.Security;
 using CookieBook.Infrastructure.Extensions.Security.Interface;
 using CookieBook.Infrastructure.Services.Interfaces;
@@ -14,11 +17,13 @@ namespace CookieBook.Infrastructure.Services
     {
         private readonly CookieContext _context;
         private readonly IDataHashManager _hashManager;
+        private readonly IJwtHandler _jwtHandler;
 
-        public UserService(CookieContext context, IDataHashManager hashManager)
+        public UserService(CookieContext context, IDataHashManager hashManager, IJwtHandler jwtHandler)
         {
             _context = context;
             _hashManager = hashManager;
+            _jwtHandler = jwtHandler;
         }
 
         public async Task<User> AddUserAsync(CreateUser command)
@@ -28,7 +33,7 @@ namespace CookieBook.Infrastructure.Services
             var loginHash = _hashManager.CalculateDataHash(command.Login);
             var emailHash = _hashManager.CalculateDataHash(command.UserEmail);
 
-            if (await UserExistsInDatabaseAsync(command.Nick, loginHash, emailHash) == true)
+            if (await _context.Users.UserExistsInDatabaseAsync(command.Nick, loginHash, emailHash) == true)
                 throw new Exception("User already exists.");
 
             _hashManager.CalculatePasswordHash(command.Password, out passwordHash, out salt);
@@ -42,10 +47,21 @@ namespace CookieBook.Infrastructure.Services
             return user;
         }
 
-        public async Task<bool> UserExistsInDatabaseAsync(string nick, ulong login, ulong email)
+        public async Task<string> LoginUserAsync(LoginUser command)
         {
-            return (await _context.Users.SingleOrDefaultAsync(x => x.Nick == nick || x.Login == login ||
-                x.UserEmail == email)) != null;
+            var loginOrEmailHash = _hashManager.CalculateDataHash(command.LoginOrEmail);
+
+            var user = await _context.Users.GetByEmail(loginOrEmailHash).SingleOrDefaultAsync();
+            if (user == null)
+                user = await _context.Users.GetByLogin(loginOrEmailHash).SingleOrDefaultAsync();
+
+            if (user == null)
+                throw new Exception("Invlid credentials.");
+
+            if (_hashManager.VerifyPasswordHash(command.Password, user.PasswordHash, user.Salt) == false)
+                throw new Exception("Invlid credentials.");
+
+            return await _jwtHandler.CreateTokenAsync(user.Id, user.Role);
         }
     }
 }
