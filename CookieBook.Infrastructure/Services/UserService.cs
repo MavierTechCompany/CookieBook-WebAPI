@@ -51,13 +51,16 @@ namespace CookieBook.Infrastructure.Services
         {
             var loginOrEmailHash = _hashManager.CalculateDataHash(command.LoginOrEmail);
 
-            var user = await _context.Users.GetByEmail(loginOrEmailHash).SingleOrDefaultAsync();
+            var user = await _context.Users.GetByEmail(loginOrEmailHash)
+                .Select(x => new { x.PasswordHash, x.Salt, x.Role, x.Id })
+                .AsNoTracking().SingleOrDefaultAsync();
             if (user == null)
-                user = await _context.Users.GetByLogin(loginOrEmailHash).SingleOrDefaultAsync();
+                user = await _context.Users.GetByLogin(loginOrEmailHash)
+                .Select(x => new { x.PasswordHash, x.Salt, x.Role, x.Id })
+                .AsNoTracking().SingleOrDefaultAsync();
 
             if (user == null)
                 throw new Exception("Invlid credentials.");
-
             if (_hashManager.VerifyPasswordHash(command.Password, user.PasswordHash, user.Salt) == false)
                 throw new Exception("Invlid credentials.");
 
