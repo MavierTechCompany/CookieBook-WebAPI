@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using CookieBook.Infrastructure.Commands.Auth;
 using CookieBook.Infrastructure.Commands.User;
@@ -17,6 +18,7 @@ namespace CookieBook.WebAPI.Controllers
             _userService = userService;
         }
 
+        #region USERS
         [HttpPost("users")]
         public async Task<IActionResult> CreateUserAsync([FromBody] CreateUser command)
         {
@@ -30,7 +32,9 @@ namespace CookieBook.WebAPI.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        #endregion
 
+        #region USERS/TOKEN
         [HttpPost("users/token")]
         public async Task<IActionResult> LoginUserAsync([FromBody] LoginUser command)
         {
@@ -44,5 +48,14 @@ namespace CookieBook.WebAPI.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        #endregion
+
+        #region USERS/id/PASSWORD
+        [HttpPut("users/{id}/password")]
+        public async Task<IActionResult> UpdatePasswordAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
     }
 }
