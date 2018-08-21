@@ -4,6 +4,7 @@ using CookieBook.Infrastructure.Commands.Auth;
 using CookieBook.Infrastructure.Commands.User;
 using CookieBook.Infrastructure.Services.Interfaces;
 using CookieBook.WebAPI.Controllers.Base;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CookieBook.WebAPI.Controllers
@@ -19,43 +20,61 @@ namespace CookieBook.WebAPI.Controllers
         }
 
         #region USERS
+
         [HttpPost("users")]
         public async Task<IActionResult> CreateUserAsync([FromBody] CreateUser command)
         {
             try
             {
-                var user = await _userService.AddUserAsync(command);
+                var user = await _userService.AddAsync(command);
                 return Created($"/users/{user.Id}", user);
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
+
         #endregion
 
         #region USERS/TOKEN
+
         [HttpPost("users/token")]
         public async Task<IActionResult> LoginUserAsync([FromBody] LoginUser command)
         {
             try
             {
-                var token = await _userService.LoginUserAsync(command);
+                var token = await _userService.LoginAsync(command);
                 return Ok(token);
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
+
         #endregion
 
         #region USERS/id/PASSWORD
+
+        [Authorize(Roles = "user")]
         [HttpPut("users/{id}/password")]
-        public async Task<IActionResult> UpdatePasswordAsync(int id)
+        public async Task<IActionResult> UpdatePasswordAsync(int id, [FromBody] UpdateUserData command)
         {
-            throw new NotImplementedException();
+            if (id != AccountID)
+                return Forbid();
+
+            try
+            {
+                await _userService.UpdateAsync(command);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
+
         #endregion
     }
 }

@@ -26,7 +26,7 @@ namespace CookieBook.Infrastructure.Services
             _jwtHandler = jwtHandler;
         }
 
-        public async Task<User> AddUserAsync(CreateUser command)
+        public async Task<User> AddAsync(CreateUser command)
         {
             byte[] salt, passwordHash;
 
@@ -47,7 +47,12 @@ namespace CookieBook.Infrastructure.Services
             return user;
         }
 
-        public async Task<string> LoginUserAsync(LoginUser command)
+        public async Task UpdateAsync(UpdateUserData command)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<string> LoginAsync(LoginUser command)
         {
             var loginOrEmailHash = _hashManager.CalculateDataHash(command.LoginOrEmail);
 
