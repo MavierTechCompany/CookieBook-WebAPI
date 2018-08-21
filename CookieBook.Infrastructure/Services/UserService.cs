@@ -47,9 +47,20 @@ namespace CookieBook.Infrastructure.Services
             return user;
         }
 
-        public async Task UpdateAsync(UpdateUserData command)
+        public async Task UpdateAsync(int id, UpdateUserData command)
         {
-            throw new NotImplementedException();
+            if (await _context.Users.UserExistsInDatabaseAsync(id) == false)
+                throw new Exception("User doesn't exist.");
+
+            var loginHash = _hashManager.CalculateDataHash(command.Login);
+            var emailHash = _hashManager.CalculateDataHash(command.UserEmail);
+
+            var user = await _context.Users.GetById(id).SingleOrDefaultAsync();
+
+            user.Update(loginHash, emailHash);
+
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
         }
 
         public async Task<string> LoginAsync(LoginUser command)

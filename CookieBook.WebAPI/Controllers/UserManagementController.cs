@@ -66,7 +66,7 @@ namespace CookieBook.WebAPI.Controllers
 
             try
             {
-                await _userService.UpdateAsync(command);
+                await _userService.UpdateAsync(id, command);
                 return NoContent();
             }
             catch (Exception ex)

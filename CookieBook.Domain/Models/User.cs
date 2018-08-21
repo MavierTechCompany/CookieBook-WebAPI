@@ -17,5 +17,12 @@ namespace CookieBook.Domain.Models
             UserEmail = userEmail;
             Role = "user";
         }
+
+        public void Update(UInt64 login, UInt64 userEmail)
+        {
+            Login = login;
+            UserEmail = userEmail;
+            UpdatedAt = DateTime.UtcNow;
+        }
     }
 }
