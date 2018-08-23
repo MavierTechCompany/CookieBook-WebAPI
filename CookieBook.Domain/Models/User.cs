@@ -7,7 +7,7 @@ namespace CookieBook.Domain.Models
     {
         public UInt64 UserEmail { get; protected set; }
         public int? UserImageId { get; private set; }
-        public UserImage UserImage { get; set; }
+        public virtual UserImage UserImage { get; set; }
 
         public User() { }
 
