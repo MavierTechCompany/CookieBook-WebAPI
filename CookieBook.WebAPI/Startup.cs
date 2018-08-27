@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CookieBook.Domain.JWT;
 using CookieBook.Infrastructure.Commands.Auth;
+using CookieBook.Infrastructure.Commands.Picture;
 using CookieBook.Infrastructure.Commands.User;
 using CookieBook.Infrastructure.Data;
 using CookieBook.Infrastructure.Extensions.Security;
@@ -13,6 +14,7 @@ using CookieBook.Infrastructure.Services;
 using CookieBook.Infrastructure.Services.Interfaces;
 using CookieBook.Infrastructure.Validators.Auth;
 using CookieBook.Infrastructure.Validators.User;
+using CookieBook.Infrastructure.Validators.UserImage;
 using CookieBook.WebAPI.Settings;
 using FluentValidation;
 using FluentValidation.AspNetCore;
@@ -80,6 +82,7 @@ namespace CookieBook.WebAPI
             services.AddTransient<IValidator<CreateUser>, CreateUserValidator>();
             services.AddTransient<IValidator<LoginUser>, LoginUserValidator>();
             services.AddTransient<IValidator<UpdateUserData>, UpdateUserValidator>();
+            services.AddTransient<IValidator<CreateImage>, CreateUserImageValidator>();
             #endregion
 
             #region Services

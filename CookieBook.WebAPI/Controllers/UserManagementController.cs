@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using CookieBook.Infrastructure.Commands.Auth;
+using CookieBook.Infrastructure.Commands.Picture;
 using CookieBook.Infrastructure.Commands.User;
 using CookieBook.Infrastructure.Services.Interfaces;
 using CookieBook.WebAPI.Controllers.Base;
@@ -68,6 +69,27 @@ namespace CookieBook.WebAPI.Controllers
             {
                 await _userService.UpdateAsync(id, command);
                 return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        #endregion
+
+        #region USERS/id/IMAGE
+
+        [Authorize(Roles = "user")]
+        [HttpPost("users/{id}/image")]
+        public async Task<IActionResult> CreateImageAsync(int id, [FromBody] CreateImage command)
+        {
+            if (id != AccountID)
+                return Forbid();
+
+            try
+            {
+                throw new NotImplementedException();
             }
             catch (Exception ex)
             {
