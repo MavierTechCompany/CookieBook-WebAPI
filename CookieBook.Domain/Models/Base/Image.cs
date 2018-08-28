@@ -9,6 +9,11 @@ namespace CookieBook.Domain.Models.Base
         public DateTime CreatedAt { get; protected set; }
         public DateTime UpdatedAt { get; protected set; }
 
-        public Image() { }
+        public Image(string content)
+        {
+            ImageContent = content;
+            CreatedAt = DateTime.UtcNow;
+            UpdatedAt = DateTime.UtcNow;
+        }
     }
 }

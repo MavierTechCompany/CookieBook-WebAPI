@@ -33,7 +33,7 @@ namespace CookieBook.Infrastructure.Services
             var loginHash = _hashManager.CalculateDataHash(command.Login);
             var emailHash = _hashManager.CalculateDataHash(command.UserEmail);
 
-            if (await _context.Users.UserExistsInDatabaseAsync(command.Nick, loginHash, emailHash) == true)
+            if (await _context.Users.ExistsInDatabaseAsync(command.Nick, loginHash, emailHash) == true)
                 throw new Exception("User already exists.");
 
             _hashManager.CalculatePasswordHash(command.Password, out passwordHash, out salt);
@@ -49,7 +49,7 @@ namespace CookieBook.Infrastructure.Services
 
         public async Task UpdateAsync(int id, UpdateUserData command)
         {
-            if (await _context.Users.UserExistsInDatabaseAsync(id) == false)
+            if (await _context.Users.ExistsInDatabaseAsync(id) == false)
                 throw new Exception("User doesn't exist.");
 
             var loginHash = _hashManager.CalculateDataHash(command.Login);
