@@ -19,13 +19,11 @@ namespace CookieBook.Infrastructure.Services
 
         public async Task<UserImage> AddAsync(CreateImage command, User user)
         {
-            if (await _context.UserImages.ExistsInDatabaseAsync(command.ImageContent) == true)
-                throw new Exception("Image already exists.");
-
             var image = new UserImage(command.ImageContent);
-            image.User = user;
 
             await _context.UserImages.AddAsync(image);
+            user.AddImage(image);
+
             await _context.SaveChangesAsync();
 
             return image;
@@ -35,5 +33,8 @@ namespace CookieBook.Infrastructure.Services
         {
             throw new NotImplementedException();
         }
+
+        public async Task<bool> ExistsForUser(int userId) =>
+            await _context.UserImages.ExistsInDatabaseAsync(userId);
     }
 }

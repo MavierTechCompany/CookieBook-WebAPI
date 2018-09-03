@@ -24,5 +24,12 @@ namespace CookieBook.Domain.Models
             UserEmail = userEmail;
             UpdatedAt = DateTime.UtcNow;
         }
+
+        public void AddImage(UserImage image)
+        {
+            UserImage = image;
+            UserImageId = image.Id;
+            UpdatedAt = DateTime.UtcNow;
+        }
     }
 }

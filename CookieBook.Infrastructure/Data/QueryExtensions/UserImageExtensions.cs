@@ -8,7 +8,7 @@ namespace CookieBook.Infrastructure.Data.QueryExtensions
     public static class UserImageExtensions
     {
         public static async Task<bool> ExistsInDatabaseAsync(this IQueryable<UserImage> value,
-            string content) => await value.Where(x => x.ImageContent == content).AnyAsync();
+            int userId) => await value.Where(x => x.User.Id == userId).AnyAsync();
 
         public static IQueryable<UserImage> GetById(this IQueryable<UserImage> value,
             int id) => value.Where(x => x.Id == id);

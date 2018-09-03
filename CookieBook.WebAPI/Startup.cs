@@ -87,6 +87,7 @@ namespace CookieBook.WebAPI
 
             #region Services
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IUserImageService, UserImageService>();
             #endregion
 
             #region Extensions

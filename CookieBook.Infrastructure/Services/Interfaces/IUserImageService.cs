@@ -8,5 +8,6 @@ namespace CookieBook.Infrastructure.Services.Interfaces
     {
         Task<UserImage> AddAsync(CreateImage command, User user);
         Task UpdateAsync(UpdateImage command);
+        Task<bool> ExistsForUser(int userId);
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using CookieBook.Domain.Models;
 using CookieBook.Infrastructure.Commands.Auth;
 using CookieBook.Infrastructure.Commands.Picture;
 using CookieBook.Infrastructure.Commands.User;
@@ -7,6 +8,7 @@ using CookieBook.Infrastructure.Services.Interfaces;
 using CookieBook.WebAPI.Controllers.Base;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace CookieBook.WebAPI.Controllers
 {
@@ -14,10 +16,12 @@ namespace CookieBook.WebAPI.Controllers
     public class UserManagementController : ApiControllerBase
     {
         private readonly IUserService _userService;
+        private readonly IUserImageService _userImageService;
 
-        public UserManagementController(IUserService userService)
+        public UserManagementController(IUserService userService, IUserImageService userImageService)
         {
             _userService = userService;
+            _userImageService = userImageService;
         }
 
         #region USERS
@@ -82,14 +86,18 @@ namespace CookieBook.WebAPI.Controllers
 
         [Authorize(Roles = "user")]
         [HttpPost("users/{id}/image")]
-        public async Task<IActionResult> CreateImageAsync(int id, [FromBody] CreateImage command)
+        public async Task<ActionResult> CreateImageAsync(int id, [FromBody] CreateImage command)
         {
             if (id != AccountID)
                 return Forbid();
+            if (await _userImageService.ExistsForUser(id) == true)
+                return BadRequest("Image already exists.");
 
             try
             {
-                throw new NotImplementedException();
+                var user = await _userService.GetAsync(id);
+                var image = _userImageService.AddAsync(command, user);
+                return Created($"/users/{id}/image/{user.Id}", image);
             }
             catch (Exception ex)
             {

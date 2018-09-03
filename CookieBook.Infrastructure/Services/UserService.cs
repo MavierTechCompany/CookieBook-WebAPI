@@ -82,5 +82,15 @@ namespace CookieBook.Infrastructure.Services
 
             return await _jwtHandler.CreateTokenAsync(user.Id, user.Role);
         }
+
+        public async Task<User> GetAsync(int id)
+        {
+            var user = await _context.Users.GetById(id).SingleAsync();
+
+            if (user == null)
+                throw new Exception("Invalid id");
+
+            return user;
+        }
     }
 }

@@ -10,5 +10,6 @@ namespace CookieBook.Infrastructure.Services.Interfaces
         Task<User> AddAsync(CreateUser command);
         Task UpdateAsync(int id, UpdateUserData command);
         Task<string> LoginAsync(LoginUser command);
+        Task<User> GetAsync(int id);
     }
 }
