@@ -86,7 +86,7 @@ namespace CookieBook.WebAPI.Controllers
 
         [Authorize(Roles = "user")]
         [HttpPost("users/{id}/image")]
-        public async Task<ActionResult> CreateImageAsync(int id, [FromBody] CreateImage command)
+        public async Task<IActionResult> CreateImageAsync(int id, [FromBody] CreateImage command)
         {
             if (id != AccountID)
                 return Forbid();
@@ -98,6 +98,28 @@ namespace CookieBook.WebAPI.Controllers
                 var user = await _userService.GetAsync(id);
                 var image = _userImageService.AddAsync(command, user);
                 return Created($"/users/{id}/image/{user.Id}", image);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [Authorize(Roles = "user")]
+        [HttpPut("users/{id}/image")]
+        public async Task<IActionResult> UpdateImageAsync(int id, [FromBody] UpdateImage command)
+        {
+            if (id != AccountID)
+                return Forbid();
+            if (await _userImageService.ExistsForUser(id) == false)
+                return BadRequest("Image doesn't exist.");
+
+            try
+            {
+                var user = await _userService.GetAsync(id);
+                // user.UserImage.Update(command.ImageContent);
+                await _userImageService.UpdateAsync(command);
+                return NoContent();
             }
             catch (Exception ex)
             {

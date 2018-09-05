@@ -17,5 +17,11 @@ namespace CookieBook.Domain.Models.Base
             CreatedAt = DateTime.UtcNow;
             UpdatedAt = DateTime.UtcNow;
         }
+
+        public virtual void Update(string content)
+        {
+            ImageContent = content;
+            UpdatedAt = DateTime.UtcNow;
+        }
     }
 }
