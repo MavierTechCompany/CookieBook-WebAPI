@@ -29,9 +29,10 @@ namespace CookieBook.Infrastructure.Services
             return image;
         }
 
-        public async Task UpdateAsync(UpdateImage command)
+        public async Task UpdateAsync(UpdateImage command, User user)
         {
-            throw new NotImplementedException();
+            user.UserImage.Update(command.ImageContent);
+            await _context.SaveChangesAsync();
         }
 
         public async Task<bool> ExistsForUser(int userId) =>

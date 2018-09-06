@@ -96,7 +96,7 @@ namespace CookieBook.WebAPI.Controllers
             try
             {
                 var user = await _userService.GetAsync(id);
-                var image = _userImageService.AddAsync(command, user);
+                var image = await _userImageService.AddAsync(command, user);
                 return Created($"/users/{id}/image/{user.Id}", image);
             }
             catch (Exception ex)
@@ -117,8 +117,7 @@ namespace CookieBook.WebAPI.Controllers
             try
             {
                 var user = await _userService.GetAsync(id);
-                // user.UserImage.Update(command.ImageContent);
-                await _userImageService.UpdateAsync(command);
+                await _userImageService.UpdateAsync(command, user);
                 return NoContent();
             }
             catch (Exception ex)

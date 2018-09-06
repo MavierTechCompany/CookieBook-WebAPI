@@ -85,7 +85,7 @@ namespace CookieBook.Infrastructure.Services
 
         public async Task<User> GetAsync(int id)
         {
-            var user = await _context.Users.GetById(id).SingleAsync();
+            var user = await _context.Users.GetById(id).Include(x => x.UserImage).SingleOrDefaultAsync();
 
             if (user == null)
                 throw new Exception("Invalid id");

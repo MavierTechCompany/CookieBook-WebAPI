@@ -83,6 +83,7 @@ namespace CookieBook.WebAPI
             services.AddTransient<IValidator<LoginUser>, LoginUserValidator>();
             services.AddTransient<IValidator<UpdateUserData>, UpdateUserValidator>();
             services.AddTransient<IValidator<CreateImage>, CreateUserImageValidator>();
+            services.AddTransient<IValidator<UpdateImage>, UpdateUserImageValidator>();
             #endregion
 
             #region Services

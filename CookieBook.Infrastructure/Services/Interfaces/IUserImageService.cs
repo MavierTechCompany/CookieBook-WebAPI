@@ -7,7 +7,7 @@ namespace CookieBook.Infrastructure.Services.Interfaces
     public interface IUserImageService
     {
         Task<UserImage> AddAsync(CreateImage command, User user);
-        Task UpdateAsync(UpdateImage command);
+        Task UpdateAsync(UpdateImage command, User user);
         Task<bool> ExistsForUser(int userId);
     }
 }
