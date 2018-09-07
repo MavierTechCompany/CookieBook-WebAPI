@@ -12,6 +12,7 @@ namespace CookieBook.Domain.Models.Base
         public string Role { get; protected set; }
         public string RestoreKey { get; protected set; }
         public DateTime CreatedAt { get; protected set; }
+        public DateTime UpdatedAt { get; protected set; }
 
         public Account() { }
 
@@ -23,6 +24,13 @@ namespace CookieBook.Domain.Models.Base
             PasswordHash = passwordHash;
             RestoreKey = restoreKey;
             CreatedAt = DateTime.UtcNow;
+            UpdatedAt = DateTime.UtcNow;
+        }
+
+        public void Update(UInt64 login)
+        {
+            Login = login;
+            UpdatedAt = DateTime.UtcNow;
         }
     }
 }

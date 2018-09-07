@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CookieBook.Domain.JWT;
 using CookieBook.Infrastructure.Commands.Auth;
+using CookieBook.Infrastructure.Commands.Picture;
 using CookieBook.Infrastructure.Commands.User;
 using CookieBook.Infrastructure.Data;
 using CookieBook.Infrastructure.Extensions.Security;
@@ -13,6 +14,7 @@ using CookieBook.Infrastructure.Services;
 using CookieBook.Infrastructure.Services.Interfaces;
 using CookieBook.Infrastructure.Validators.Auth;
 using CookieBook.Infrastructure.Validators.User;
+using CookieBook.Infrastructure.Validators.UserImage;
 using CookieBook.WebAPI.Settings;
 using FluentValidation;
 using FluentValidation.AspNetCore;
@@ -56,7 +58,7 @@ namespace CookieBook.WebAPI
             #region DatabaseSettings
             services.AddDbContext<CookieContext>(options => options
                 .UseSqlServer(Configuration.GetConnectionString("CookieBookDatabase"),
-                    c => c.MigrationsAssembly("CookieBook.WebAPI")));
+                    c => c.MigrationsAssembly("CookieBook.WebAPI")).EnableSensitiveDataLogging(false));
             #endregion
 
             #region JWTSettings
@@ -79,10 +81,14 @@ namespace CookieBook.WebAPI
             #region Validators
             services.AddTransient<IValidator<CreateUser>, CreateUserValidator>();
             services.AddTransient<IValidator<LoginUser>, LoginUserValidator>();
+            services.AddTransient<IValidator<UpdateUserData>, UpdateUserValidator>();
+            services.AddTransient<IValidator<CreateImage>, CreateUserImageValidator>();
+            services.AddTransient<IValidator<UpdateImage>, UpdateUserImageValidator>();
             #endregion
 
             #region Services
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IUserImageService, UserImageService>();
             #endregion
 
             #region Extensions
@@ -102,7 +108,7 @@ namespace CookieBook.WebAPI
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseMvc();
         }

@@ -7,7 +7,9 @@ namespace CookieBook.Infrastructure.Services.Interfaces
 {
     public interface IUserService
     {
-        Task<User> AddUserAsync(CreateUser command);
-        Task<string> LoginUserAsync(LoginUser command);
+        Task<User> AddAsync(CreateUser command);
+        Task UpdateAsync(int id, UpdateUserData command);
+        Task<string> LoginAsync(LoginUser command);
+        Task<User> GetAsync(int id);
     }
 }

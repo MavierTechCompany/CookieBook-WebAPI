@@ -26,14 +26,14 @@ namespace CookieBook.Infrastructure.Services
             _jwtHandler = jwtHandler;
         }
 
-        public async Task<User> AddUserAsync(CreateUser command)
+        public async Task<User> AddAsync(CreateUser command)
         {
             byte[] salt, passwordHash;
 
             var loginHash = _hashManager.CalculateDataHash(command.Login);
             var emailHash = _hashManager.CalculateDataHash(command.UserEmail);
 
-            if (await _context.Users.UserExistsInDatabaseAsync(command.Nick, loginHash, emailHash) == true)
+            if (await _context.Users.ExistsInDatabaseAsync(command.Nick, loginHash, emailHash) == true)
                 throw new Exception("User already exists.");
 
             _hashManager.CalculatePasswordHash(command.Password, out passwordHash, out salt);
@@ -47,7 +47,23 @@ namespace CookieBook.Infrastructure.Services
             return user;
         }
 
-        public async Task<string> LoginUserAsync(LoginUser command)
+        public async Task UpdateAsync(int id, UpdateUserData command)
+        {
+            if (await _context.Users.ExistsInDatabaseAsync(id) == false)
+                throw new Exception("User doesn't exist.");
+
+            var loginHash = _hashManager.CalculateDataHash(command.Login);
+            var emailHash = _hashManager.CalculateDataHash(command.UserEmail);
+
+            var user = await _context.Users.GetById(id).SingleOrDefaultAsync();
+
+            user.Update(loginHash, emailHash);
+
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<string> LoginAsync(LoginUser command)
         {
             var loginOrEmailHash = _hashManager.CalculateDataHash(command.LoginOrEmail);
 
@@ -65,6 +81,16 @@ namespace CookieBook.Infrastructure.Services
                 throw new Exception("Invlid credentials.");
 
             return await _jwtHandler.CreateTokenAsync(user.Id, user.Role);
+        }
+
+        public async Task<User> GetAsync(int id)
+        {
+            var user = await _context.Users.GetById(id).Include(x => x.UserImage).SingleOrDefaultAsync();
+
+            if (user == null)
+                throw new Exception("Invalid id");
+
+            return user;
         }
     }
 }

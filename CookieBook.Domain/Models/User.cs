@@ -7,7 +7,7 @@ namespace CookieBook.Domain.Models
     {
         public UInt64 UserEmail { get; protected set; }
         public int? UserImageId { get; private set; }
-        public UserImage UserImage { get; set; }
+        public virtual UserImage UserImage { get; set; }
 
         public User() { }
 
@@ -16,6 +16,20 @@ namespace CookieBook.Domain.Models
         {
             UserEmail = userEmail;
             Role = "user";
+        }
+
+        public void Update(UInt64 login, UInt64 userEmail)
+        {
+            Login = login;
+            UserEmail = userEmail;
+            UpdatedAt = DateTime.UtcNow;
+        }
+
+        public void AddImage(UserImage image)
+        {
+            UserImage = image;
+            UserImageId = image.Id;
+            UpdatedAt = DateTime.UtcNow;
         }
     }
 }

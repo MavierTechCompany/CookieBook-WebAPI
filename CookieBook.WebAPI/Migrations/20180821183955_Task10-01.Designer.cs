@@ -4,14 +4,16 @@ using CookieBook.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CookieBook.WebAPI.Migrations
 {
     [DbContext(typeof(CookieContext))]
-    partial class CookieContextModelSnapshot : ModelSnapshot
+    [Migration("20180821183955_Task10-01")]
+    partial class Task1001
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -63,7 +65,7 @@ namespace CookieBook.WebAPI.Migrations
                     b.Property<string>("Discriminator")
                         .IsRequired();
 
-                    b.Property<string>("ImageContent");
+                    b.Property<byte[]>("ImageContent");
 
                     b.Property<DateTime>("UpdatedAt");
 
