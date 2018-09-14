@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using CookieBook.Domain.Models;
+using CookieBook.Infrastructure.Commands.Account;
 using CookieBook.Infrastructure.Commands.Auth;
 using CookieBook.Infrastructure.Commands.Picture;
 using CookieBook.Infrastructure.Commands.User;
@@ -40,6 +41,24 @@ namespace CookieBook.WebAPI.Controllers
             }
         }
 
+        [Authorize(Roles = "user")]
+        [HttpPut("users/{id}")]
+        public async Task<IActionResult> UpdateAsync(int id, [FromBody] UpdateUserData command)
+        {
+            if (id != AccountID)
+                return Forbid();
+
+            try
+            {
+                await _userService.UpdateAsync(id, command);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         #endregion
 
         #region USERS/TOKEN
@@ -64,14 +83,14 @@ namespace CookieBook.WebAPI.Controllers
 
         [Authorize(Roles = "user")]
         [HttpPut("users/{id}/password")]
-        public async Task<IActionResult> UpdatePasswordAsync(int id, [FromBody] UpdateUserData command)
+        public async Task<IActionResult> UpdatePasswordAsync(int id, [FromBody] UpdatePassword command)
         {
             if (id != AccountID)
                 return Forbid();
 
             try
             {
-                await _userService.UpdateAsync(id, command);
+                await _userService.UpdatePasswordAsync(id, command);
                 return NoContent();
             }
             catch (Exception ex)

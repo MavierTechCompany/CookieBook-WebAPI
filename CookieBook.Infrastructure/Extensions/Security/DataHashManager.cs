@@ -15,6 +15,13 @@ namespace CookieBook.Infrastructure.Extensions.Security
             passwordHash = hmac512.ComputeHash(Encoding.UTF8.GetBytes(password));
         }
 
+        public void CalculatePasswordHash(string password, byte[] passwordSalt,
+            out byte[] passwordHash)
+        {
+            var hmac512 = new HMACSHA512(passwordSalt);
+            passwordHash = hmac512.ComputeHash(Encoding.UTF8.GetBytes(password));
+        }
+
         public UInt64 CalculateDataHash(string data)
         {
             UInt64 hashedValue = 3074457345618258791ul;

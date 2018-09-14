@@ -25,6 +25,12 @@ namespace CookieBook.Domain.Models
             UpdatedAt = DateTime.UtcNow;
         }
 
+        public void UpdatePassword(byte[] newPassword)
+        {
+            PasswordHash = newPassword;
+            UpdatedAt = DateTime.UtcNow;
+        }
+
         public void AddImage(UserImage image)
         {
             UserImage = image;

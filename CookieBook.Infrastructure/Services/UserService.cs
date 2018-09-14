@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using CookieBook.Domain.Models;
+using CookieBook.Infrastructure.Commands.Account;
 using CookieBook.Infrastructure.Commands.Auth;
 using CookieBook.Infrastructure.Commands.User;
 using CookieBook.Infrastructure.Data;
@@ -58,6 +59,26 @@ namespace CookieBook.Infrastructure.Services
             var user = await _context.Users.GetById(id).SingleOrDefaultAsync();
 
             user.Update(loginHash, emailHash);
+
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdatePasswordAsync(int id, UpdatePassword command)
+        {
+            byte[] newPasswordHash;
+
+            var user = await _context.Users.GetById(id).SingleOrDefaultAsync();
+
+            if (user == null)
+                throw new Exception("Userr doesn't exist.");
+
+            if (_hashManager.VerifyPasswordHash(command.Password, user.PasswordHash,
+                    user.Salt) == false)
+                throw new Exception("Invalid credentials.");
+
+            _hashManager.CalculatePasswordHash(command.NewPassword, user.Salt, out newPasswordHash);
+            user.UpdatePassword(newPasswordHash);
 
             _context.Users.Update(user);
             await _context.SaveChangesAsync();
