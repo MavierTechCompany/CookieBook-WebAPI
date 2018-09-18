@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CookieBook.Domain.JWT;
+using CookieBook.Infrastructure.Commands.Account;
 using CookieBook.Infrastructure.Commands.Auth;
 using CookieBook.Infrastructure.Commands.Picture;
 using CookieBook.Infrastructure.Commands.User;
@@ -84,6 +85,7 @@ namespace CookieBook.WebAPI
             services.AddTransient<IValidator<UpdateUserData>, UpdateUserValidator>();
             services.AddTransient<IValidator<CreateImage>, CreateUserImageValidator>();
             services.AddTransient<IValidator<UpdateImage>, UpdateUserImageValidator>();
+            services.AddTransient<IValidator<UpdatePassword>, UpdatePasswordValidator>();
             #endregion
 
             #region Services
