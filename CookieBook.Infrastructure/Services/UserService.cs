@@ -7,6 +7,7 @@ using CookieBook.Infrastructure.Commands.Auth;
 using CookieBook.Infrastructure.Commands.User;
 using CookieBook.Infrastructure.Data;
 using CookieBook.Infrastructure.Data.QueryExtensions;
+using CookieBook.Infrastructure.Extensions.CustomExceptions;
 using CookieBook.Infrastructure.Extensions.Security;
 using CookieBook.Infrastructure.Extensions.Security.Interface;
 using CookieBook.Infrastructure.Services.Interfaces;
@@ -35,7 +36,7 @@ namespace CookieBook.Infrastructure.Services
             var emailHash = _hashManager.CalculateDataHash(command.UserEmail);
 
             if (await _context.Users.ExistsInDatabaseAsync(command.Nick, loginHash, emailHash) == true)
-                throw new Exception("User already exists.");
+                throw new CorruptedOperationException("User already exists.");
 
             _hashManager.CalculatePasswordHash(command.Password, out passwordHash, out salt);
             var restoreKey = PasswordGenerator.GenerateRandomPassword();
@@ -51,7 +52,7 @@ namespace CookieBook.Infrastructure.Services
         public async Task UpdateAsync(int id, UpdateUserData command)
         {
             if (await _context.Users.ExistsInDatabaseAsync(id) == false)
-                throw new Exception("User doesn't exist.");
+                throw new CorruptedOperationException("User doesn't exist.");
 
             var loginHash = _hashManager.CalculateDataHash(command.Login);
             var emailHash = _hashManager.CalculateDataHash(command.UserEmail);
@@ -71,11 +72,11 @@ namespace CookieBook.Infrastructure.Services
             var user = await _context.Users.GetById(id).SingleOrDefaultAsync();
 
             if (user == null)
-                throw new Exception("Userr doesn't exist.");
+                throw new CorruptedOperationException("Userr doesn't exist.");
 
             if (_hashManager.VerifyPasswordHash(command.Password, user.PasswordHash,
                     user.Salt) == false)
-                throw new Exception("Invalid credentials.");
+                throw new CorruptedOperationException("Invalid credentials.");
 
             _hashManager.CalculatePasswordHash(command.NewPassword, user.Salt, out newPasswordHash);
             user.UpdatePassword(newPasswordHash);
@@ -97,9 +98,9 @@ namespace CookieBook.Infrastructure.Services
                 .AsNoTracking().SingleOrDefaultAsync();
 
             if (user == null)
-                throw new Exception("Invlid credentials.");
+                throw new CorruptedOperationException("Invlid credentials.");
             if (_hashManager.VerifyPasswordHash(command.Password, user.PasswordHash, user.Salt) == false)
-                throw new Exception("Invlid credentials.");
+                throw new CorruptedOperationException("Invlid credentials.");
 
             return await _jwtHandler.CreateTokenAsync(user.Id, user.Role);
         }
@@ -109,7 +110,7 @@ namespace CookieBook.Infrastructure.Services
             var user = await _context.Users.GetById(id).Include(x => x.UserImage).SingleOrDefaultAsync();
 
             if (user == null)
-                throw new Exception("Invalid id");
+                throw new CorruptedOperationException("Invalid id");
 
             return user;
         }
