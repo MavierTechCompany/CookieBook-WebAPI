@@ -30,15 +30,20 @@ namespace CookieBook.WebAPI.Framework
 
         private static Task HandleErrorAsync(HttpContext context, Exception exception)
         {
-            var exceptionType = exception.GetType();
-            var response = "Ops.. Something went wrong.";
-            var statusCode = (int) HttpStatusCode.InternalServerError;
+            Type exceptionType = exception.GetType();
+            string response;
+            int statusCode;
 
             switch (exception)
             {
                 case Exception ex when exceptionType == typeof(CorruptedOperationException):
                     response = ex.Message;
                     statusCode = 404;
+                    break;
+
+                default:
+                    response = "Something went wrong.";
+                    statusCode = 500;
                     break;
             }
 
