@@ -22,7 +22,7 @@ namespace CookieBook.Infrastructure.Services
             var image = new UserImage(command.ImageContent);
 
             await _context.UserImages.AddAsync(image);
-            user.AddImage(image);
+            user.UserImage = image;
 
             await _context.SaveChangesAsync();
 
