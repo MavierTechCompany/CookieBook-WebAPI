@@ -23,7 +23,6 @@ namespace CookieBook.WebAPI.Framework
             }
             catch (Exception exception)
             {
-
                 await HandleErrorAsync(context, exception);
             }
         }
@@ -38,7 +37,7 @@ namespace CookieBook.WebAPI.Framework
             {
                 case Exception ex when exceptionType == typeof(CorruptedOperationException):
                     response = ex.Message;
-                    statusCode = 404;
+                    statusCode = (int) HttpStatusCode.BadRequest;
                     break;
 
                 default:

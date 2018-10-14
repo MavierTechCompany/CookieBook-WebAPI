@@ -16,6 +16,7 @@ using CookieBook.Infrastructure.Services.Interfaces;
 using CookieBook.Infrastructure.Validators.Auth;
 using CookieBook.Infrastructure.Validators.User;
 using CookieBook.Infrastructure.Validators.UserImage;
+using CookieBook.WebAPI.Framework;
 using CookieBook.WebAPI.Settings;
 using FluentValidation;
 using FluentValidation.AspNetCore;
@@ -112,6 +113,7 @@ namespace CookieBook.WebAPI
 
             //app.UseHttpsRedirection();
             app.UseAuthentication();
+            app.UseErrorHandler();
             app.UseMvc();
         }
     }
