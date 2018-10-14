@@ -86,7 +86,9 @@ namespace CookieBook.WebAPI.Controllers
 
             var user = await _userService.GetAsync(id);
             var image = await _userImageService.AddAsync(command, user);
-            return Created($"/users/{id}/image/{user.Id}", image);
+
+            var resoultImage = new { image.Id, image.UserRef, image.ImageContent };
+            return Created($"/users/{id}/image/{user.Id}", resoultImage);
         }
 
         [Authorize(Roles = "user")]

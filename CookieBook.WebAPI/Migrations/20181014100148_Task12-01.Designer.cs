@@ -4,14 +4,16 @@ using CookieBook.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CookieBook.WebAPI.Migrations
 {
     [DbContext(typeof(CookieContext))]
-    partial class CookieContextModelSnapshot : ModelSnapshot
+    [Migration("20181014100148_Task12-01")]
+    partial class Task1201
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

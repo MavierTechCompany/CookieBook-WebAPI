@@ -21,10 +21,11 @@ namespace CookieBook.Infrastructure.Data
                 relationship.DeleteBehavior = DeleteBehavior.Restrict;
             }
 
-            modelBuilder.Entity<UserImage>()
-                .HasOne(x => x.User)
-                .WithOne(y => y.UserImage)
-                .HasForeignKey<User>(x => x.UserImageId);
+            modelBuilder.Entity<User>()
+                .HasOne(x => x.UserImage)
+                .WithOne(y => y.User)
+                .HasForeignKey<UserImage>(y => y.UserRef)
+                .IsRequired(false);
         }
     }
 }
