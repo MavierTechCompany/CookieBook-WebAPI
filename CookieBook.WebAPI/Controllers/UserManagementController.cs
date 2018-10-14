@@ -30,15 +30,8 @@ namespace CookieBook.WebAPI.Controllers
         [HttpPost("users")]
         public async Task<IActionResult> CreateUserAsync([FromBody] CreateUser command)
         {
-            try
-            {
-                var user = await _userService.AddAsync(command);
-                return Created($"/users/{user.Id}", user);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var user = await _userService.AddAsync(command);
+            return Created($"/users/{user.Id}", user);
         }
 
         [Authorize(Roles = "user")]
@@ -48,15 +41,8 @@ namespace CookieBook.WebAPI.Controllers
             if (id != AccountID)
                 return Forbid();
 
-            try
-            {
-                await _userService.UpdateAsync(id, command);
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            await _userService.UpdateAsync(id, command);
+            return NoContent();
         }
 
         #endregion
@@ -66,15 +52,8 @@ namespace CookieBook.WebAPI.Controllers
         [HttpPost("users/token")]
         public async Task<IActionResult> LoginUserAsync([FromBody] LoginUser command)
         {
-            try
-            {
-                var token = await _userService.LoginAsync(command);
-                return Ok(token);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var token = await _userService.LoginAsync(command);
+            return Ok(token);
         }
 
         #endregion
@@ -88,15 +67,8 @@ namespace CookieBook.WebAPI.Controllers
             if (id != AccountID)
                 return Forbid();
 
-            try
-            {
-                await _userService.UpdatePasswordAsync(id, command);
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            await _userService.UpdatePasswordAsync(id, command);
+            return NoContent();
         }
 
         #endregion
@@ -112,16 +84,9 @@ namespace CookieBook.WebAPI.Controllers
             if (await _userImageService.ExistsForUser(id) == true)
                 return BadRequest("Image already exists.");
 
-            try
-            {
-                var user = await _userService.GetAsync(id);
-                var image = await _userImageService.AddAsync(command, user);
-                return Created($"/users/{id}/image/{user.Id}", image);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var user = await _userService.GetAsync(id);
+            var image = await _userImageService.AddAsync(command, user);
+            return Created($"/users/{id}/image/{user.Id}", image);
         }
 
         [Authorize(Roles = "user")]
@@ -133,16 +98,9 @@ namespace CookieBook.WebAPI.Controllers
             if (await _userImageService.ExistsForUser(id) == false)
                 return BadRequest("Image doesn't exist.");
 
-            try
-            {
-                var user = await _userService.GetAsync(id);
-                await _userImageService.UpdateAsync(command, user);
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var user = await _userService.GetAsync(id);
+            await _userImageService.UpdateAsync(command, user);
+            return NoContent();
         }
 
         #endregion
