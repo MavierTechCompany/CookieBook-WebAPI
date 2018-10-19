@@ -7,7 +7,7 @@ It follows the rules of the RESTfull API.
 ## Table of contents
 * [Technologies](#technologies)
 * [Launch](#launch)
-* Scope of functionalities
+* [Scope of functionalities](#scope-of-functionalities)
 * Project status
 
 ## Technologies
