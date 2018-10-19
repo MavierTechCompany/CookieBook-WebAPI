@@ -72,4 +72,9 @@ It follows the rules of the RESTfull API.
     <td>Cooking recipes ratting</td>
     <td>:construction:</td>
   </tr>
+  
+  <tr>
+    <td>...</td>
+    <td>...</td>
+  </tr>
 </table>
