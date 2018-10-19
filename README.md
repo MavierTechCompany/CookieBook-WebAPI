@@ -9,3 +9,8 @@ It follows the rules of the RESTfull API.
 * Launch
 * Scope of functionalities
 * Project status
+
+## Technologies
+* [.NET Core 2.1](https://www.microsoft.com/net/download)
+* [Entity Framework Core 2.1.1](https://docs.microsoft.com/en-us/ef/core/)
+* [Microsoft SQL Server 2017](https://www.microsoft.com/en-us/sql-server/sql-server-2017)
