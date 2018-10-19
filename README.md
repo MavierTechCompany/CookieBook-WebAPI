@@ -6,7 +6,7 @@ It follows the rules of the RESTfull API.
 
 ## Table of contents
 * [Technologies](#technologies)
-* Launch
+* [Launch](#launch)
 * Scope of functionalities
 * Project status
 
@@ -17,3 +17,59 @@ It follows the rules of the RESTfull API.
 * [Fluent Validation 8.0.0-preview3](https://fluentvalidation.net/)
 
 ## Launch
+1. Download this project/repository.
+2. Download and install:
+   * [.NET Core 2.1 Runtime](https://www.microsoft.com/net/download)
+   * [Microsoft SQL Server 2017](https://www.microsoft.com/en-us/sql-server/sql-server-2017)
+3. Go to the `CookieBook-WebAPI\CookieBook.WebAPI` and run `Powershell/Command Promp/Terminal` in this location.
+4. Type `dotnet ef database update`. This will create the database and apply all migrations.
+5. Type `dotnet run`. This will run the WebAPI.
+6. You can now work with this WebAPI.
+
+## Scope of functionalities
+<table>
+  <tr>
+    <th>Functionality</th>
+    <th>Status</th>
+  </tr>
+  
+  <tr>
+    <td>User registration</td>
+    <td>:heavy_check_mark:</td>
+  </tr>
+  
+  <tr>
+    <td>User loging in</td>
+    <td>:heavy_check_mark:</td>
+  </tr>
+  
+  <tr>
+    <td>Updating user data</td>
+    <td>:heavy_check_mark:</td>
+  </tr>
+  
+  <tr>
+    <td>Changing user password</td>
+    <td>:heavy_check_mark:</td>
+  </tr>
+  
+  <tr>
+    <td>Adding cooking recipe</td>
+    <td>:construction:</td>
+  </tr>
+    
+  <tr>
+    <td>Updating cooking recipe</td>
+    <td>:construction:</td>
+  </tr>
+  
+  <tr>
+    <td>Commenting cooking recipes</td>
+    <td>:construction:</td>
+  </tr>
+  
+  <tr>
+    <td>Cooking recipes ratting</td>
+    <td>:construction:</td>
+  </tr>
+</table>
