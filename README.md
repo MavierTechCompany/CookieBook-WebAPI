@@ -5,7 +5,7 @@ It's responsible for the server side of the project: storing, modifying and retu
 It follows the rules of the RESTfull API.
 
 ## Table of contents
-* Technologies
+* [Technologies](#technologies)
 * Launch
 * Scope of functionalities
 * Project status
