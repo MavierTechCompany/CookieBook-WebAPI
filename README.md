@@ -8,7 +8,7 @@ It follows the rules of the RESTfull API.
 * [Technologies](#technologies)
 * [Launch](#launch)
 * [Scope of functionalities](#scope-of-functionalities)
-* Project status
+* [Project status](#project-status)
 
 ## Technologies
 * [.NET Core 2.1](https://www.microsoft.com/net/download)
