@@ -78,3 +78,10 @@ It follows the rules of the RESTfull API.
     <td>...</td>
   </tr>
 </table>
+
+## Project status
+Current status: WORK IN PROGRESS :construction:
+
+Application is before it's first release.
+
+A `Master` branch is always the stable one. If you are intrested in testing the project in its current form then you should download this branch.
