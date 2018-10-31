@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CookieBook.Domain.Models;
@@ -10,6 +11,7 @@ using CookieBook.Infrastructure.Data.QueryExtensions;
 using CookieBook.Infrastructure.Extensions.CustomExceptions;
 using CookieBook.Infrastructure.Extensions.Security;
 using CookieBook.Infrastructure.Extensions.Security.Interface;
+using CookieBook.Infrastructure.Parameters.Account;
 using CookieBook.Infrastructure.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -113,6 +115,27 @@ namespace CookieBook.Infrastructure.Services
                 throw new CorruptedOperationException("Invalid id");
 
             return user;
+        }
+
+        public async Task<IEnumerable<User>> GetAsync(AccountsParameters parameters)
+        {
+            var users = _context.Users.AsQueryable();
+
+            if (!string.IsNullOrEmpty(parameters.Nick))
+            {
+                var nickForQuery = parameters.Nick.ToLowerInvariant();
+
+                users = users.Where(x => x.Nick.ToLowerInvariant() == nickForQuery);
+            }
+
+            if (!string.IsNullOrEmpty(parameters.Role))
+            {
+                var roleForQuery = parameters.Role.ToLowerInvariant();
+
+                users = users.Where(x => x.Role.ToLowerInvariant() == roleForQuery);
+            }
+
+            return await users.ToListAsync();
         }
     }
 }

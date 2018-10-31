@@ -5,6 +5,7 @@ using CookieBook.Infrastructure.Commands.Account;
 using CookieBook.Infrastructure.Commands.Auth;
 using CookieBook.Infrastructure.Commands.Picture;
 using CookieBook.Infrastructure.Commands.User;
+using CookieBook.Infrastructure.Parameters.Account;
 using CookieBook.Infrastructure.Services.Interfaces;
 using CookieBook.WebAPI.Controllers.Base;
 using Microsoft.AspNetCore.Authorization;
@@ -32,6 +33,13 @@ namespace CookieBook.WebAPI.Controllers
         {
             var user = await _userService.AddAsync(command);
             return Created($"/users/{user.Id}", user);
+        }
+
+        [HttpGet("users")]
+        public async Task<IActionResult> ReadUsersAsync(AccountsParameters parameters)
+        {
+            var users = await _userService.GetAsync(parameters);
+            return Ok(users);
         }
 
         [Authorize(Roles = "user")]
