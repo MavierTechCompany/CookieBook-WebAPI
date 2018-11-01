@@ -121,18 +121,16 @@ namespace CookieBook.Infrastructure.Services
         {
             var users = _context.Users.AsQueryable();
 
+            if (parameters.RegistrationDate != default(DateTime))
+            {
+                users = users.Where(x => x.CreatedAt.Date == parameters.RegistrationDate.Date);
+            }
+
             if (!string.IsNullOrEmpty(parameters.Nick))
             {
                 var nickForQuery = parameters.Nick.ToLowerInvariant();
 
-                users = users.Where(x => x.Nick.ToLowerInvariant() == nickForQuery);
-            }
-
-            if (!string.IsNullOrEmpty(parameters.Role))
-            {
-                var roleForQuery = parameters.Role.ToLowerInvariant();
-
-                users = users.Where(x => x.Role.ToLowerInvariant() == roleForQuery);
+                users = users.Where(x => x.Nick.ToLowerInvariant().Contains(nickForQuery));
             }
 
             return await users.ToListAsync();
