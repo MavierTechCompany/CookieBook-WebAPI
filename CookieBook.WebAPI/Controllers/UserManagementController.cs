@@ -42,6 +42,13 @@ namespace CookieBook.WebAPI.Controllers
             return Ok(users);
         }
 
+        [HttpGet("users/{id}")]
+        public async Task<IActionResult> ReadUserAsync(int id)
+        {
+            var user = await _userService.GetAsync(id);
+            return Ok(user);
+        }
+
         [Authorize(Roles = "user")]
         [HttpPut("users/{id}")]
         public async Task<IActionResult> UpdateAsync(int id, [FromBody] UpdateUserData command)
