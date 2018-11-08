@@ -122,16 +122,6 @@ namespace CookieBook.Infrastructure.Services
         {
             var users = _context.Users.AsQueryable();
 
-            // if (!string.IsNullOrEmpty(parameters.Fields))
-            // {
-            //     var fields = parameters.Fields.Split(',');
-
-            //     if (PropertyManager.PropertiesExists<User>(fields))
-            //     {
-
-            //     }
-            // }
-
             if (parameters.RegistrationDate != default(DateTime))
             {
                 users = users.Where(x => x.CreatedAt.Date == parameters.RegistrationDate.Date);

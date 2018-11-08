@@ -5,6 +5,7 @@ using CookieBook.Infrastructure.Commands.Account;
 using CookieBook.Infrastructure.Commands.Auth;
 using CookieBook.Infrastructure.Commands.Picture;
 using CookieBook.Infrastructure.Commands.User;
+using CookieBook.Infrastructure.Extensions;
 using CookieBook.Infrastructure.Parameters.Account;
 using CookieBook.Infrastructure.Services.Interfaces;
 using CookieBook.WebAPI.Controllers.Base;
@@ -39,7 +40,7 @@ namespace CookieBook.WebAPI.Controllers
         public async Task<IActionResult> ReadUsersAsync(AccountsParameters parameters)
         {
             var users = await _userService.GetAsync(parameters);
-            return Ok(users);
+            return Ok(users.ShapeData(parameters.Fields));
         }
 
         [HttpGet("users/{id}")]
