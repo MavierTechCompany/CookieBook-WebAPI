@@ -39,6 +39,12 @@ namespace CookieBook.WebAPI.Controllers
         [HttpGet("users")]
         public async Task<IActionResult> ReadUsersAsync(AccountsParameters parameters)
         {
+            if (!string.IsNullOrWhiteSpace(parameters.Fields) &&
+                !PropertyManager.PropertiesExists<User>(parameters.Fields))
+            {
+                return BadRequest();
+            }
+
             var users = await _userService.GetAsync(parameters);
             return Ok(users.ShapeData(parameters.Fields));
         }

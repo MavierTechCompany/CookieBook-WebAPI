@@ -31,6 +31,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json.Serialization;
 
 namespace CookieBook.WebAPI
 {
@@ -49,8 +50,13 @@ namespace CookieBook.WebAPI
             services.AddMvc(conf => conf.Filters.Add(typeof(ValidationFilter)))
                 .AddFluentValidation()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
-                .AddJsonOptions(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json
-                    .ReferenceLoopHandling.Ignore);
+                .AddJsonOptions(options =>
+                {
+                    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json
+                        .ReferenceLoopHandling.Ignore;
+                    options.SerializerSettings.ContractResolver =
+                        new CamelCasePropertyNamesContractResolver();
+                });
 
             #region PolicySettings
             services.AddAuthorization(x => x.AddPolicy("admin", p => p.RequireRole("admin")));

@@ -4,12 +4,16 @@ namespace CookieBook.Infrastructure.Extensions
 {
     public static class PropertyManager
     {
-        public static bool PropertiesExists<T>(string[] properties)
+        public static bool PropertiesExists<T>(string properties)
         {
+            var splitedProperties = properties.Split(',');
+
             var exists = true;
 
-            foreach (var propertyName in properties)
+            foreach (var property in splitedProperties)
             {
+                var propertyName = property.Trim();
+
                 var propertyInfo = typeof(T).GetProperty(propertyName, BindingFlags.IgnoreCase |
                     BindingFlags.Instance | BindingFlags.Public);
 
