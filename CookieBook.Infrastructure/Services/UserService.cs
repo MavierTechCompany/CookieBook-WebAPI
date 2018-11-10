@@ -8,6 +8,7 @@ using CookieBook.Infrastructure.Commands.Auth;
 using CookieBook.Infrastructure.Commands.User;
 using CookieBook.Infrastructure.Data;
 using CookieBook.Infrastructure.Data.QueryExtensions;
+using CookieBook.Infrastructure.Extensions;
 using CookieBook.Infrastructure.Extensions.CustomExceptions;
 using CookieBook.Infrastructure.Extensions.Security;
 using CookieBook.Infrastructure.Extensions.Security.Interface;
@@ -126,9 +127,9 @@ namespace CookieBook.Infrastructure.Services
                 users = users.Where(x => x.CreatedAt.Date == parameters.RegistrationDate.Date);
             }
 
-            if (!string.IsNullOrEmpty(parameters.Nick))
+            if (!string.IsNullOrEmpty(parameters.Query))
             {
-                var nickForQuery = parameters.Nick.ToLowerInvariant();
+                var nickForQuery = parameters.Query.ToLowerInvariant();
 
                 users = users.Where(x => x.Nick.ToLowerInvariant().Contains(nickForQuery));
             }

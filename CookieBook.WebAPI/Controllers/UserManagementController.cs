@@ -5,6 +5,7 @@ using CookieBook.Infrastructure.Commands.Account;
 using CookieBook.Infrastructure.Commands.Auth;
 using CookieBook.Infrastructure.Commands.Picture;
 using CookieBook.Infrastructure.Commands.User;
+using CookieBook.Infrastructure.Extensions;
 using CookieBook.Infrastructure.Parameters.Account;
 using CookieBook.Infrastructure.Services.Interfaces;
 using CookieBook.WebAPI.Controllers.Base;
@@ -38,8 +39,27 @@ namespace CookieBook.WebAPI.Controllers
         [HttpGet("users")]
         public async Task<IActionResult> ReadUsersAsync(AccountsParameters parameters)
         {
+            if (!string.IsNullOrWhiteSpace(parameters.Fields) &&
+                !PropertyManager.PropertiesExists<User>(parameters.Fields))
+            {
+                return BadRequest();
+            }
+
             var users = await _userService.GetAsync(parameters);
-            return Ok(users);
+            return Ok(users.ShapeData(parameters.Fields));
+        }
+
+        [HttpGet("users/{id}")]
+        public async Task<IActionResult> ReadUserAsync(int id, [FromQuery] string fields)
+        {
+            if (!string.IsNullOrWhiteSpace(fields) &&
+                !PropertyManager.PropertiesExists<User>(fields))
+            {
+                return BadRequest();
+            }
+
+            var user = await _userService.GetAsync(id);
+            return Ok(user.ShapeData(fields));
         }
 
         [Authorize(Roles = "user")]
