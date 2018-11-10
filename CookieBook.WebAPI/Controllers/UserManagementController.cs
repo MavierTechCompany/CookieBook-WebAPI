@@ -50,10 +50,16 @@ namespace CookieBook.WebAPI.Controllers
         }
 
         [HttpGet("users/{id}")]
-        public async Task<IActionResult> ReadUserAsync(int id)
+        public async Task<IActionResult> ReadUserAsync(int id, [FromQuery] string fields)
         {
+            if (!string.IsNullOrWhiteSpace(fields) &&
+                !PropertyManager.PropertiesExists<User>(fields))
+            {
+                return BadRequest();
+            }
+
             var user = await _userService.GetAsync(id);
-            return Ok(user);
+            return Ok(user.ShapeData(fields));
         }
 
         [Authorize(Roles = "user")]
