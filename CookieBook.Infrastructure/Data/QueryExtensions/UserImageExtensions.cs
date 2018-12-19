@@ -12,5 +12,8 @@ namespace CookieBook.Infrastructure.Data.QueryExtensions
 
         public static IQueryable<UserImage> GetById(this IQueryable<UserImage> value,
             int id) => value.Where(x => x.Id == id);
+
+        public static IQueryable<UserImage> GetByUserId(this IQueryable<UserImage> value,
+            int id) => value.Where(x => x.User.Id == id);
     }
 }

@@ -128,6 +128,20 @@ namespace CookieBook.WebAPI.Controllers
         }
 
         [Authorize(Roles = "user")]
+        [HttpGet("users/{id}/image")]
+        public async Task<IActionResult> GetImageAsync(int id, [FromQuery] string fields)
+        {
+            if (!string.IsNullOrWhiteSpace(fields) &&
+                !PropertyManager.PropertiesExists<UserImage>(fields))
+            {
+                return BadRequest();
+            }
+
+            var image = await _userImageService.GetByUserIdAsync(id);
+            return Ok(image.ShapeData(fields));
+        }
+
+        [Authorize(Roles = "user")]
         [HttpPut("users/{id}/image")]
         public async Task<IActionResult> UpdateImageAsync(int id, [FromBody] UpdateImage command)
         {

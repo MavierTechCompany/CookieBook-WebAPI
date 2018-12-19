@@ -4,7 +4,9 @@ using CookieBook.Domain.Models;
 using CookieBook.Infrastructure.Commands.Picture;
 using CookieBook.Infrastructure.Data;
 using CookieBook.Infrastructure.Data.QueryExtensions;
+using CookieBook.Infrastructure.Extensions.CustomExceptions;
 using CookieBook.Infrastructure.Services.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace CookieBook.Infrastructure.Services
 {
@@ -33,6 +35,16 @@ namespace CookieBook.Infrastructure.Services
         {
             user.UserImage.Update(command.ImageContent);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<UserImage> GetByUserIdAsync(int userId)
+        {
+            var image = await _context.UserImages.GetByUserId(userId).SingleOrDefaultAsync();
+
+            if (image == null)
+                throw new CorruptedOperationException("Invalid id");
+
+            return image;
         }
 
         public async Task<bool> ExistsForUser(int userId) =>
