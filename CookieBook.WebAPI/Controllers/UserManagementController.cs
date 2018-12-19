@@ -127,7 +127,6 @@ namespace CookieBook.WebAPI.Controllers
             return Created($"/users/{id}/image/{user.Id}", resoultImage);
         }
 
-        [Authorize(Roles = "user")]
         [HttpGet("users/{id}/image")]
         public async Task<IActionResult> GetImageAsync(int id, [FromQuery] string fields)
         {
