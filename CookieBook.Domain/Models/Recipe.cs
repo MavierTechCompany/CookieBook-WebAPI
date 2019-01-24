@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using CookieBook.Domain.Models.Base;
+using CookieBook.Domain.Models.Intermediate;
 
 namespace CookieBook.Domain.Models
 {
@@ -12,7 +14,7 @@ namespace CookieBook.Domain.Models
         public bool IsVegetarian { get; set; }
 
         public virtual User User { get; set; }
-        public virtual Category Category { get; set; }
+        public virtual ICollection<RecipeCategory> RecipeCategories { get; set; }
         public virtual RecipeImage RecipeImage { get; set; }
     }
 }
