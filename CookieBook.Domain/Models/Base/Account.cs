@@ -2,6 +2,10 @@ using System;
 
 namespace CookieBook.Domain.Models.Base
 {
+    /// <summary>
+    /// Base class for account-like models.
+    /// <para>Represends a container-like table for all accounts.</para>
+    /// </summary>
     public abstract class Account : Entity
     {
         public string Nick { get; protected set; }
@@ -11,7 +15,7 @@ namespace CookieBook.Domain.Models.Base
         public string Role { get; protected set; }
         public string RestoreKey { get; protected set; }
 
-        public Account() { }
+        public Account() : base() { }
 
         public Account(string nick, UInt64 login, byte[] salt, byte[] passwordHash, string restoreKey) : base()
         {

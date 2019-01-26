@@ -2,11 +2,15 @@ using System;
 
 namespace CookieBook.Domain.Models.Base
 {
+    /// <summary>
+    /// Base class for image-like models.
+    /// <para>Represends a container-like table for all images.</para>
+    /// </summary>
     public abstract class Image : Entity
     {
         public string ImageContent { get; protected set; }
 
-        public Image() { }
+        public Image() : base() { }
 
         public Image(string content) : base()
         {
