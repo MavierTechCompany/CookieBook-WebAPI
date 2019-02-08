@@ -14,7 +14,8 @@ namespace CookieBook.Domain.Models
         public bool IsVegetarian { get; set; }
 
         public virtual User User { get; set; }
-        public virtual ICollection<RecipeCategory> RecipeCategories { get; set; }
         public virtual RecipeImage RecipeImage { get; set; }
+        public virtual ICollection<RecipeCategory> RecipeCategories { get; set; }
+        public virtual ICollection<RecipeComponent> RecipeComponents { get; set; }
     }
 }

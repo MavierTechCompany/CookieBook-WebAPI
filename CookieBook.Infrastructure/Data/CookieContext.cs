@@ -16,7 +16,9 @@ namespace CookieBook.Infrastructure.Data
         public DbSet<RecipeImage> RecipeImages { get; set; }
         public DbSet<Recipe> Recipes { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<Component> Components { get; set; }
         public DbSet<RecipeCategory> RecipeCategories { get; set; }
+        public DbSet<RecipeComponent> RecipeComponents { get; set; }
         #endregion
 
         public CookieContext(DbContextOptions<CookieContext> options) : base(options) { }
@@ -27,6 +29,12 @@ namespace CookieBook.Infrastructure.Data
             {
                 relationship.DeleteBehavior = DeleteBehavior.Restrict;
             }
+
+            modelBuilder.Entity<Recipe>()
+                .HasOne(x => x.RecipeImage)
+                .WithOne(y => y.Recipe)
+                .HasForeignKey<RecipeImage>(y => y.RecipeRef)
+                .IsRequired(false);
 
             #region User
             modelBuilder.Entity<User>()
@@ -41,12 +49,6 @@ namespace CookieBook.Infrastructure.Data
                 .IsRequired();
             #endregion
 
-            modelBuilder.Entity<Recipe>()
-                .HasOne(x => x.RecipeImage)
-                .WithOne(y => y.Recipe)
-                .HasForeignKey<RecipeImage>(y => y.RecipeRef)
-                .IsRequired(false);
-
             #region RecipeCategory
             modelBuilder.Entity<RecipeCategory>()
                 .HasKey(xy => new { xy.RecipeId, xy.CategoryId });
@@ -60,6 +62,21 @@ namespace CookieBook.Infrastructure.Data
                 .HasOne(xy => xy.Category)
                 .WithMany(y => y.RecipeCategories)
                 .HasForeignKey(xy => xy.CategoryId);
+            #endregion
+
+            #region RecipeComponent
+            modelBuilder.Entity<RecipeComponent>()
+                .HasKey(xy => new { xy.RecipeId, xy.ComponentId });
+
+            modelBuilder.Entity<RecipeComponent>()
+                .HasOne(xy => xy.Recipe)
+                .WithMany(x => x.RecipeComponents)
+                .HasForeignKey(xy => xy.RecipeId);
+
+            modelBuilder.Entity<RecipeComponent>()
+                .HasOne(xy => xy.Component)
+                .WithMany(y => y.RecipeComponents)
+                .HasForeignKey(xy => xy.ComponentId);
             #endregion
         }
     }

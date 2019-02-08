@@ -8,7 +8,7 @@ namespace CookieBook.Domain.Models
     {
         public string Name { get; set; }
 
-        public ICollection<RecipeCategory> RecipeCategories { get; set; }
+        public virtual ICollection<RecipeCategory> RecipeCategories { get; set; }
 
         public Category(string name) : base()
         {
