@@ -28,7 +28,6 @@ namespace CookieBook.WebAPI.Controllers
         }
 
         #region USERS
-
         [HttpPost("users")]
         public async Task<IActionResult> CreateUserAsync([FromBody] CreateUser command)
         {
@@ -64,7 +63,7 @@ namespace CookieBook.WebAPI.Controllers
 
         [Authorize(Roles = "user")]
         [HttpPut("users/{id}")]
-        public async Task<IActionResult> UpdateAsync(int id, [FromBody] UpdateUserData command)
+        public async Task<IActionResult> UpdateUserAsync(int id, [FromBody] UpdateUserData command)
         {
             if (id != AccountID)
                 return Forbid();
@@ -72,22 +71,18 @@ namespace CookieBook.WebAPI.Controllers
             await _userService.UpdateAsync(id, command);
             return NoContent();
         }
-
         #endregion
 
         #region USERS/TOKEN
-
         [HttpPost("users/token")]
         public async Task<IActionResult> LoginUserAsync([FromBody] LoginUser command)
         {
             var token = await _userService.LoginAsync(command);
             return Ok(token);
         }
-
         #endregion
 
         #region USERS/id/PASSWORD
-
         [Authorize(Roles = "user")]
         [HttpPut("users/{id}/password")]
         public async Task<IActionResult> UpdatePasswordAsync(int id, [FromBody] UpdatePassword command)
@@ -98,11 +93,9 @@ namespace CookieBook.WebAPI.Controllers
             await _userService.UpdatePasswordAsync(id, command);
             return NoContent();
         }
-
         #endregion
 
         #region USERS/id/IMAGE
-
         [Authorize(Roles = "user")]
         [HttpPost("users/{id}/image")]
         public async Task<IActionResult> CreateImageAsync(int id, [FromBody] CreateImage command)
@@ -153,7 +146,6 @@ namespace CookieBook.WebAPI.Controllers
             await _userImageService.UpdateAsync(command, user);
             return NoContent();
         }
-
         #endregion
     }
 }
