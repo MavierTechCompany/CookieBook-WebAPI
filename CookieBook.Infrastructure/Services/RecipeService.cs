@@ -27,7 +27,8 @@ namespace CookieBook.Infrastructure.Services
                 .Include(x => x.RecipeImage)
                 .Include(x => x.User)
                 .Include(x => x.RecipeCategories).ThenInclude(y => y.Category)
-                .Include(x => x.RecipeComponents).ThenInclude(z => z.Component).SingleOrDefaultAsync();
+                .Include(x => x.RecipeComponents).ThenInclude(z => z.Component)
+                .SingleOrDefaultAsync();
 
             if (recipe == null)
                 throw new CorruptedOperationException("Invalid id");
@@ -70,6 +71,12 @@ namespace CookieBook.Infrastructure.Services
             {
                 recipes = recipes.Where(x => x.IsVegetarian == parameters.IsVegetarian);
             }
+
+            recipes = recipes
+                .Include(x => x.RecipeImage)
+                .Include(x => x.User)
+                .Include(x => x.RecipeCategories).ThenInclude(y => y.Category)
+                .Include(x => x.RecipeComponents).ThenInclude(z => z.Component);
 
             return await recipes.ToListAsync();
         }
