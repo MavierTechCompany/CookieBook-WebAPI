@@ -28,6 +28,7 @@ namespace CookieBook.WebAPI.Controllers
             {
                 return BadRequest();
             }
+
             var recipes = await _recipeService.GetAsync(parameters);
             return Ok(recipes.ShapeData(parameters.Fields));
         }
@@ -42,7 +43,14 @@ namespace CookieBook.WebAPI.Controllers
         [HttpGet("recipes/{id}")]
         public async Task<IActionResult> ReadRecipeAsync(int id, [FromQuery] string fields)
         {
-            throw new NotImplementedException();
+            if (!string.IsNullOrWhiteSpace(fields) &&
+                !PropertyManager.PropertiesExists<Recipe>(fields))
+            {
+                return BadRequest();
+            }
+
+            var recipes = await _recipeService.GetAsync(id);
+            return Ok(recipes.ShapeData(fields));
         }
 
         [Authorize(Roles = "user")]

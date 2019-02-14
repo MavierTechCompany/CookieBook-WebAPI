@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using CookieBook.Domain.Models;
 using CookieBook.Infrastructure.Data;
+using CookieBook.Infrastructure.Data.QueryExtensions;
+using CookieBook.Infrastructure.Extensions.CustomExceptions;
 using CookieBook.Infrastructure.Parameters.Recipe;
 using CookieBook.Infrastructure.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -19,9 +21,15 @@ namespace CookieBook.Infrastructure.Services
             _context = context;
         }
 
-        public Task<Recipe> GetAsync(int id)
+        public async Task<Recipe> GetAsync(int id)
         {
-            throw new System.NotImplementedException();
+            var recipe = await _context.Recipes.GetById(id).Include(x => x.RecipeImage).Include(x => x.RecipeCategories)
+                .ThenInclude(y => y.Category).Include(x => x.RecipeComponents).ThenInclude(z => z.Component).SingleOrDefaultAsync();
+
+            if (recipe == null)
+                throw new CorruptedOperationException("Invalid id");
+
+            return recipe;
         }
 
         public async Task<IEnumerable<Recipe>> GetAsync(RecipesParameters parameters)
