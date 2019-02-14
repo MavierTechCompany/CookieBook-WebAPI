@@ -23,8 +23,11 @@ namespace CookieBook.Infrastructure.Services
 
         public async Task<Recipe> GetAsync(int id)
         {
-            var recipe = await _context.Recipes.GetById(id).Include(x => x.RecipeImage).Include(x => x.RecipeCategories)
-                .ThenInclude(y => y.Category).Include(x => x.RecipeComponents).ThenInclude(z => z.Component).SingleOrDefaultAsync();
+            var recipe = await _context.Recipes.GetById(id)
+                .Include(x => x.RecipeImage)
+                .Include(x => x.User)
+                .Include(x => x.RecipeCategories).ThenInclude(y => y.Category)
+                .Include(x => x.RecipeComponents).ThenInclude(z => z.Component).SingleOrDefaultAsync();
 
             if (recipe == null)
                 throw new CorruptedOperationException("Invalid id");
