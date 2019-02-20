@@ -6,7 +6,7 @@ namespace CookieBook.Domain.Models
     {
         public int? UserRef { get; set; }
 
-        public User User { get; set; }
+        public virtual User User { get; set; }
 
         public UserImage() : base() { }
 

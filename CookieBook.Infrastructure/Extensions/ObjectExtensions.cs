@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Reflection;
+using Newtonsoft.Json;
 
 namespace CookieBook.Infrastructure.Extensions
 {
@@ -14,6 +15,12 @@ namespace CookieBook.Infrastructure.Extensions
                 throw new ArgumentNullException("source");
             }
 
+            var result = JsonConvert.SerializeObject(source, new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            });
+
+            source = JsonConvert.DeserializeObject<TSource>(result);
             var dataShapedObject = new ExpandoObject();
 
             if (string.IsNullOrWhiteSpace(fields))

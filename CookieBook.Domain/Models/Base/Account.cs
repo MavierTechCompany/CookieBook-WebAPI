@@ -8,12 +8,12 @@ namespace CookieBook.Domain.Models.Base
     /// </summary>
     public abstract class Account : Entity
     {
-        public string Nick { get; protected set; }
-        public UInt64 Login { get; protected set; }
-        public byte[] Salt { get; protected set; }
-        public byte[] PasswordHash { get; protected set; }
-        public string Role { get; protected set; }
-        public string RestoreKey { get; protected set; }
+        public string Nick { get; set; }
+        public UInt64 Login { get; set; }
+        public byte[] Salt { get; set; }
+        public byte[] PasswordHash { get; set; }
+        public string Role { get; set; }
+        public string RestoreKey { get; set; }
 
         public Account() : base() { }
 

@@ -8,7 +8,7 @@ namespace CookieBook.Domain.Models.Base
     /// </summary>
     public abstract class Image : Entity
     {
-        public string ImageContent { get; protected set; }
+        public string ImageContent { get; set; }
 
         public Image() : base() { }
 

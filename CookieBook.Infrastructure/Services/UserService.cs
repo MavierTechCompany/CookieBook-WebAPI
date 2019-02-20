@@ -136,6 +136,11 @@ namespace CookieBook.Infrastructure.Services
                 users = users.Where(x => x.Nick.ToLowerInvariant().Contains(nickForQuery));
             }
 
+            users = users
+                .Include(x => x.UserImage)
+                .Include(x => x.Recipes)
+                .ThenInclude(y => y.RecipeImage);
+
             return await users.ToListAsync();
         }
     }
