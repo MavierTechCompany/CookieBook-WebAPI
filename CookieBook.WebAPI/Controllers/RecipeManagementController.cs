@@ -33,13 +33,6 @@ namespace CookieBook.WebAPI.Controllers
             return Ok(recipes.ShapeData(parameters.Fields));
         }
 
-        [Authorize(Roles = "user")]
-        [HttpPost("recipes")]
-        public async Task<IActionResult> CreateRecipeAsync()
-        {
-            throw new NotImplementedException();
-        }
-
         [HttpGet("recipes/{id}")]
         public async Task<IActionResult> ReadRecipeAsync(int id, [FromQuery] string fields)
         {
@@ -49,43 +42,8 @@ namespace CookieBook.WebAPI.Controllers
                 return BadRequest();
             }
 
-            var recipes = await _recipeService.GetAsync(id);
-            return Ok(recipes.ShapeData(fields));
-        }
-
-        [Authorize(Roles = "user")]
-        [HttpPut("recipes/{id}")]
-        public async Task<IActionResult> UpdateRecipeAsync()
-        {
-            throw new NotImplementedException();
-        }
-        #endregion
-
-        #region CATEGORIES
-        [HttpGet("categories")]
-        public async Task<IActionResult> ReadCategoriesAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        [Authorize(Roles = "user")]
-        [HttpPost("categories")]
-        public async Task<IActionResult> CreateCategoryAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        [HttpGet("categories/{id}")]
-        public async Task<IActionResult> ReadCategoryAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        [Authorize(Roles = "user")]
-        [HttpPut("categories/{id}")]
-        public async Task<IActionResult> UpdateCategoryAsync()
-        {
-            throw new NotImplementedException();
+            var recipe = await _recipeService.GetAsync(id);
+            return Ok(recipe.ShapeData(fields));
         }
         #endregion
     }

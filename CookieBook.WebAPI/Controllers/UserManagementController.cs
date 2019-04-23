@@ -7,6 +7,7 @@ using CookieBook.Infrastructure.Commands.Picture;
 using CookieBook.Infrastructure.Commands.User;
 using CookieBook.Infrastructure.Extensions;
 using CookieBook.Infrastructure.Parameters.Account;
+using CookieBook.Infrastructure.Parameters.Recipe;
 using CookieBook.Infrastructure.Services.Interfaces;
 using CookieBook.WebAPI.Controllers.Base;
 using Microsoft.AspNetCore.Authorization;
@@ -145,6 +146,45 @@ namespace CookieBook.WebAPI.Controllers
             var user = await _userService.GetAsync(id);
             await _userImageService.UpdateAsync(command, user);
             return NoContent();
+        }
+        #endregion
+
+        #region USERS/id/RECIPES
+        [HttpGet("users/{id}/recipes")]
+        public async Task<IActionResult> ReadRecipesAsync(int id, [FromQuery] RecipesParameters parameters)
+        {
+            if (!string.IsNullOrWhiteSpace(parameters.Fields) &&
+                !PropertyManager.PropertiesExists<Recipe>(parameters.Fields))
+            {
+                return BadRequest();
+            }
+
+            var recipes = await _userService.GetUserRecipesAsync(id, parameters);
+            return Ok(recipes.ShapeData(parameters.Fields));
+        }
+
+        [Authorize(Roles = "user")]
+        [HttpPost("users/{id}/recipes")]
+        public async Task<IActionResult> CreateRecipeAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        [HttpGet("users/{id}/recipes/{recipeId}")]
+        public async Task<IActionResult> ReadRecipeAsync(int id, int recipeId, [FromQuery] string fields)
+        {
+
+            if (!string.IsNullOrWhiteSpace(fields) &&
+                !PropertyManager.PropertiesExists<Recipe>(fields))
+            {
+                return BadRequest();
+            }
+
+            var recipe = await _userService.GetUserRecipeAsync(id, recipeId);
+            if (recipe == null)
+                return BadRequest();
+
+            return Ok(recipe.ShapeData(fields));
         }
         #endregion
     }

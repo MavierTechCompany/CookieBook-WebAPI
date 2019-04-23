@@ -13,6 +13,7 @@ using CookieBook.Infrastructure.Extensions.CustomExceptions;
 using CookieBook.Infrastructure.Extensions.Security;
 using CookieBook.Infrastructure.Extensions.Security.Interface;
 using CookieBook.Infrastructure.Parameters.Account;
+using CookieBook.Infrastructure.Parameters.Recipe;
 using CookieBook.Infrastructure.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,12 +24,14 @@ namespace CookieBook.Infrastructure.Services
         private readonly CookieContext _context;
         private readonly IDataHashManager _hashManager;
         private readonly IJwtHandler _jwtHandler;
+        private readonly IRecipeService _recipeService;
 
-        public UserService(CookieContext context, IDataHashManager hashManager, IJwtHandler jwtHandler)
+        public UserService(CookieContext context, IDataHashManager hashManager, IJwtHandler jwtHandler, IRecipeService recipeService)
         {
             _context = context;
             _hashManager = hashManager;
             _jwtHandler = jwtHandler;
+            _recipeService = recipeService;
         }
 
         public async Task<User> AddAsync(CreateUser command)
@@ -112,10 +115,13 @@ namespace CookieBook.Infrastructure.Services
         {
             var user = await _context.Users.GetById(id)
                 .Include(x => x.UserImage)
+                .Include(x => x.Recipes).ThenInclude(y => y.RecipeImage)
+                .Include(x => x.Recipes).ThenInclude(x => x.RecipeCategories).ThenInclude(y => y.Category)
+                .Include(x => x.Recipes).ThenInclude(x => x.RecipeComponents).ThenInclude(z => z.Component)
                 .SingleOrDefaultAsync();
 
             if (user == null)
-                throw new CorruptedOperationException("Invalid id");
+                throw new CorruptedOperationException("Invalid user id");
 
             return user;
         }
@@ -138,10 +144,33 @@ namespace CookieBook.Infrastructure.Services
 
             users = users
                 .Include(x => x.UserImage)
-                .Include(x => x.Recipes)
-                .ThenInclude(y => y.RecipeImage);
+                .Include(x => x.Recipes).ThenInclude(y => y.RecipeImage)
+                .Include(x => x.Recipes).ThenInclude(x => x.RecipeCategories).ThenInclude(y => y.Category)
+                .Include(x => x.Recipes).ThenInclude(x => x.RecipeComponents).ThenInclude(z => z.Component);
 
             return await users.ToListAsync();
+        }
+
+        public async Task<IEnumerable<Recipe>> GetUserRecipesAsync(int id, RecipesParameters parameters)
+        {
+            if (!await _context.Users.ExistsInDatabaseAsync(id))
+                throw new CorruptedOperationException("Invalid user id.");
+
+            var recipes = await _recipeService.GetAsync(parameters);
+
+            return recipes;
+        }
+
+        public async Task<Recipe> GetUserRecipeAsync(int id, int recipeId)
+        {
+            if (!await _context.Users.ExistsInDatabaseAsync(id))
+                throw new CorruptedOperationException("Invalid user id.");
+
+            var recipe = await _recipeService.GetAsync(recipeId);
+            if (recipe.User.Id != id)
+                recipe = null;
+
+            return recipe;
         }
     }
 }

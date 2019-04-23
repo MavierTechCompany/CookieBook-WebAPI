@@ -31,7 +31,7 @@ namespace CookieBook.Infrastructure.Services
                 .SingleOrDefaultAsync();
 
             if (recipe == null)
-                throw new CorruptedOperationException("Invalid id");
+                throw new CorruptedOperationException("Invalid recipe id");
 
             return recipe;
         }
