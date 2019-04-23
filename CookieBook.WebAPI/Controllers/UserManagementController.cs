@@ -174,7 +174,9 @@ namespace CookieBook.WebAPI.Controllers
                 return Forbid();
 
             var user = await _userService.GetAsync(id);
-            var recipe = await _recipeService.AddAsync(command, user)
+            var recipe = await _recipeService.AddAsync(command, user);
+
+            throw new NotImplementedException();
         }
 
         [HttpGet("users/{id}/recipes/{recipeId}")]
