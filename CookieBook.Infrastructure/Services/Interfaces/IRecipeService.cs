@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using CookieBook.Domain.Models;
+using CookieBook.Infrastructure.Commands.Recipe;
 using CookieBook.Infrastructure.Parameters.Recipe;
 
 namespace CookieBook.Infrastructure.Services.Interfaces
@@ -9,5 +10,6 @@ namespace CookieBook.Infrastructure.Services.Interfaces
     {
         Task<Recipe> GetAsync(int id);
         Task<IEnumerable<Recipe>> GetAsync(RecipesParameters parameters);
+        Task<Recipe> AddAsync(CreateRecipe command, User user);
     }
 }

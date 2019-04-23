@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CookieBook.Domain.Models;
+using CookieBook.Infrastructure.Commands.Recipe;
 using CookieBook.Infrastructure.Data;
 using CookieBook.Infrastructure.Data.QueryExtensions;
 using CookieBook.Infrastructure.Extensions.CustomExceptions;
@@ -79,6 +80,11 @@ namespace CookieBook.Infrastructure.Services
                 .Include(x => x.RecipeComponents).ThenInclude(z => z.Component);
 
             return await recipes.ToListAsync();
+        }
+
+        public async Task<Recipe> AddAsync(CreateRecipe command, User user)
+        {
+            throw new NotImplementedException();
         }
     }
 }

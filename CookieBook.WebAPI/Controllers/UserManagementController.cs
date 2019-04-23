@@ -4,6 +4,7 @@ using CookieBook.Domain.Models;
 using CookieBook.Infrastructure.Commands.Account;
 using CookieBook.Infrastructure.Commands.Auth;
 using CookieBook.Infrastructure.Commands.Picture;
+using CookieBook.Infrastructure.Commands.Recipe;
 using CookieBook.Infrastructure.Commands.User;
 using CookieBook.Infrastructure.Extensions;
 using CookieBook.Infrastructure.Parameters.Account;
@@ -21,11 +22,13 @@ namespace CookieBook.WebAPI.Controllers
     {
         private readonly IUserService _userService;
         private readonly IUserImageService _userImageService;
+        private readonly IRecipeService _recipeService;
 
-        public UserManagementController(IUserService userService, IUserImageService userImageService)
+        public UserManagementController(IUserService userService, IUserImageService userImageService, IRecipeService recipeService)
         {
             _userService = userService;
             _userImageService = userImageService;
+            _recipeService = recipeService;
         }
 
         #region USERS
@@ -165,9 +168,13 @@ namespace CookieBook.WebAPI.Controllers
 
         [Authorize(Roles = "user")]
         [HttpPost("users/{id}/recipes")]
-        public async Task<IActionResult> CreateRecipeAsync(int id)
+        public async Task<IActionResult> CreateRecipeAsync(int id, [FromBody] CreateRecipe command)
         {
-            throw new NotImplementedException();
+            if (id != AccountID)
+                return Forbid();
+
+            var user = await _userService.GetAsync(id);
+            var recipe = await _recipeService.AddAsync(command, user)
         }
 
         [HttpGet("users/{id}/recipes/{recipeId}")]
@@ -185,6 +192,13 @@ namespace CookieBook.WebAPI.Controllers
                 return BadRequest();
 
             return Ok(recipe.ShapeData(fields));
+        }
+
+        [Authorize(Roles = "user")]
+        [HttpPut("users/{id}/recipes/{recipeId}")]
+        public async Task<IActionResult> UpdateRecipeAsync(int id, int recipeId, [FromBody] UpdateRecipe command)
+        {
+            throw new NotImplementedException();
         }
         #endregion
     }
