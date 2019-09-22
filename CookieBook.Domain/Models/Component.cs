@@ -15,6 +15,13 @@ namespace CookieBook.Domain.Models
 
         public Component() : base() { }
 
+        public Component(string name, Unit unit, float amount) : base()
+        {
+			Name = name;
+			Unit = unit;
+			Amount = amount;
+		}
+
         public void Update(string name, Unit unit, float amount)
         {
             Name = name;

@@ -84,7 +84,25 @@ namespace CookieBook.Infrastructure.Services
 
         public async Task<Recipe> AddAsync(CreateRecipe command, User user)
         {
-            throw new NotImplementedException();
-        }
+			var recipe = new Recipe(command.Name, command.Description, command.IsLactoseFree,
+                command.IsGlutenFree, command.IsVegan, command.IsVegetarian);
+
+			var components = new List<Component>();
+            foreach (var component in command.Components)
+            {
+				components.Add(new Component(component.Name, component.Unit,
+                    component.Amount));
+			}
+
+			await _context.Components.AddRangeAsync(components);
+			recipe.Components = components;
+
+			await _context.Recipes.AddAsync(recipe);
+			user.Recipes.Add(recipe);
+
+			await _context.SaveChangesAsync();
+
+			return recipe;
+		}
     }
 }
