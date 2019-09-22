@@ -10,14 +10,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CookieBook.WebAPI.Migrations
 {
     [DbContext(typeof(CookieContext))]
-    [Migration("20190208112150_Task20_01")]
-    partial class Task20_01
+    [Migration("20190922122739_Task20-01")]
+    partial class Task2001
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.4-rtm-31024")
+                .HasAnnotation("ProductVersion", "2.1.11-servicing-32099")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -105,11 +105,15 @@ namespace CookieBook.WebAPI.Migrations
 
                     b.Property<string>("Name");
 
+                    b.Property<int?>("RecipeId");
+
                     b.Property<string>("Unit");
 
                     b.Property<DateTime>("UpdatedAt");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("RecipeId");
 
                     b.ToTable("Components");
                 });
@@ -129,23 +133,6 @@ namespace CookieBook.WebAPI.Migrations
                     b.HasIndex("CategoryId");
 
                     b.ToTable("RecipeCategories");
-                });
-
-            modelBuilder.Entity("CookieBook.Domain.Models.Intermediate.RecipeComponent", b =>
-                {
-                    b.Property<int>("RecipeId");
-
-                    b.Property<int>("ComponentId");
-
-                    b.Property<DateTime>("CreatedAt");
-
-                    b.Property<DateTime>("UpdatedAt");
-
-                    b.HasKey("RecipeId", "ComponentId");
-
-                    b.HasIndex("ComponentId");
-
-                    b.ToTable("RecipeComponents");
                 });
 
             modelBuilder.Entity("CookieBook.Domain.Models.Recipe", b =>
@@ -222,6 +209,14 @@ namespace CookieBook.WebAPI.Migrations
                     b.HasDiscriminator().HasValue("UserImage");
                 });
 
+            modelBuilder.Entity("CookieBook.Domain.Models.Component", b =>
+                {
+                    b.HasOne("CookieBook.Domain.Models.Recipe", "Recipe")
+                        .WithMany("Components")
+                        .HasForeignKey("RecipeId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
             modelBuilder.Entity("CookieBook.Domain.Models.Intermediate.RecipeCategory", b =>
                 {
                     b.HasOne("CookieBook.Domain.Models.Category", "Category")
@@ -231,19 +226,6 @@ namespace CookieBook.WebAPI.Migrations
 
                     b.HasOne("CookieBook.Domain.Models.Recipe", "Recipe")
                         .WithMany("RecipeCategories")
-                        .HasForeignKey("RecipeId")
-                        .OnDelete(DeleteBehavior.Restrict);
-                });
-
-            modelBuilder.Entity("CookieBook.Domain.Models.Intermediate.RecipeComponent", b =>
-                {
-                    b.HasOne("CookieBook.Domain.Models.Component", "Component")
-                        .WithMany("RecipeComponents")
-                        .HasForeignKey("ComponentId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("CookieBook.Domain.Models.Recipe", "Recipe")
-                        .WithMany("RecipeComponents")
                         .HasForeignKey("RecipeId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });

@@ -117,7 +117,7 @@ namespace CookieBook.Infrastructure.Services
                 .Include(x => x.UserImage)
                 .Include(x => x.Recipes).ThenInclude(y => y.RecipeImage)
                 .Include(x => x.Recipes).ThenInclude(x => x.RecipeCategories).ThenInclude(y => y.Category)
-                .Include(x => x.Recipes).ThenInclude(x => x.RecipeComponents).ThenInclude(z => z.Component)
+                .Include(x => x.Recipes).ThenInclude(z => z.Components)
                 .SingleOrDefaultAsync();
 
             if (user == null)
@@ -146,7 +146,7 @@ namespace CookieBook.Infrastructure.Services
                 .Include(x => x.UserImage)
                 .Include(x => x.Recipes).ThenInclude(y => y.RecipeImage)
                 .Include(x => x.Recipes).ThenInclude(x => x.RecipeCategories).ThenInclude(y => y.Category)
-                .Include(x => x.Recipes).ThenInclude(x => x.RecipeComponents).ThenInclude(z => z.Component);
+                .Include(x => x.Recipes).ThenInclude(z => z.Components);
 
             return await users.ToListAsync();
         }

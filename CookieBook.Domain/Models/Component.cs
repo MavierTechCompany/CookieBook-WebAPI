@@ -10,7 +10,7 @@ namespace CookieBook.Domain.Models
         public string Unit { get; set; }
         public int Amount { get; set; }
 
-        public virtual ICollection<RecipeComponent> RecipeComponents { get; set; }
+        public virtual Recipe Recipe { get; set; }
 
         public Component() : base() { }
 

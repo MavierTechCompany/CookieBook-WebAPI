@@ -16,6 +16,6 @@ namespace CookieBook.Domain.Models
         public virtual User User { get; set; }
         public virtual RecipeImage RecipeImage { get; set; }
         public virtual ICollection<RecipeCategory> RecipeCategories { get; set; }
-        public virtual ICollection<RecipeComponent> RecipeComponents { get; set; }
+        public virtual ICollection<Component> Components { get; set; }
     }
 }
