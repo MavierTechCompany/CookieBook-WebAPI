@@ -20,7 +20,10 @@ namespace CookieBook.Infrastructure.Validators.Recipe
                 .MinimumLength(50)
                 .MaximumLength(1000);
 
-            RuleFor(x => x.IsLactoseFree)
+			RuleFor(x => x.Components)
+				.NotEmpty();
+
+			RuleFor(x => x.IsLactoseFree)
                 .NotNull();
 
             RuleFor(x => x.IsGlutenFree)
