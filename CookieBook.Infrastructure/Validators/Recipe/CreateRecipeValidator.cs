@@ -1,5 +1,6 @@
 using CookieBook.Infrastructure.Commands.Recipe;
 using CookieBook.Infrastructure.Extensions;
+using CookieBook.Infrastructure.Validators.Recipe.Component;
 using FluentValidation;
 
 namespace CookieBook.Infrastructure.Validators.Recipe
@@ -22,6 +23,9 @@ namespace CookieBook.Infrastructure.Validators.Recipe
 
 			RuleFor(x => x.Components)
 				.NotEmpty();
+
+			RuleForEach(x => x.Components)
+				.SetValidator(new CreateComponentValidator());
 
 			RuleFor(x => x.IsLactoseFree)
                 .NotNull();

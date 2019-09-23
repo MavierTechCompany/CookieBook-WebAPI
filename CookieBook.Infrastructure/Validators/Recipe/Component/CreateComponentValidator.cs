@@ -11,6 +11,14 @@ namespace CookieBook.Infrastructure.Validators.Recipe.Component
 				.NotEmpty()
 				.MinimumLength(2)
 				.MaximumLength(255);
+
+			RuleFor(x => x.Unit)
+				.NotEmpty()
+				.IsInEnum();
+
+			RuleFor(x => x.Amount)
+				.NotEmpty()
+				.GreaterThan(0.0f);
 		}
     }
 }
