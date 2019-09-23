@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace CookieBook.WebAPI.Migrations
 {
-    public partial class Task2001 : Migration
+    public partial class InitialMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -81,8 +81,8 @@ namespace CookieBook.WebAPI.Migrations
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     UpdatedAt = table.Column<DateTime>(nullable: false),
                     Name = table.Column<string>(nullable: true),
-                    Unit = table.Column<string>(nullable: true),
-                    Amount = table.Column<int>(nullable: false),
+                    Unit = table.Column<int>(nullable: false),
+                    Amount = table.Column<float>(nullable: false),
                     RecipeId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>

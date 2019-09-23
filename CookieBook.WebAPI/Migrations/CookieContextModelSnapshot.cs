@@ -97,7 +97,7 @@ namespace CookieBook.WebAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("Amount");
+                    b.Property<float>("Amount");
 
                     b.Property<DateTime>("CreatedAt");
 
@@ -105,7 +105,7 @@ namespace CookieBook.WebAPI.Migrations
 
                     b.Property<int?>("RecipeId");
 
-                    b.Property<string>("Unit");
+                    b.Property<int>("Unit");
 
                     b.Property<DateTime>("UpdatedAt");
 

@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CookieBook.WebAPI.Migrations
 {
     [DbContext(typeof(CookieContext))]
-    [Migration("20190922122739_Task20-01")]
-    partial class Task2001
+    [Migration("20190923145931_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -99,7 +99,7 @@ namespace CookieBook.WebAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("Amount");
+                    b.Property<float>("Amount");
 
                     b.Property<DateTime>("CreatedAt");
 
@@ -107,7 +107,7 @@ namespace CookieBook.WebAPI.Migrations
 
                     b.Property<int?>("RecipeId");
 
-                    b.Property<string>("Unit");
+                    b.Property<int>("Unit");
 
                     b.Property<DateTime>("UpdatedAt");
 

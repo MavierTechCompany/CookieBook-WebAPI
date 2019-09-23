@@ -36,7 +36,7 @@ namespace CookieBook.WebAPI.Controllers
         public async Task<IActionResult> CreateUserAsync([FromBody] CreateUser command)
         {
             var user = await _userService.AddAsync(command);
-            return Created($"/users/{user.Id}", user);
+            return Created($"{Request.Host}{Request.Path}/{user.Id}", user);
         }
 
         [HttpGet("users")]
@@ -121,7 +121,7 @@ namespace CookieBook.WebAPI.Controllers
                 image.UpdatedAt
             };
 
-            return Created($"/users/{id}/image/{user.Id}", resoultImage);
+            return Created($"{Request.Host}{Request.Path}/{user.Id}", resoultImage);
         }
 
         [HttpGet("users/{id}/image")]
@@ -176,8 +176,8 @@ namespace CookieBook.WebAPI.Controllers
             var user = await _userService.GetAsync(id);
             var recipe = await _recipeService.AddAsync(command, user);
 
-            throw new NotImplementedException();
-        }
+			return Created($"{Request.Host}{Request.Path}/{recipe.Id}", recipe);
+		}
 
         [HttpGet("users/{id}/recipes/{recipeId}")]
         public async Task<IActionResult> ReadRecipeAsync(int id, int recipeId, [FromQuery] string fields)
