@@ -1,12 +1,15 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using CookieBook.Domain.Models.Base;
 
 namespace CookieBook.Domain.Models
 {
     public class User : Account
     {
-        public UInt64 UserEmail { get; protected set; }
-        public virtual UserImage UserImage { get; set; }
+        public UInt64 UserEmail { get; set; }
+        public UserImage UserImage { get; set; }
+        public virtual ICollection<Recipe> Recipes { get; set; }
 
         public User() { }
 

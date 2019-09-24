@@ -5,6 +5,7 @@ using CookieBook.Infrastructure.Commands.Account;
 using CookieBook.Infrastructure.Commands.Auth;
 using CookieBook.Infrastructure.Commands.User;
 using CookieBook.Infrastructure.Parameters.Account;
+using CookieBook.Infrastructure.Parameters.Recipe;
 
 namespace CookieBook.Infrastructure.Services.Interfaces
 {
@@ -16,5 +17,7 @@ namespace CookieBook.Infrastructure.Services.Interfaces
         Task<User> GetAsync(int id);
         Task<IEnumerable<User>> GetAsync(AccountsParameters parameters);
         Task UpdatePasswordAsync(int id, UpdatePassword command);
+        Task<IEnumerable<Recipe>> GetUserRecipesAsync(int id, RecipesParameters parameters);
+        Task<Recipe> GetUserRecipeAsync(int id, int recipeId);
     }
 }

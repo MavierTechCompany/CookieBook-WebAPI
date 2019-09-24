@@ -2,26 +2,25 @@ using System;
 
 namespace CookieBook.Domain.Models.Base
 {
-    public abstract class Image
+    /// <summary>
+    /// Base class for image-like models.
+    /// <para>Represends a container-like table for all images.</para>
+    /// </summary>
+    public abstract class Image : Entity
     {
-        public int Id { get; protected set; }
-        public string ImageContent { get; protected set; }
-        public DateTime CreatedAt { get; protected set; }
-        public DateTime UpdatedAt { get; protected set; }
+        public string ImageContent { get; set; }
 
-        public Image() { }
+        public Image() : base() { }
 
-        public Image(string content)
+        public Image(string content) : base()
         {
             ImageContent = content;
-            CreatedAt = DateTime.UtcNow;
-            UpdatedAt = DateTime.UtcNow;
         }
 
         public virtual void Update(string content)
         {
             ImageContent = content;
-            UpdatedAt = DateTime.UtcNow;
+            base.Update();
         }
     }
 }
