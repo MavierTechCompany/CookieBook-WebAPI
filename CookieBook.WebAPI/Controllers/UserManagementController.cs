@@ -150,12 +150,16 @@ namespace CookieBook.WebAPI.Controllers
             await _userImageService.UpdateAsync(command, user);
             return NoContent();
         }
-        #endregion
+		#endregion
 
-        #region USERS/id/RECIPES
+		#region USERS/id/RECIPES
+		[Authorize(Roles = "user")]
         [HttpGet("users/{id}/recipes")]
         public async Task<IActionResult> ReadRecipesAsync(int id, [FromQuery] RecipesParameters parameters)
         {
+			if (id != AccountID)
+				return Forbid();
+
             if (!string.IsNullOrWhiteSpace(parameters.Fields) &&
                 !PropertyManager.PropertiesExists<Recipe>(parameters.Fields))
             {
@@ -179,9 +183,13 @@ namespace CookieBook.WebAPI.Controllers
 			return Created($"{Request.Host}{Request.Path}/{recipe.Id}", recipe);
 		}
 
+		[Authorize(Roles = "user")]
         [HttpGet("users/{id}/recipes/{recipeId}")]
         public async Task<IActionResult> ReadRecipeAsync(int id, int recipeId, [FromQuery] string fields)
         {
+			if (id != AccountID)
+				return Forbid();
+
             if (!string.IsNullOrWhiteSpace(fields) &&
                 !PropertyManager.PropertiesExists<Recipe>(fields))
             {
@@ -199,6 +207,9 @@ namespace CookieBook.WebAPI.Controllers
         [HttpPut("users/{id}/recipes/{recipeId}")]
         public async Task<IActionResult> UpdateRecipeAsync(int id, int recipeId, [FromBody] UpdateRecipe command)
         {
+			if (id != AccountID)
+				return Forbid();
+                
             throw new NotImplementedException();
         }
         #endregion
