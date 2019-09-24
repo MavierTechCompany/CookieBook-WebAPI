@@ -156,9 +156,10 @@ namespace CookieBook.Infrastructure.Services
             if (!await _context.Users.ExistsInDatabaseAsync(id))
                 throw new CorruptedOperationException("Invalid user id.");
 
-            var recipes = await _recipeService.GetAsync(parameters);
+			var recipes = await _recipeService.GetAsync(parameters);
+			recipes = recipes.Where(x => x.User.Id == id);
 
-            return recipes;
+			return recipes;
         }
 
         public async Task<Recipe> GetUserRecipeAsync(int id, int recipeId)
