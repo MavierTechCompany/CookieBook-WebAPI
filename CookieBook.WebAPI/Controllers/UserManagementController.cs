@@ -182,7 +182,6 @@ namespace CookieBook.WebAPI.Controllers
         [HttpGet("users/{id}/recipes/{recipeId}")]
         public async Task<IActionResult> ReadRecipeAsync(int id, int recipeId, [FromQuery] string fields)
         {
-
             if (!string.IsNullOrWhiteSpace(fields) &&
                 !PropertyManager.PropertiesExists<Recipe>(fields))
             {
