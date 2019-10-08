@@ -8,7 +8,7 @@ using CookieBook.WebAPI.Controllers.Base;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CookieBook.WebAPI.Controllers
+namespace CookieBook.WebAPI.Controllers.RecipeManagement
 {
     [Route("recipe-management")]
     public class RecipeManagementController : ApiControllerBase
