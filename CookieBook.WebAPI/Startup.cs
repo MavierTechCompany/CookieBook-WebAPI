@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using CookieBook.Domain.JWT;
 using CookieBook.Infrastructure.Commands.Account;
 using CookieBook.Infrastructure.Commands.Auth;
@@ -37,94 +38,96 @@ using Newtonsoft.Json.Serialization;
 
 namespace CookieBook.WebAPI
 {
-    public class Startup
-    {
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
+	public class Startup
+	{
+		public Startup(IConfiguration configuration)
+		{
+			Configuration = configuration;
+		}
 
-        public IConfiguration Configuration { get; }
+		public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
-        {
-            services.AddMvc(conf => conf.Filters.Add(typeof(ValidationFilter)))
-                .AddFluentValidation()
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
-                .AddJsonOptions(options =>
-                {
-                    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json
-                        .ReferenceLoopHandling.Ignore;
-                    options.SerializerSettings.ContractResolver =
-                        new CamelCasePropertyNamesContractResolver();
-                });
+		// This method gets called by the runtime. Use this method to add services to the container.
+		public void ConfigureServices(IServiceCollection services)
+		{
+			services.AddAutoMapper(typeof(Startup));
 
-            #region PolicySettings
-            services.AddAuthorization(x => x.AddPolicy("admin", p => p.RequireRole("admin")));
-            services.AddAuthorization(x => x.AddPolicy("user", p => p.RequireRole("user")));
-            #endregion
+			services.AddMvc(conf => conf.Filters.Add(typeof(ValidationFilter)))
+				.AddFluentValidation()
+				.SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
+				.AddJsonOptions(options =>
+				{
+					options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json
+						.ReferenceLoopHandling.Ignore;
+					options.SerializerSettings.ContractResolver =
+						new CamelCasePropertyNamesContractResolver();
+				});
 
-            #region DatabaseSettings
-            services.AddDbContext<CookieContext>(options => options
-                .UseSqlServer(Configuration.GetConnectionString("CookieBookDatabase"),
-                    c => c.MigrationsAssembly("CookieBook.WebAPI")).EnableSensitiveDataLogging(false));
-            #endregion
+			#region PolicySettings
+			services.AddAuthorization(x => x.AddPolicy("admin", p => p.RequireRole("admin")));
+			services.AddAuthorization(x => x.AddPolicy("user", p => p.RequireRole("user")));
+			#endregion
 
-            #region JWTSettings
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options =>
-                {
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                    ValidIssuer = Configuration.GetSection("JwtSettings:Issuer").Value,
-                    ValidateAudience = false,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8
-                    .GetBytes(Configuration.GetSection("JwtSettings:Key").Value))
-                    };
-                });
+			#region DatabaseSettings
+			services.AddDbContext<CookieContext>(options => options
+			   .UseSqlServer(Configuration.GetConnectionString("CookieBookDatabase"),
+				   c => c.MigrationsAssembly("CookieBook.WebAPI")).EnableSensitiveDataLogging(false));
+			#endregion
 
-            services.Configure<JwtSettings>(Configuration.GetSection("JwtSettings"));
-            services.AddScoped<IJwtHandler, JwtHandler>();
-            #endregion
+			#region JWTSettings
+			services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+				.AddJwtBearer(options =>
+				{
+					options.TokenValidationParameters = new TokenValidationParameters
+					{
+						ValidIssuer = Configuration.GetSection("JwtSettings:Issuer").Value,
+						ValidateAudience = false,
+						IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8
+					.GetBytes(Configuration.GetSection("JwtSettings:Key").Value))
+					};
+				});
 
-            #region Validators
-            services.AddTransient<IValidator<CreateUser>, CreateUserValidator>();
-            services.AddTransient<IValidator<LoginUser>, LoginUserValidator>();
-            services.AddTransient<IValidator<UpdateUserData>, UpdateUserValidator>();
-            services.AddTransient<IValidator<CreateImage>, CreateUserImageValidator>();
-            services.AddTransient<IValidator<UpdateImage>, UpdateUserImageValidator>();
-            services.AddTransient<IValidator<UpdatePassword>, UpdatePasswordValidator>();
-            services.AddTransient<IValidator<CreateRecipe>, CreateRecipeValidator>();
-            #endregion
+			services.Configure<JwtSettings>(Configuration.GetSection("JwtSettings"));
+			services.AddScoped<IJwtHandler, JwtHandler>();
+			#endregion
 
-            #region Services
-            services.AddScoped<IUserService, UserService>();
-            services.AddScoped<IUserImageService, UserImageService>();
-            services.AddScoped<IRecipeService, RecipeService>();
-            #endregion
+			#region Validators
+			services.AddTransient<IValidator<CreateUser>, CreateUserValidator>();
+			services.AddTransient<IValidator<LoginUser>, LoginUserValidator>();
+			services.AddTransient<IValidator<UpdateUserData>, UpdateUserValidator>();
+			services.AddTransient<IValidator<CreateImage>, CreateUserImageValidator>();
+			services.AddTransient<IValidator<UpdateImage>, UpdateUserImageValidator>();
+			services.AddTransient<IValidator<UpdatePassword>, UpdatePasswordValidator>();
+			services.AddTransient<IValidator<CreateRecipe>, CreateRecipeValidator>();
+			#endregion
 
-            #region Extensions
-            services.AddScoped<IDataHashManager, DataHashManager>();
-            #endregion
-        }
+			#region Services
+			services.AddScoped<IUserService, UserService>();
+			services.AddScoped<IUserImageService, UserImageService>();
+			services.AddScoped<IRecipeService, RecipeService>();
+			#endregion
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
-        {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                app.UseHsts();
-            }
+			#region Extensions
+			services.AddScoped<IDataHashManager, DataHashManager>();
+			#endregion
+		}
 
-            //app.UseHttpsRedirection();
-            app.UseAuthentication();
-            app.UseErrorHandler();
-            app.UseMvc();
-        }
-    }
+		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+		public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+		{
+			if (env.IsDevelopment())
+			{
+				app.UseDeveloperExceptionPage();
+			}
+			else
+			{
+				app.UseHsts();
+			}
+
+			//app.UseHttpsRedirection();
+			app.UseAuthentication();
+			app.UseErrorHandler();
+			app.UseMvc();
+		}
+	}
 }
