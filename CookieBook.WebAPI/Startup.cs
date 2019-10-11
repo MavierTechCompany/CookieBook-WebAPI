@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -50,7 +51,7 @@ namespace CookieBook.WebAPI
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
-			services.AddAutoMapper(typeof(Startup));
+			services.AddAutoMapper(Assembly.Load("CookieBook.Infrastructure"));
 
 			services.AddMvc(conf => conf.Filters.Add(typeof(ValidationFilter)))
 				.AddFluentValidation()

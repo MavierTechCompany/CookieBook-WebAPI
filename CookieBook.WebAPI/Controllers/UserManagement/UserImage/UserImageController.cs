@@ -32,16 +32,7 @@ namespace CookieBook.WebAPI.Controllers.UserManagement.UserImage
 			var user = await _userService.GetAsync(id);
 			var image = await _userImageService.AddAsync(command, user);
 
-			var resoultImage = new
-			{
-				image.Id,
-				image.UserRef,
-				image.ImageContent,
-				image.CreatedAt,
-				image.UpdatedAt
-			};
-
-			return Created($"{Request.Host}{Request.Path}/{user.Id}", resoultImage);
+			return Created($"{Request.Host}{Request.Path}/{user.Id}", image);
 		}
 
 		[HttpGet]
