@@ -1,5 +1,7 @@
 using System.Threading.Tasks;
+using AutoMapper;
 using CookieBook.Infrastructure.Commands.Picture;
+using CookieBook.Infrastructure.DTO;
 using CookieBook.Infrastructure.Extensions;
 using CookieBook.Infrastructure.Services.Interfaces;
 using CookieBook.WebAPI.Controllers.Base;
@@ -13,12 +15,14 @@ namespace CookieBook.WebAPI.Controllers.UserManagement.UserImage
     {
 		private readonly IUserService _userService;
 		private readonly IUserImageService _userImageService;
+		private readonly IMapper _mapper;
 
-        public UserImageController(IUserService userService, IUserImageService userImageService)
+        public UserImageController(IUserService userService, IUserImageService userImageService, IMapper mapper)
         {
 			_userService = userService;
 			_userImageService = userImageService;
-        }
+			_mapper = mapper;
+		}
 
 		[Authorize(Roles = "user")]
 		[HttpPost]
@@ -32,7 +36,9 @@ namespace CookieBook.WebAPI.Controllers.UserManagement.UserImage
 			var user = await _userService.GetAsync(id);
 			var image = await _userImageService.AddAsync(command, user);
 
-			return Created($"{Request.Host}{Request.Path}/{user.Id}", image);
+			var imageDto = _mapper.Map<UserImageDto>(image);
+
+			return Created($"{Request.Host}{Request.Path}/{user.Id}", imageDto);
 		}
 
 		[HttpGet]
@@ -45,7 +51,9 @@ namespace CookieBook.WebAPI.Controllers.UserManagement.UserImage
 			}
 
 			var image = await _userImageService.GetByUserIdAsync(id);
-			return Ok(image.ShapeData(fields));
+			var imageDto = _mapper.Map<UserImageDto>(image);
+
+			return Ok(imageDto.ShapeData(fields));
 		}
 
 		[Authorize(Roles = "user")]

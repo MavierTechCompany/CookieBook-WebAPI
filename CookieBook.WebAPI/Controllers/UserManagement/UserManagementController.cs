@@ -1,7 +1,9 @@
 using System.Threading.Tasks;
+using AutoMapper;
 using CookieBook.Domain.Models;
 using CookieBook.Infrastructure.Commands.Auth;
 using CookieBook.Infrastructure.Commands.User;
+using CookieBook.Infrastructure.DTO;
 using CookieBook.Infrastructure.Extensions;
 using CookieBook.Infrastructure.Parameters.Account;
 using CookieBook.Infrastructure.Services.Interfaces;
@@ -15,11 +17,13 @@ namespace CookieBook.WebAPI.Controllers.UserManagement
     public class UserManagementController : ApiControllerBase
     {
         private readonly IUserService _userService;
+		private readonly IMapper _mapper;
 
-        public UserManagementController(IUserService userService)
+        public UserManagementController(IUserService userService, IMapper mapper)
         {
             _userService = userService;
-        }
+			_mapper = mapper;
+		}
 
         #region USERS
         [HttpPost]
@@ -54,6 +58,8 @@ namespace CookieBook.WebAPI.Controllers.UserManagement
 			}
 
 			var user = await _userService.GetAsync(id);
+			//var userDto = _mapper.Map<UserDto>(user);
+
 			return Ok(user.ShapeData(fields));
 		}
 
