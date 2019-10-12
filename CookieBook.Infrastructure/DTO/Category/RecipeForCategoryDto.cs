@@ -3,7 +3,7 @@ using CookieBook.Infrastructure.DTO.Base;
 
 namespace CookieBook.Infrastructure.DTO
 {
-    public class RecipeDto : EntityDto
+    public class RecipeForCategoryDto : EntityDto
     {
 		public string Name { get; set; }
 		public string Description { get; set; }
@@ -11,9 +11,8 @@ namespace CookieBook.Infrastructure.DTO
 		public bool IsGlutenFree { get; set; }
 		public bool IsVegan { get; set; }
 		public bool IsVegetarian { get; set; }
-        public int UserId { get; set; }
+		public int UserId { get; set; }
 		public virtual RecipeImageDto RecipeImage { get; set; }
-		public virtual ICollection<CategoryDto> Categories { get; set; }
 		public virtual ICollection<ComponentDto> Components { get; set; }
     }
 }

@@ -36,9 +36,9 @@ namespace CookieBook.WebAPI.Controllers.RecipeManagement
             }
 
             var recipes = await _recipeService.GetAsync(parameters);
-			//var recipesDto = _mapper.Map<List<RecipeDto>>(recipes);
+			var recipesDto = _mapper.Map<IEnumerable<RecipeDto>>(recipes);
 
-			return Ok(recipes.ShapeData(parameters.Fields));
+			return Ok(recipesDto.ShapeData(parameters.Fields));
         }
 
         [HttpGet("recipes/{id}")]
