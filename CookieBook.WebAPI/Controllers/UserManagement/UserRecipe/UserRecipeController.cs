@@ -1,7 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
 using CookieBook.Domain.Models;
 using CookieBook.Infrastructure.Commands.Recipe;
+using CookieBook.Infrastructure.DTO;
 using CookieBook.Infrastructure.Extensions;
 using CookieBook.Infrastructure.Parameters.Recipe;
 using CookieBook.Infrastructure.Services.Interfaces;
@@ -12,15 +15,17 @@ using Microsoft.AspNetCore.Mvc;
 namespace CookieBook.WebAPI.Controllers.UserManagement.UserRecipe
 {
 	[Route("user-management/users/{id}/recipes")]
-    public class UserRecipeController : ApiControllerBase
-    {
+	public class UserRecipeController : ApiControllerBase
+	{
 		private readonly IUserService _userService;
 		private readonly IRecipeService _recipeService;
+		private readonly IMapper _mapper;
 
-		public UserRecipeController(IUserService userService, IRecipeService recipeService)
+		public UserRecipeController(IUserService userService, IRecipeService recipeService, IMapper mapper)
 		{
 			_userService = userService;
 			_recipeService = recipeService;
+			_mapper = mapper;
 		}
 
 		[Authorize(Roles = "user")]
@@ -37,6 +42,8 @@ namespace CookieBook.WebAPI.Controllers.UserManagement.UserRecipe
 			}
 
 			var recipes = await _userService.GetUserRecipesAsync(id, parameters);
+			var recipesDto = _mapper.Map<IEnumerable<RecipeDto>>(recipes);
+
 			return Ok(recipes.ShapeData(parameters.Fields));
 		}
 
@@ -49,8 +56,9 @@ namespace CookieBook.WebAPI.Controllers.UserManagement.UserRecipe
 
 			var user = await _userService.GetAsync(id);
 			var recipe = await _recipeService.AddAsync(command, user);
+			var recipeDto = _mapper.Map<RecipeDto>(recipe);
 
-			return Created($"{Request.Host}{Request.Path}/{recipe.Id}", recipe);
+			return Created($"{Request.Host}{Request.Path}/{recipe.Id}", recipeDto);
 		}
 
 		[Authorize(Roles = "user")]
@@ -70,7 +78,9 @@ namespace CookieBook.WebAPI.Controllers.UserManagement.UserRecipe
 			if (recipe == null)
 				return BadRequest();
 
-			return Ok(recipe.ShapeData(fields));
+			var recipeDto = _mapper.Map<RecipeDto>(recipe);
+
+			return Ok(recipeDto.ShapeData(fields));
 		}
 
 		[Authorize(Roles = "user")]
@@ -82,5 +92,5 @@ namespace CookieBook.WebAPI.Controllers.UserManagement.UserRecipe
 
 			throw new NotImplementedException();
 		}
-    }
+	}
 }

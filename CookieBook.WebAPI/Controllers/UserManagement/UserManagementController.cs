@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using CookieBook.Domain.Models;
@@ -13,24 +14,26 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CookieBook.WebAPI.Controllers.UserManagement
 {
-	[Route("user-management/users")]
+    [Route("user-management/users")]
     public class UserManagementController : ApiControllerBase
     {
         private readonly IUserService _userService;
-		private readonly IMapper _mapper;
+        private readonly IMapper _mapper;
 
         public UserManagementController(IUserService userService, IMapper mapper)
         {
             _userService = userService;
-			_mapper = mapper;
-		}
+            _mapper = mapper;
+        }
 
         #region USERS
         [HttpPost]
         public async Task<IActionResult> CreateUserAsync([FromBody] CreateUser command)
         {
             var user = await _userService.AddAsync(command);
-            return Created($"{Request.Host}{Request.Path}/{user.Id}", user);
+            var userDto = _mapper.Map<UserDto>(user);
+
+            return Created($"{Request.Host}{Request.Path}/{user.Id}", userDto);
         }
 
         [HttpGet]
@@ -43,36 +46,38 @@ namespace CookieBook.WebAPI.Controllers.UserManagement
             }
 
             var users = await _userService.GetAsync(parameters);
-            return Ok(users.ShapeData(parameters.Fields));
+            var usersDto = _mapper.Map<IEnumerable<UserDto>>(users);
+
+            return Ok(usersDto.ShapeData(parameters.Fields));
         }
-		#endregion
+        #endregion
 
-		#region USER
-		[HttpGet("{id}")]
-		public async Task<IActionResult> ReadUserAsync(int id, [FromQuery] string fields)
-		{
-			if (!string.IsNullOrWhiteSpace(fields) &&
-				!PropertyManager.PropertiesExists<User>(fields))
-			{
-				return BadRequest();
-			}
+        #region USER
+        [HttpGet("{id}")]
+        public async Task<IActionResult> ReadUserAsync(int id, [FromQuery] string fields)
+        {
+            if (!string.IsNullOrWhiteSpace(fields) &&
+                !PropertyManager.PropertiesExists<User>(fields))
+            {
+                return BadRequest();
+            }
 
-			var user = await _userService.GetAsync(id);
-			//var userDto = _mapper.Map<UserDto>(user);
+            var user = await _userService.GetAsync(id);
+            var userDto = _mapper.Map<UserDto>(user);
 
-			return Ok(user.ShapeData(fields));
-		}
+            return Ok(userDto.ShapeData(fields));
+        }
 
-		[Authorize(Roles = "user")]
-		[HttpPut("{id}")]
-		public async Task<IActionResult> UpdateUserAsync(int id, [FromBody] UpdateUserData command)
-		{
-			if (id != AccountID)
-				return Forbid();
+        [Authorize(Roles = "user")]
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateUserAsync(int id, [FromBody] UpdateUserData command)
+        {
+            if (id != AccountID)
+                return Forbid();
 
-			await _userService.UpdateAsync(id, command);
-			return NoContent();
-		}
+            await _userService.UpdateAsync(id, command);
+            return NoContent();
+        }
         #endregion
 
         #region TOKEN
