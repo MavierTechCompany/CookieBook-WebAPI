@@ -55,7 +55,7 @@ It follows the rules of the RESTfull API.
   
   <tr>
     <td>Adding cooking recipe</td>
-    <td>:construction:</td>
+    <td>:heavy_check_mark:</td>
   </tr>
     
   <tr>
