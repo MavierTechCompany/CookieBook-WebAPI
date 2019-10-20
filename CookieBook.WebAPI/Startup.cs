@@ -70,9 +70,9 @@ namespace CookieBook.WebAPI
 			#endregion
 
 			#region DatabaseSettings
-			services.AddDbContext<CookieContext>(options => options
+			services.AddDbContextPool<CookieContext>(options => options
 			   .UseSqlServer(Configuration.GetConnectionString("CookieBookDatabase"),
-				   c => c.MigrationsAssembly("CookieBook.WebAPI")).EnableSensitiveDataLogging(false));
+				   c => c.MigrationsAssembly("CookieBook.WebAPI")).EnableSensitiveDataLogging(false), 64);
 			#endregion
 
 			#region JWTSettings
@@ -125,9 +125,9 @@ namespace CookieBook.WebAPI
 				app.UseHsts();
 			}
 
-			//app.UseHttpsRedirection();
+			app.UseHttpsRedirection();
 			app.UseAuthentication();
-			//app.UseErrorHandler();
+			app.UseErrorHandler();
 			app.UseMvc();
 		}
 	}
