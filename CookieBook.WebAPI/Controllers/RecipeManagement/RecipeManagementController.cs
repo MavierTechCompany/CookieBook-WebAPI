@@ -1,6 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
 using CookieBook.Domain.Models;
+using CookieBook.Infrastructure.DTO;
 using CookieBook.Infrastructure.Extensions;
 using CookieBook.Infrastructure.Parameters.Recipe;
 using CookieBook.Infrastructure.Services.Interfaces;
@@ -14,9 +17,12 @@ namespace CookieBook.WebAPI.Controllers.RecipeManagement
     public class RecipeManagementController : ApiControllerBase
     {
         private readonly IRecipeService _recipeService;
-        public RecipeManagementController(IRecipeService recipeService)
+        private readonly IMapper _mapper;
+
+        public RecipeManagementController(IRecipeService recipeService, IMapper mapper)
         {
             _recipeService = recipeService;
+            _mapper = mapper;
         }
 
         #region RECIPES
@@ -30,7 +36,9 @@ namespace CookieBook.WebAPI.Controllers.RecipeManagement
             }
 
             var recipes = await _recipeService.GetAsync(parameters);
-            return Ok(recipes.ShapeData(parameters.Fields));
+            var recipesDto = _mapper.Map<IEnumerable<RecipeDto>>(recipes);
+
+            return Ok(recipesDto.ShapeData(parameters.Fields));
         }
 
         [HttpGet("recipes/{id}")]
@@ -43,7 +51,9 @@ namespace CookieBook.WebAPI.Controllers.RecipeManagement
             }
 
             var recipe = await _recipeService.GetAsync(id);
-            return Ok(recipe.ShapeData(fields));
+            var recipeDto = _mapper.Map<RecipeDto>(recipe);
+
+            return Ok(recipeDto.ShapeData(fields));
         }
         #endregion
     }

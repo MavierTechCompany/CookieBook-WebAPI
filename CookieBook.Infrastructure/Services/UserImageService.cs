@@ -14,10 +14,10 @@ namespace CookieBook.Infrastructure.Services
     {
         private readonly CookieContext _context;
 
-        public UserImageService(CookieContext context)
+		public UserImageService(CookieContext context)
         {
             _context = context;
-        }
+		}
 
         public async Task<UserImage> AddAsync(CreateImage command, User user)
         {
@@ -28,8 +28,8 @@ namespace CookieBook.Infrastructure.Services
 
             await _context.SaveChangesAsync();
 
-            return image;
-        }
+			return image;
+		}
 
         public async Task UpdateAsync(UpdateImage command, User user)
         {
@@ -42,10 +42,10 @@ namespace CookieBook.Infrastructure.Services
             var image = await _context.UserImages.GetByUserId(userId).SingleOrDefaultAsync();
 
             if (image == null)
-                throw new CorruptedOperationException("Invalid id");
+                throw new CorruptedOperationException("Image doesn't exist");
 
-            return image;
-        }
+			return image;
+		}
 
         public async Task<bool> ExistsForUser(int userId) =>
             await _context.UserImages.ExistsInDatabaseAsync(userId);
