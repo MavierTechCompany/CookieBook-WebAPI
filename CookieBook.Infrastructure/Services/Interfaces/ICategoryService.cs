@@ -10,6 +10,6 @@ namespace CookieBook.Infrastructure.Services.Interfaces
 		Task<Category> GetAsync(int id);
 		Task<IEnumerable<Category>> GetAsync();
 		Task<Category> AddAsync(CreateCategory command);
-		Task UpdateAsync(UpdateCategory command);
+		Task UpdateAsync(int id, UpdateCategory command);
 	}
 }

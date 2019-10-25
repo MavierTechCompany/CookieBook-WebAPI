@@ -31,19 +31,37 @@ namespace CookieBook.Infrastructure.Services
 			return category;
 		}
 
-		public Task<IEnumerable<Category>> GetAsync()
+		public async Task<IEnumerable<Category>> GetAsync()
 		{
-			throw new System.NotImplementedException();
+			var categories = await _context.Categories
+				.Include(x => x.RecipeCategories)
+				.ThenInclude(y => y.Recipe)
+				.ToListAsync();
+
+			return categories;
 		}
 
-		public Task<Category> AddAsync(CreateCategory command)
+		public async Task<Category> AddAsync(CreateCategory command)
 		{
-			throw new System.NotImplementedException();
+			var category = new Category(command.Name);
+
+			await _context.Categories.AddAsync(category);
+			await _context.SaveChangesAsync();
+
+			return category;
 		}
 
-		public Task UpdateAsync(UpdateCategory command)
+		public async Task UpdateAsync(int id, UpdateCategory command)
 		{
-			throw new System.NotImplementedException();
+			if (await _context.Categories.ExistsInDatabaseAsync(id) == false)
+				throw new CorruptedOperationException("Category doesn't exist.");
+
+			var category = await _context.Categories.GetById(id).SingleOrDefaultAsync();
+
+			category.Update(command.Name);
+
+			_context.Categories.Update(category);
+			await _context.SaveChangesAsync();
 		}
 	}
 }
