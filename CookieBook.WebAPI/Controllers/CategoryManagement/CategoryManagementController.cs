@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using AutoMapper;
 using CookieBook.Domain.Models;
 using CookieBook.Infrastructure.Commands.Category;
-using CookieBook.Infrastructure.Data;
 using CookieBook.Infrastructure.DTO;
 using CookieBook.Infrastructure.Extensions;
 using CookieBook.Infrastructure.Parameters.Category;
