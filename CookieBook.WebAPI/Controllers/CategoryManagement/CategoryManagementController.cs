@@ -54,7 +54,28 @@ namespace CookieBook.WebAPI.Controllers.CategoryManagement
         #endregion
 
         #region CATEGORY
+		[HttpGet("{id}")]
+        public async Task<IActionResult> ReadCategoryAsync(int id, [FromQuery] string fields)
+        {
+            if (!string.IsNullOrWhiteSpace(fields) &&
+                !PropertyManager.PropertiesExists<Category>(fields))
+            {
+                return BadRequest();
+            }
 
+            var category = await _categoryService.GetAsync(id);
+            var categoryrDto = _mapper.Map<CategoryDto>(category);
+
+            return Ok(categoryrDto.ShapeData(fields));
+        }
+
+		[Authorize(Roles = "admin")]
+		[HttpPut("{id}")]
+		public async Task<IActionResult> UpdateUserAsync(int id, [FromBody] UpdateCategory command)
+		{
+			await _categoryService.UpdateAsync(id, command);
+			return NoContent();
+		}
         #endregion
     }
 }
