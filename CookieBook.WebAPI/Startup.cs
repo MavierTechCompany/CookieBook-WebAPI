@@ -8,6 +8,7 @@ using AutoMapper;
 using CookieBook.Domain.JWT;
 using CookieBook.Infrastructure.Commands.Account;
 using CookieBook.Infrastructure.Commands.Auth;
+using CookieBook.Infrastructure.Commands.Category;
 using CookieBook.Infrastructure.Commands.Picture;
 using CookieBook.Infrastructure.Commands.Recipe;
 using CookieBook.Infrastructure.Commands.User;
@@ -17,6 +18,7 @@ using CookieBook.Infrastructure.Extensions.Security.Interface;
 using CookieBook.Infrastructure.Services;
 using CookieBook.Infrastructure.Services.Interfaces;
 using CookieBook.Infrastructure.Validators.Auth;
+using CookieBook.Infrastructure.Validators.Category;
 using CookieBook.Infrastructure.Validators.Recipe;
 using CookieBook.Infrastructure.Validators.User;
 using CookieBook.Infrastructure.Validators.UserImage;
@@ -100,12 +102,15 @@ namespace CookieBook.WebAPI
 			services.AddTransient<IValidator<UpdateImage>, UpdateUserImageValidator>();
 			services.AddTransient<IValidator<UpdatePassword>, UpdatePasswordValidator>();
 			services.AddTransient<IValidator<CreateRecipe>, CreateRecipeValidator>();
+			services.AddTransient<IValidator<CreateCategory>, CreateCategoryValidator>();
+			services.AddTransient<IValidator<UpdateCategory>, UpdateCategoryValidator>();
 			#endregion
 
 			#region Services
 			services.AddScoped<IUserService, UserService>();
 			services.AddScoped<IUserImageService, UserImageService>();
 			services.AddScoped<IRecipeService, RecipeService>();
+			services.AddScoped<ICategoryService, CategoryService>();
 			#endregion
 
 			#region Extensions
