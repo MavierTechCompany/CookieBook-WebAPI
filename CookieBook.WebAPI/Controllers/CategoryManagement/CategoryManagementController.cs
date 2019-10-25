@@ -1,8 +1,12 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
+using CookieBook.Domain.Models;
 using CookieBook.Infrastructure.Commands.Category;
 using CookieBook.Infrastructure.Data;
 using CookieBook.Infrastructure.DTO;
+using CookieBook.Infrastructure.Extensions;
+using CookieBook.Infrastructure.Parameters.Category;
 using CookieBook.Infrastructure.Services.Interfaces;
 using CookieBook.WebAPI.Controllers.Base;
 using Microsoft.AspNetCore.Authorization;
@@ -32,6 +36,21 @@ namespace CookieBook.WebAPI.Controllers.CategoryManagement
 
 			return Created($"{Request.Host}{Request.Path}/{category.Id}", categoryrDto);
         }
+
+		[HttpGet]
+		public async Task<IActionResult> ReadCategoriesAsync(CategoryParameters parameters)
+		{
+			if (!string.IsNullOrWhiteSpace(parameters.Fields) &&
+				!PropertyManager.PropertiesExists<Category>(parameters.Fields))
+			{
+				return BadRequest();
+			}
+
+			var categories = await _categoryService.GetAsync(parameters);
+			var categoriesDto = _mapper.Map<IEnumerable<CategoryDto>>(categories);
+
+			return Ok(categoriesDto.ShapeData(parameters.Fields));
+		}
         #endregion
 
         #region CATEGORY

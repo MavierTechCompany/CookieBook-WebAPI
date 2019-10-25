@@ -1,10 +1,12 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using CookieBook.Domain.Models;
 using CookieBook.Infrastructure.Commands.Category;
 using CookieBook.Infrastructure.Data;
 using CookieBook.Infrastructure.Data.QueryExtensions;
 using CookieBook.Infrastructure.Extensions.CustomExceptions;
+using CookieBook.Infrastructure.Parameters.Category;
 using CookieBook.Infrastructure.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -31,14 +33,22 @@ namespace CookieBook.Infrastructure.Services
 			return category;
 		}
 
-		public async Task<IEnumerable<Category>> GetAsync()
+		public async Task<IEnumerable<Category>> GetAsync(CategoryParameters parameters)
 		{
-			var categories = await _context.Categories
-				.Include(x => x.RecipeCategories)
-				.ThenInclude(y => y.Recipe)
-				.ToListAsync();
+			var categories = _context.Categories.AsQueryable();
 
-			return categories;
+			if (!string.IsNullOrEmpty(parameters.Query))
+			{
+				var nameForQuery = parameters.Query.ToLowerInvariant();
+
+				categories = categories.Where(x => x.Name.ToLowerInvariant().Contains(nameForQuery));
+			}
+
+			categories = categories
+			 	.Include(x => x.RecipeCategories)
+			 	.ThenInclude(y => y.Recipe);
+
+			return await categories.ToListAsync();
 		}
 
 		public async Task<Category> AddAsync(CreateCategory command)
