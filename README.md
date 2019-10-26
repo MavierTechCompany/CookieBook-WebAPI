@@ -58,6 +58,16 @@ It follows the rules of the RESTfull API.
     <td>:heavy_check_mark:</td>
   </tr>
     
+   <tr>
+    <td>Adding category</td>
+    <td>:heavy_check_mark:</td>
+  </tr>
+    
+   <tr>
+    <td>Updating category</td>
+    <td>:heavy_check_mark:</td>
+  </tr>
+    
   <tr>
     <td>Updating cooking recipe</td>
     <td>:construction:</td>
