@@ -104,5 +104,16 @@ namespace CookieBook.Infrastructure.Services
 
 			return recipe;
 		}
+
+        public async Task<Recipe> UpdateAsync(UpdateRecipe command, int id)
+        {
+			var recipe = await GetAsync(id);
+			recipe.Update(); //TODO need to pass parameters
+
+			_context.Recipes.Update(recipe);
+			await _context.SaveChangesAsync();
+
+			return recipe;
+		}
     }
 }
