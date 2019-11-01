@@ -107,8 +107,11 @@ namespace CookieBook.Infrastructure.Services
 
         public async Task<Recipe> UpdateAsync(UpdateRecipe command, int id)
         {
+            //TODO Check if exists (create a generic extension method)
+
 			var recipe = await GetAsync(id);
-			recipe.Update(); //TODO need to pass parameters
+			recipe.Update(command.Name, command.Description, command.IsLactoseFree,
+				command.IsGlutenFree, command.IsVegan, command.IsVegetarian);
 
 			_context.Recipes.Update(recipe);
 			await _context.SaveChangesAsync();
