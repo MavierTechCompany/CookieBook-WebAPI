@@ -24,14 +24,14 @@ namespace CookieBook.Infrastructure.Services
 
         public async Task<Recipe> GetAsync(int id)
         {
-            var recipe = await _context.Recipes.GetById(id)
-                .Include(x => x.User)
+			var recipe = await _context.Recipes.GetById(id)
+				.Include(x => x.User)
 				.Include(x => x.Components)
 				.Include(x => x.RecipeImage)
 				.Include(x => x.RecipeCategories).ThenInclude(y => y.Category)
-                .SingleOrDefaultAsync();
+				.SingleOrDefaultAsync();
 
-            if (recipe == null)
+			if (recipe == null)
                 throw new CorruptedOperationException("Invalid recipe id");
 
             return recipe;
@@ -107,7 +107,8 @@ namespace CookieBook.Infrastructure.Services
 
         public async Task<Recipe> UpdateAsync(UpdateRecipe command, int id)
         {
-            //TODO Check if exists (create a generic extension method)
+			if (await _context.Recipes.ExistsInDatabaseAsync(id) == false)
+				throw new CorruptedOperationException("Recipe doesn't exist.");
 
 			var recipe = await GetAsync(id);
 			recipe.Update(command.Name, command.Description, command.IsLactoseFree,

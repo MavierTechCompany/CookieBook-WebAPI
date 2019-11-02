@@ -48,6 +48,6 @@ namespace CookieBook.Infrastructure.Services
 		}
 
         public async Task<bool> ExistsForUser(int userId) =>
-            await _context.UserImages.ExistsInDatabaseAsync(userId);
+            await _context.UserImages.ExistsForUserAsync(userId);
     }
 }
