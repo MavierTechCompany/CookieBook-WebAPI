@@ -105,7 +105,7 @@ namespace CookieBook.Infrastructure.Services
 			return recipe;
 		}
 
-        public async Task<Recipe> UpdateAsync(UpdateRecipe command, int id)
+        public async Task UpdateAsync(UpdateRecipe command, int id)
         {
 			if (await _context.Recipes.ExistsInDatabaseAsync(id) == false)
 				throw new CorruptedOperationException("Recipe doesn't exist.");
@@ -116,8 +116,6 @@ namespace CookieBook.Infrastructure.Services
 
 			_context.Recipes.Update(recipe);
 			await _context.SaveChangesAsync();
-
-			return recipe;
 		}
     }
 }
