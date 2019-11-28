@@ -90,7 +90,8 @@ namespace CookieBook.WebAPI.Controllers.UserManagement.UserRecipe
 			if (id != AccountID)
 				return Forbid();
 
-			throw new NotImplementedException();
+			await _recipeService.UpdateAsync(command, recipeId);
+			return NoContent();
 		}
 	}
 }

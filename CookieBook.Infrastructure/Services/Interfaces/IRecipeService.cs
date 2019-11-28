@@ -11,5 +11,6 @@ namespace CookieBook.Infrastructure.Services.Interfaces
         Task<Recipe> GetAsync(int id);
         Task<IEnumerable<Recipe>> GetAsync(RecipesParameters parameters);
         Task<Recipe> AddAsync(CreateRecipe command, User user);
-    }
+		Task UpdateAsync(UpdateRecipe command, int id);
+	}
 }

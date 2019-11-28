@@ -22,15 +22,14 @@ namespace CookieBook.Domain.Models
 
         public void Update(UInt64 login, UInt64 userEmail)
         {
-            Login = login;
             UserEmail = userEmail;
-            UpdatedAt = DateTime.UtcNow;
-        }
+			base.Update(login);
+		}
 
         public void UpdatePassword(byte[] newPassword)
         {
             PasswordHash = newPassword;
-            UpdatedAt = DateTime.UtcNow;
-        }
+			base.Update();
+		}
     }
 }
