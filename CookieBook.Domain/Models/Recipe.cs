@@ -23,24 +23,24 @@ namespace CookieBook.Domain.Models
         public Recipe(string name, string description, bool isLactoseFree, bool isGlutenFree,
             bool isVegan, bool isVegetarian) : base()
         {
-			Name = name;
-			Description = description;
-			IsLactoseFree = isLactoseFree;
-			IsGlutenFree = isGlutenFree;
-			IsVegan = isVegan;
-			IsVegetarian = isVegetarian;
-		}
+            Name = name;
+            Description = description;
+            IsLactoseFree = isLactoseFree;
+            IsGlutenFree = isGlutenFree;
+            IsVegan = isVegan;
+            IsVegetarian = isVegetarian;
+        }
 
         public void Update(string name, string description, bool isLactoseFree, bool isGlutenFree,
-			bool isVegan, bool isVegetarian)
+            bool isVegan, bool isVegetarian)
         {
             Name = name;
-			Description = description;
-			IsLactoseFree = isLactoseFree;
-			IsGlutenFree = isGlutenFree;
-			IsVegan = isVegan;
-			IsVegetarian = isVegetarian;
-			base.Update();
-		}
+            Description = description;
+            IsLactoseFree = isLactoseFree;
+            IsGlutenFree = isGlutenFree;
+            IsVegan = isVegan;
+            IsVegetarian = isVegetarian;
+            base.Update();
+        }
     }
 }
