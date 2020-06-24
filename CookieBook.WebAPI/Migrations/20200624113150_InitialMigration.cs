@@ -106,22 +106,46 @@ namespace CookieBook.WebAPI.Migrations
                     UpdatedAt = table.Column<DateTime>(nullable: false),
                     ImageContent = table.Column<string>(nullable: true),
                     Discriminator = table.Column<string>(nullable: false),
-                    RecipeRef = table.Column<int>(nullable: true),
-                    UserRef = table.Column<int>(nullable: true)
+                    RecipeId = table.Column<int>(nullable: true),
+                    UserId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Images", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Images_Recipes_RecipeRef",
-                        column: x => x.RecipeRef,
+                        name: "FK_Images_Recipes_RecipeId",
+                        column: x => x.RecipeId,
                         principalTable: "Recipes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Images_Accounts_UserRef",
-                        column: x => x.UserRef,
+                        name: "FK_Images_Accounts_UserId",
+                        column: x => x.UserId,
                         principalTable: "Accounts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Rate",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    CreatedAt = table.Column<DateTime>(nullable: false),
+                    UpdatedAt = table.Column<DateTime>(nullable: false),
+                    Value = table.Column<float>(nullable: false),
+                    Description = table.Column<string>(nullable: true),
+                    RecipeId = table.Column<int>(nullable: false),
+                    RecipeId1 = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Rate", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Rate_Recipes_RecipeId1",
+                        column: x => x.RecipeId1,
+                        principalTable: "Recipes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -158,18 +182,23 @@ namespace CookieBook.WebAPI.Migrations
                 column: "RecipeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Images_RecipeRef",
+                name: "IX_Images_RecipeId",
                 table: "Images",
-                column: "RecipeRef",
+                column: "RecipeId",
                 unique: true,
-                filter: "[RecipeRef] IS NOT NULL");
+                filter: "[RecipeId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Images_UserRef",
+                name: "IX_Images_UserId",
                 table: "Images",
-                column: "UserRef",
+                column: "UserId",
                 unique: true,
-                filter: "[UserRef] IS NOT NULL");
+                filter: "[UserId] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Rate_RecipeId1",
+                table: "Rate",
+                column: "RecipeId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_RecipeCategories_CategoryId",
@@ -189,6 +218,9 @@ namespace CookieBook.WebAPI.Migrations
 
             migrationBuilder.DropTable(
                 name: "Images");
+
+            migrationBuilder.DropTable(
+                name: "Rate");
 
             migrationBuilder.DropTable(
                 name: "RecipeCategories");
