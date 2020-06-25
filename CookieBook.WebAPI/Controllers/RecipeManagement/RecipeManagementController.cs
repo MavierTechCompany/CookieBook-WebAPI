@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using CookieBook.Domain.Models;
+using CookieBook.Infrastructure.Commands.Recipe.Rate;
 using CookieBook.Infrastructure.DTO;
 using CookieBook.Infrastructure.Extensions;
 using CookieBook.Infrastructure.Parameters.Recipe;
@@ -25,7 +26,6 @@ namespace CookieBook.WebAPI.Controllers.RecipeManagement
             _mapper = mapper;
         }
 
-        #region RECIPES
         [HttpGet("recipes")]
         public async Task<IActionResult> ReadRecipesAsync(RecipesParameters parameters)
         {
@@ -55,6 +55,12 @@ namespace CookieBook.WebAPI.Controllers.RecipeManagement
 
             return Ok(recipeDto.ShapeData(fields));
         }
-        #endregion
+
+        [Authorize(Roles = "user")]
+        [HttpPost("recipes/{id}/rates")]
+        public async Task<IActionResult> CreateRateAsync(int id, [FromBody] CreateRate command)
+        {
+            return Ok();
+        }
     }
 }
