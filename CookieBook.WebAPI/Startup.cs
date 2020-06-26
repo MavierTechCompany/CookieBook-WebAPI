@@ -105,6 +105,7 @@ namespace CookieBook.WebAPI
             services.AddScoped<IUserImageService, UserImageService>();
             services.AddScoped<IRecipeService, RecipeService>();
             services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<IRateService, RateService>();
 
             services.AddScoped<IDataHashManager, DataHashManager>();
         }

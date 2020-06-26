@@ -17,6 +17,7 @@ namespace CookieBook.Infrastructure.Data
         public DbSet<Category> Categories { get; set; }
         public DbSet<Component> Components { get; set; }
         public DbSet<RecipeCategory> RecipeCategories { get; set; }
+        public DbSet<Rate> Rates { get; set; }
 
         public CookieContext(DbContextOptions<CookieContext> options) : base(options)
         {

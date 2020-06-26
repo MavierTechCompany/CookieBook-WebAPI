@@ -7,6 +7,7 @@ using CookieBook.Infrastructure.Commands.Recipe.Rate;
 using CookieBook.Infrastructure.DTO;
 using CookieBook.Infrastructure.Extensions;
 using CookieBook.Infrastructure.Parameters.Recipe;
+using CookieBook.Infrastructure.Parameters.Recipe.Rate;
 using CookieBook.Infrastructure.Services.Interfaces;
 using CookieBook.WebAPI.Controllers.Base;
 using Microsoft.AspNetCore.Authorization;
@@ -18,19 +19,20 @@ namespace CookieBook.WebAPI.Controllers.RecipeManagement
     public class RecipeManagementController : ApiControllerBase
     {
         private readonly IRecipeService _recipeService;
+        private readonly IRateService _rateService;
         private readonly IMapper _mapper;
 
-        public RecipeManagementController(IRecipeService recipeService, IMapper mapper)
+        public RecipeManagementController(IRecipeService recipeService, IRateService rateService, IMapper mapper)
         {
             _recipeService = recipeService;
+            _rateService = rateService;
             _mapper = mapper;
         }
 
         [HttpGet("recipes")]
         public async Task<IActionResult> ReadRecipesAsync(RecipesParameters parameters)
         {
-            if (!string.IsNullOrWhiteSpace(parameters.Fields) &&
-                !PropertyManager.PropertiesExists<Recipe>(parameters.Fields))
+            if (!string.IsNullOrWhiteSpace(parameters.Fields) && !PropertyManager.PropertiesExists<Recipe>(parameters.Fields))
             {
                 return BadRequest();
             }
@@ -44,8 +46,7 @@ namespace CookieBook.WebAPI.Controllers.RecipeManagement
         [HttpGet("recipes/{id}")]
         public async Task<IActionResult> ReadRecipeAsync(int id, [FromQuery] string fields)
         {
-            if (!string.IsNullOrWhiteSpace(fields) &&
-                !PropertyManager.PropertiesExists<Recipe>(fields))
+            if (!string.IsNullOrWhiteSpace(fields) && !PropertyManager.PropertiesExists<Recipe>(fields))
             {
                 return BadRequest();
             }
@@ -60,7 +61,39 @@ namespace CookieBook.WebAPI.Controllers.RecipeManagement
         [HttpPost("recipes/{id}/rates")]
         public async Task<IActionResult> CreateRateAsync(int id, [FromBody] CreateRate command)
         {
-            return Ok();
+            var recipe = await _recipeService.GetAsync(id);
+            var rate = await _rateService.CreateAsync(command, recipe);
+            var rateDto = _mapper.Map<RateDto>(rate);
+
+            return Created($"{Request.Host}{Request.Path}/{rate.Id}", rateDto);
+        }
+
+        [HttpGet("recipes/{id}/rates")]
+        public async Task<IActionResult> ReadRatesAsync(int id, RatesParameters parameters)
+        {
+            if (!string.IsNullOrWhiteSpace(parameters.Fields) && !PropertyManager.PropertiesExists<Rate>(parameters.Fields))
+            {
+                return BadRequest();
+            }
+
+            var rates = await _rateService.GetByRecipeIdAsync(id, parameters);
+            var ratesDto = _mapper.Map<IEnumerable<RecipeDto>>(rates);
+
+            return Ok(ratesDto.ShapeData(parameters.Fields));
+        }
+
+        [HttpGet("recipes/{id}/rates{rateId}")]
+        public async Task<IActionResult> ReadRateAsync(int id, [FromQuery] string fields)
+        {
+            if (!string.IsNullOrWhiteSpace(fields) && !PropertyManager.PropertiesExists<Rate>(fields))
+            {
+                return BadRequest();
+            }
+
+            var rate = await _rateService.GetAsync(id);
+            var rateDto = _mapper.Map<RecipeDto>(rate);
+
+            return Ok(rateDto.ShapeData(fields));
         }
     }
 }
