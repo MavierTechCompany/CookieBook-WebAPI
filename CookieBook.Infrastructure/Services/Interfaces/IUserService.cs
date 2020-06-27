@@ -12,12 +12,19 @@ namespace CookieBook.Infrastructure.Services.Interfaces
     public interface IUserService
     {
         Task<User> AddAsync(CreateUser command);
+
         Task UpdateAsync(int id, UpdateUserData command);
+
         Task<string> LoginAsync(LoginUser command);
-        Task<User> GetAsync(int id);
-        Task<IEnumerable<User>> GetAsync(AccountsParameters parameters);
+
+        Task<User> GetAsync(int id, bool asNoTracking = false);
+
+        Task<IEnumerable<User>> GetAsync(AccountsParameters parameters, bool asNoTracking = false);
+
         Task UpdatePasswordAsync(int id, UpdatePassword command);
-        Task<IEnumerable<Recipe>> GetUserRecipesAsync(int id, RecipesParameters parameters);
-        Task<Recipe> GetUserRecipeAsync(int id, int recipeId);
+
+        Task<IEnumerable<Recipe>> GetUserRecipesAsync(int id, RecipesParameters parameters, bool asNoTracking = false);
+
+        Task<Recipe> GetUserRecipeAsync(int id, int recipeId, bool asNoTracking = false);
     }
 }

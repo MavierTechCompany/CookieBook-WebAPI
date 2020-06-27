@@ -23,15 +23,19 @@ namespace CookieBook.Infrastructure.Services
             _context = context;
         }
 
-        public async Task<Recipe> GetAsync(int id)
+        public async Task<Recipe> GetAsync(int id, bool asNoTracking = false)
         {
-            var recipe = await _context.Recipes.GetById(id)
+            var query = _context.Recipes.GetById(id)
                 .Include(x => x.User)
                 .Include(x => x.Rates)
                 .Include(x => x.Components)
                 .Include(x => x.RecipeImage)
-                .Include(x => x.RecipeCategories).ThenInclude(y => y.Category)
-                .SingleOrDefaultAsync();
+                .Include(x => x.RecipeCategories).ThenInclude(y => y.Category).AsQueryable();
+
+            if (asNoTracking)
+                query = query.AsNoTracking();
+
+            var recipe = await query.SingleOrDefaultAsync();
 
             if (recipe == null)
                 throw new CorruptedOperationException("Invalid recipe id");
@@ -39,7 +43,7 @@ namespace CookieBook.Infrastructure.Services
             return recipe;
         }
 
-        public async Task<IEnumerable<Recipe>> GetAsync(RecipesParameters parameters)
+        public async Task<IEnumerable<Recipe>> GetAsync(RecipesParameters parameters, bool asNoTracking = false)
         {
             var recipes = _context.Recipes.AsQueryable();
 
@@ -81,6 +85,9 @@ namespace CookieBook.Infrastructure.Services
                 .Include(x => x.Components)
                 .Include(x => x.RecipeImage)
                 .Include(x => x.RecipeCategories).ThenInclude(y => y.Category);
+
+            if (asNoTracking)
+                recipes = recipes.AsNoTracking();
 
             return await recipes.ToListAsync();
         }

@@ -8,9 +8,12 @@ namespace CookieBook.Infrastructure.Services.Interfaces
 {
     public interface ICategoryService
     {
-		Task<Category> GetAsync(int id);
-		Task<IEnumerable<Category>> GetAsync(CategoryParameters parameters);
-		Task<Category> AddAsync(CreateCategory command);
-		Task UpdateAsync(int id, UpdateCategory command);
-	}
+        Task<Category> GetAsync(int id, bool asNoTracking = false);
+
+        Task<IEnumerable<Category>> GetAsync(CategoryParameters parameters, bool asNoTracking = false);
+
+        Task<Category> AddAsync(CreateCategory command);
+
+        Task UpdateAsync(int id, UpdateCategory command);
+    }
 }

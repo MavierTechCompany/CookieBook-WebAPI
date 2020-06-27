@@ -111,14 +111,18 @@ namespace CookieBook.Infrastructure.Services
             return await _jwtHandler.CreateTokenAsync(user.Id, user.Role);
         }
 
-        public async Task<User> GetAsync(int id)
+        public async Task<User> GetAsync(int id, bool asNoTracking = false)
         {
-            var user = await _context.Users.GetById(id)
+            var query = _context.Users.GetById(id)
                 .Include(x => x.UserImage)
                 .Include(x => x.Recipes).ThenInclude(y => y.RecipeImage)
                 .Include(x => x.Recipes).ThenInclude(x => x.RecipeCategories).ThenInclude(y => y.Category)
-                .Include(x => x.Recipes).ThenInclude(z => z.Components)
-                .SingleOrDefaultAsync();
+                .Include(x => x.Recipes).ThenInclude(z => z.Components).AsQueryable();
+
+            if (asNoTracking)
+                query = query.AsNoTracking();
+
+            var user = await query.SingleOrDefaultAsync();
 
             if (user == null)
                 throw new CorruptedOperationException("Invalid user id");
@@ -126,7 +130,7 @@ namespace CookieBook.Infrastructure.Services
             return user;
         }
 
-        public async Task<IEnumerable<User>> GetAsync(AccountsParameters parameters)
+        public async Task<IEnumerable<User>> GetAsync(AccountsParameters parameters, bool asNoTracking = false)
         {
             var users = _context.Users.AsQueryable();
 
@@ -148,26 +152,29 @@ namespace CookieBook.Infrastructure.Services
                 .Include(x => x.Recipes).ThenInclude(x => x.RecipeCategories).ThenInclude(y => y.Category)
                 .Include(x => x.Recipes).ThenInclude(z => z.Components);
 
+            if (asNoTracking)
+                users = users.AsNoTracking();
+
             return await users.ToListAsync();
         }
 
-        public async Task<IEnumerable<Recipe>> GetUserRecipesAsync(int id, RecipesParameters parameters)
+        public async Task<IEnumerable<Recipe>> GetUserRecipesAsync(int id, RecipesParameters parameters, bool asNoTracking = false)
         {
             if (!await _context.Users.ExistsInDatabaseAsync(id))
                 throw new CorruptedOperationException("Invalid user id.");
 
-			var recipes = await _recipeService.GetAsync(parameters);
-			recipes = recipes.Where(x => x.User.Id == id);
+            var recipes = await _recipeService.GetAsync(parameters, asNoTracking);
+            recipes = recipes.Where(x => x.User.Id == id);
 
-			return recipes;
+            return recipes;
         }
 
-        public async Task<Recipe> GetUserRecipeAsync(int id, int recipeId)
+        public async Task<Recipe> GetUserRecipeAsync(int id, int recipeId, bool asNoTracking = false)
         {
             if (!await _context.Users.ExistsInDatabaseAsync(id))
                 throw new CorruptedOperationException("Invalid user id.");
 
-            var recipe = await _recipeService.GetAsync(recipeId);
+            var recipe = await _recipeService.GetAsync(recipeId, asNoTracking);
             if (recipe.User.Id != id)
                 recipe = null;
 
