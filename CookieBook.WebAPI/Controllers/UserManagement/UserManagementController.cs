@@ -26,7 +26,6 @@ namespace CookieBook.WebAPI.Controllers.UserManagement
             _mapper = mapper;
         }
 
-        #region USERS
         [HttpPost]
         public async Task<IActionResult> CreateUserAsync([FromBody] CreateUser command)
         {
@@ -50,9 +49,7 @@ namespace CookieBook.WebAPI.Controllers.UserManagement
 
             return Ok(usersDto.ShapeData(parameters.Fields));
         }
-        #endregion
 
-        #region USER
         [HttpGet("{id}")]
         public async Task<IActionResult> ReadUserAsync(int id, [FromQuery] string fields)
         {
@@ -78,15 +75,12 @@ namespace CookieBook.WebAPI.Controllers.UserManagement
             await _userService.UpdateAsync(id, command);
             return NoContent();
         }
-        #endregion
 
-        #region TOKEN
         [HttpPost("token")]
         public async Task<IActionResult> LoginUserAsync([FromBody] LoginUser command)
         {
             var token = await _userService.LoginAsync(command);
             return Ok(token);
         }
-        #endregion
     }
 }

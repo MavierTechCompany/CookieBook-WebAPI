@@ -4,11 +4,16 @@ namespace CookieBook.Domain.Models
 {
     public class RecipeImage : Image
     {
-        public int? RecipeRef { get; set; }
+        public int? RecipeId { get; set; }
 
         public Recipe Recipe { get; set; }
 
-        public RecipeImage() : base() { }
-        public RecipeImage(string content) : base(content) { }
+        public RecipeImage() : base()
+        {
+        }
+
+        public RecipeImage(string content) : base(content)
+        {
+        }
     }
 }

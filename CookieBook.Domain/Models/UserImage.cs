@@ -4,12 +4,16 @@ namespace CookieBook.Domain.Models
 {
     public class UserImage : Image
     {
-        public int? UserRef { get; set; }
+        public int? UserId { get; set; }
 
         public virtual User User { get; set; }
 
-        public UserImage() : base() { }
+        public UserImage() : base()
+        {
+        }
 
-        public UserImage(string content) : base(content) { }
+        public UserImage(string content) : base(content)
+        {
+        }
     }
 }

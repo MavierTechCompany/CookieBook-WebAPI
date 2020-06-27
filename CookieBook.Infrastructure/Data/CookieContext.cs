@@ -8,7 +8,6 @@ namespace CookieBook.Infrastructure.Data
 {
     public class CookieContext : DbContext
     {
-        #region DbSets
         public DbSet<Account> Accounts { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Image> Images { get; set; }
@@ -18,9 +17,12 @@ namespace CookieBook.Infrastructure.Data
         public DbSet<Category> Categories { get; set; }
         public DbSet<Component> Components { get; set; }
         public DbSet<RecipeCategory> RecipeCategories { get; set; }
-        #endregion
+        public DbSet<Rate> Rates { get; set; }
 
-        public CookieContext(DbContextOptions<CookieContext> options) : base(options) { }
+        public CookieContext(DbContextOptions<CookieContext> options) : base(options)
+        {
+        }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             foreach (var relationship in modelBuilder.Model.GetEntityTypes()
@@ -29,32 +31,25 @@ namespace CookieBook.Infrastructure.Data
                 relationship.DeleteBehavior = DeleteBehavior.Restrict;
             }
 
-            #region Recipe
             modelBuilder.Entity<Recipe>()
                 .HasOne(x => x.RecipeImage)
                 .WithOne(y => y.Recipe)
-                .HasForeignKey<RecipeImage>(y => y.RecipeRef)
                 .IsRequired(false);
 
-			modelBuilder.Entity<Recipe>()
-				.HasMany(x => x.Components)
-				.WithOne(y => y.Recipe);
-			#endregion
+            modelBuilder.Entity<Recipe>()
+                .HasMany(x => x.Components)
+                .WithOne(y => y.Recipe);
 
-			#region User
-			modelBuilder.Entity<User>()
+            modelBuilder.Entity<User>()
                 .HasOne(x => x.UserImage)
                 .WithOne(y => y.User)
-                .HasForeignKey<UserImage>(y => y.UserRef)
                 .IsRequired(false);
 
             modelBuilder.Entity<User>()
                 .HasMany(x => x.Recipes)
                 .WithOne(y => y.User)
                 .IsRequired();
-            #endregion
 
-            #region RecipeCategory
             modelBuilder.Entity<RecipeCategory>()
                 .HasKey(xy => new { xy.RecipeId, xy.CategoryId });
 
@@ -67,7 +62,6 @@ namespace CookieBook.Infrastructure.Data
                 .HasOne(xy => xy.Category)
                 .WithMany(y => y.RecipeCategories)
                 .HasForeignKey(xy => xy.CategoryId);
-            #endregion
         }
     }
 }

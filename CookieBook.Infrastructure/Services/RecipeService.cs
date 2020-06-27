@@ -27,6 +27,7 @@ namespace CookieBook.Infrastructure.Services
         {
             var recipe = await _context.Recipes.GetById(id)
                 .Include(x => x.User)
+                .Include(x => x.Rates)
                 .Include(x => x.Components)
                 .Include(x => x.RecipeImage)
                 .Include(x => x.RecipeCategories).ThenInclude(y => y.Category)
@@ -76,6 +77,7 @@ namespace CookieBook.Infrastructure.Services
 
             recipes = recipes
                 .Include(x => x.User)
+                .Include(x => x.Rates)
                 .Include(x => x.Components)
                 .Include(x => x.RecipeImage)
                 .Include(x => x.RecipeCategories).ThenInclude(y => y.Category);

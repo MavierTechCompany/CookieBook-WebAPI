@@ -16,9 +16,12 @@ namespace CookieBook.Domain.Models
         public virtual User User { get; set; }
         public virtual RecipeImage RecipeImage { get; set; }
         public virtual ICollection<RecipeCategory> RecipeCategories { get; set; }
+        public virtual ICollection<Rate> Rates { get; set; }
         public virtual ICollection<Component> Components { get; set; }
 
-        public Recipe() : base() { }
+        public Recipe() : base()
+        {
+        }
 
         public Recipe(string name, string description, bool isLactoseFree, bool isGlutenFree,
             bool isVegan, bool isVegetarian) : base()

@@ -10,14 +10,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CookieBook.WebAPI.Migrations
 {
     [DbContext(typeof(CookieContext))]
-    [Migration("20190923145931_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20200627083336_InitMigration")]
+    partial class InitMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.11-servicing-32099")
+                .HasAnnotation("ProductVersion", "2.1.14-servicing-32113")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -135,6 +135,29 @@ namespace CookieBook.WebAPI.Migrations
                     b.ToTable("RecipeCategories");
                 });
 
+            modelBuilder.Entity("CookieBook.Domain.Models.Rate", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreatedAt");
+
+                    b.Property<string>("Description");
+
+                    b.Property<int>("RecipeId");
+
+                    b.Property<DateTime>("UpdatedAt");
+
+                    b.Property<float>("Value");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RecipeId");
+
+                    b.ToTable("Rates");
+                });
+
             modelBuilder.Entity("CookieBook.Domain.Models.Recipe", b =>
                 {
                     b.Property<int>("Id")
@@ -183,11 +206,11 @@ namespace CookieBook.WebAPI.Migrations
                 {
                     b.HasBaseType("CookieBook.Domain.Models.Base.Image");
 
-                    b.Property<int?>("RecipeRef");
+                    b.Property<int?>("RecipeId");
 
-                    b.HasIndex("RecipeRef")
+                    b.HasIndex("RecipeId")
                         .IsUnique()
-                        .HasFilter("[RecipeRef] IS NOT NULL");
+                        .HasFilter("[RecipeId] IS NOT NULL");
 
                     b.ToTable("RecipeImage");
 
@@ -198,11 +221,11 @@ namespace CookieBook.WebAPI.Migrations
                 {
                     b.HasBaseType("CookieBook.Domain.Models.Base.Image");
 
-                    b.Property<int?>("UserRef");
+                    b.Property<int?>("UserId");
 
-                    b.HasIndex("UserRef")
+                    b.HasIndex("UserId")
                         .IsUnique()
-                        .HasFilter("[UserRef] IS NOT NULL");
+                        .HasFilter("[UserId] IS NOT NULL");
 
                     b.ToTable("UserImage");
 
@@ -230,6 +253,14 @@ namespace CookieBook.WebAPI.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
+            modelBuilder.Entity("CookieBook.Domain.Models.Rate", b =>
+                {
+                    b.HasOne("CookieBook.Domain.Models.Recipe", "Recipe")
+                        .WithMany("Rates")
+                        .HasForeignKey("RecipeId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
             modelBuilder.Entity("CookieBook.Domain.Models.Recipe", b =>
                 {
                     b.HasOne("CookieBook.Domain.Models.User", "User")
@@ -242,7 +273,7 @@ namespace CookieBook.WebAPI.Migrations
                 {
                     b.HasOne("CookieBook.Domain.Models.Recipe", "Recipe")
                         .WithOne("RecipeImage")
-                        .HasForeignKey("CookieBook.Domain.Models.RecipeImage", "RecipeRef")
+                        .HasForeignKey("CookieBook.Domain.Models.RecipeImage", "RecipeId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
@@ -250,7 +281,7 @@ namespace CookieBook.WebAPI.Migrations
                 {
                     b.HasOne("CookieBook.Domain.Models.User", "User")
                         .WithOne("UserImage")
-                        .HasForeignKey("CookieBook.Domain.Models.UserImage", "UserRef")
+                        .HasForeignKey("CookieBook.Domain.Models.UserImage", "UserId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 #pragma warning restore 612, 618
