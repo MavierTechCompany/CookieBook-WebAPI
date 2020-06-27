@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CookieBook.WebAPI.Migrations
 {
     [DbContext(typeof(CookieContext))]
-    [Migration("20200624113150_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20200627083336_InitMigration")]
+    partial class InitMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -147,17 +147,15 @@ namespace CookieBook.WebAPI.Migrations
 
                     b.Property<int>("RecipeId");
 
-                    b.Property<int?>("RecipeId1");
-
                     b.Property<DateTime>("UpdatedAt");
 
                     b.Property<float>("Value");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("RecipeId1");
+                    b.HasIndex("RecipeId");
 
-                    b.ToTable("Rate");
+                    b.ToTable("Rates");
                 });
 
             modelBuilder.Entity("CookieBook.Domain.Models.Recipe", b =>
@@ -259,7 +257,7 @@ namespace CookieBook.WebAPI.Migrations
                 {
                     b.HasOne("CookieBook.Domain.Models.Recipe", "Recipe")
                         .WithMany("Rates")
-                        .HasForeignKey("RecipeId1")
+                        .HasForeignKey("RecipeId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 

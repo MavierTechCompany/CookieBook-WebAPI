@@ -145,17 +145,15 @@ namespace CookieBook.WebAPI.Migrations
 
                     b.Property<int>("RecipeId");
 
-                    b.Property<int?>("RecipeId1");
-
                     b.Property<DateTime>("UpdatedAt");
 
                     b.Property<float>("Value");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("RecipeId1");
+                    b.HasIndex("RecipeId");
 
-                    b.ToTable("Rate");
+                    b.ToTable("Rates");
                 });
 
             modelBuilder.Entity("CookieBook.Domain.Models.Recipe", b =>
@@ -257,7 +255,7 @@ namespace CookieBook.WebAPI.Migrations
                 {
                     b.HasOne("CookieBook.Domain.Models.Recipe", "Recipe")
                         .WithMany("Rates")
-                        .HasForeignKey("RecipeId1")
+                        .HasForeignKey("RecipeId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 

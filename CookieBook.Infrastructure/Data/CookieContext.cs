@@ -40,11 +40,6 @@ namespace CookieBook.Infrastructure.Data
                 .HasMany(x => x.Components)
                 .WithOne(y => y.Recipe);
 
-            modelBuilder.Entity<Recipe>()
-                .HasMany(x => x.Rates)
-                .WithOne(y => y.Recipe)
-                .IsRequired(false);
-
             modelBuilder.Entity<User>()
                 .HasOne(x => x.UserImage)
                 .WithOne(y => y.User)

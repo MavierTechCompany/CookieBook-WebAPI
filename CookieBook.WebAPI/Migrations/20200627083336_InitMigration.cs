@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace CookieBook.WebAPI.Migrations
 {
-    public partial class InitialMigration : Migration
+    public partial class InitMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -127,7 +127,7 @@ namespace CookieBook.WebAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Rate",
+                name: "Rates",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -136,15 +136,14 @@ namespace CookieBook.WebAPI.Migrations
                     UpdatedAt = table.Column<DateTime>(nullable: false),
                     Value = table.Column<float>(nullable: false),
                     Description = table.Column<string>(nullable: true),
-                    RecipeId = table.Column<int>(nullable: false),
-                    RecipeId1 = table.Column<int>(nullable: true)
+                    RecipeId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Rate", x => x.Id);
+                    table.PrimaryKey("PK_Rates", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Rate_Recipes_RecipeId1",
-                        column: x => x.RecipeId1,
+                        name: "FK_Rates_Recipes_RecipeId",
+                        column: x => x.RecipeId,
                         principalTable: "Recipes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -196,9 +195,9 @@ namespace CookieBook.WebAPI.Migrations
                 filter: "[UserId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Rate_RecipeId1",
-                table: "Rate",
-                column: "RecipeId1");
+                name: "IX_Rates_RecipeId",
+                table: "Rates",
+                column: "RecipeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_RecipeCategories_CategoryId",
@@ -220,7 +219,7 @@ namespace CookieBook.WebAPI.Migrations
                 name: "Images");
 
             migrationBuilder.DropTable(
-                name: "Rate");
+                name: "Rates");
 
             migrationBuilder.DropTable(
                 name: "RecipeCategories");

@@ -8,7 +8,7 @@ namespace CookieBook.Domain.Models
         public string Description { get; set; }
 
         public int RecipeId { get; set; }
-        public Recipe Recipe { get; set; }
+        public virtual Recipe Recipe { get; set; }
 
         public Rate(float value, string description) : base()
         {

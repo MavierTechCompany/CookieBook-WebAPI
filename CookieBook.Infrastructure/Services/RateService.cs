@@ -1,4 +1,6 @@
 ﻿using CookieBook.Domain.Models;
+using CookieBook.Infrastructure.Commands.Recipe;
+using CookieBook.Infrastructure.Commands.Recipe.Rate;
 using CookieBook.Infrastructure.Data;
 using CookieBook.Infrastructure.Extensions.CustomExceptions;
 using CookieBook.Infrastructure.Parameters.Recipe.Rate;
@@ -21,7 +23,16 @@ namespace CookieBook.Infrastructure.Services
             _context = context;
         }
 
-        public Task<Rate> CreateAsync() => throw new NotImplementedException();
+        public async Task<Rate> CreateAsync(CreateRate command, Recipe recipe)
+        {
+            var rate = new Rate(command.Value, command.Description);
+            await _context.Rates.AddAsync(rate);
+            recipe.Rates.Add(rate);
+
+            await _context.SaveChangesAsync();
+
+            return rate;
+        }
 
         public async Task<Rate> GetAsync(int id)
         {

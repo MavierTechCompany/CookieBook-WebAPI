@@ -77,21 +77,21 @@ namespace CookieBook.WebAPI.Controllers.RecipeManagement
             }
 
             var rates = await _rateService.GetByRecipeIdAsync(id, parameters);
-            var ratesDto = _mapper.Map<IEnumerable<RecipeDto>>(rates);
+            var ratesDto = _mapper.Map<IEnumerable<RateDto>>(rates);
 
             return Ok(ratesDto.ShapeData(parameters.Fields));
         }
 
-        [HttpGet("recipes/{id}/rates{rateId}")]
-        public async Task<IActionResult> ReadRateAsync(int id, [FromQuery] string fields)
+        [HttpGet("recipes/{id}/rates/{rateId}")]
+        public async Task<IActionResult> ReadRateAsync(int rateId, [FromQuery] string fields)
         {
             if (!string.IsNullOrWhiteSpace(fields) && !PropertyManager.PropertiesExists<Rate>(fields))
             {
                 return BadRequest();
             }
 
-            var rate = await _rateService.GetAsync(id);
-            var rateDto = _mapper.Map<RecipeDto>(rate);
+            var rate = await _rateService.GetAsync(rateId);
+            var rateDto = _mapper.Map<RateDto>(rate);
 
             return Ok(rateDto.ShapeData(fields));
         }
