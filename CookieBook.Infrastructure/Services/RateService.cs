@@ -34,9 +34,14 @@ namespace CookieBook.Infrastructure.Services
             return rate;
         }
 
-        public async Task<Rate> GetAsync(int id)
+        public async Task<Rate> GetAsync(int id, bool asNoTracking = false)
         {
-            var rate = await _context.Rates.SingleOrDefaultAsync(x => x.Id == id);
+            var query = _context.Rates.Where(x => x.Id == id).AsQueryable();
+
+            if (asNoTracking)
+                query = query.AsNoTracking();
+
+            var rate = await query.SingleOrDefaultAsync();
 
             if (rate == null)
                 throw new CorruptedOperationException("Invalid rate id");
@@ -44,7 +49,7 @@ namespace CookieBook.Infrastructure.Services
             return rate;
         }
 
-        public async Task<IEnumerable<Rate>> GetByRecipeIdAsync(int recipeId, RatesParameters parameters)
+        public async Task<IEnumerable<Rate>> GetByRecipeIdAsync(int recipeId, RatesParameters parameters, bool asNoTracking = false)
         {
             var rates = _context.Rates.Where(x => x.RecipeId == recipeId).AsQueryable();
 
@@ -64,6 +69,9 @@ namespace CookieBook.Infrastructure.Services
             {
                 rates = rates.Where(x => x.Value == parameters.Value);
             }
+
+            if (asNoTracking)
+                rates = rates.AsNoTracking();
 
             return await rates.ToListAsync();
         }

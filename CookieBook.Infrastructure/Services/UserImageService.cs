@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using CookieBook.Domain.Models;
 using CookieBook.Infrastructure.Commands.Picture;
@@ -14,10 +15,10 @@ namespace CookieBook.Infrastructure.Services
     {
         private readonly CookieContext _context;
 
-		public UserImageService(CookieContext context)
+        public UserImageService(CookieContext context)
         {
             _context = context;
-		}
+        }
 
         public async Task<UserImage> AddAsync(CreateImage command, User user)
         {
@@ -28,8 +29,8 @@ namespace CookieBook.Infrastructure.Services
 
             await _context.SaveChangesAsync();
 
-			return image;
-		}
+            return image;
+        }
 
         public async Task UpdateAsync(UpdateImage command, User user)
         {
@@ -37,15 +38,20 @@ namespace CookieBook.Infrastructure.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<UserImage> GetByUserIdAsync(int userId)
+        public async Task<UserImage> GetByUserIdAsync(int userId, bool asNoTracking = false)
         {
-            var image = await _context.UserImages.GetByUserId(userId).SingleOrDefaultAsync();
+            var query = _context.UserImages.GetByUserId(userId).AsQueryable();
+
+            if (asNoTracking)
+                query = query.AsNoTracking();
+
+            var image = await query.SingleOrDefaultAsync();
 
             if (image == null)
                 throw new CorruptedOperationException("Image doesn't exist");
 
-			return image;
-		}
+            return image;
+        }
 
         public async Task<bool> ExistsForUser(int userId) =>
             await _context.UserImages.ExistsForUserAsync(userId);

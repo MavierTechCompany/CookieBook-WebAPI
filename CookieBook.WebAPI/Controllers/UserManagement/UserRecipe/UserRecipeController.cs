@@ -41,7 +41,7 @@ namespace CookieBook.WebAPI.Controllers.UserManagement.UserRecipe
                 return BadRequest();
             }
 
-            var recipes = await _userService.GetUserRecipesAsync(id, parameters);
+            var recipes = await _userService.GetUserRecipesAsync(id, parameters, true);
             var recipesDto = _mapper.Map<IEnumerable<RecipeDto>>(recipes);
 
             return Ok(recipesDto.ShapeData(parameters.Fields));
@@ -74,7 +74,7 @@ namespace CookieBook.WebAPI.Controllers.UserManagement.UserRecipe
                 return BadRequest();
             }
 
-            var recipe = await _userService.GetUserRecipeAsync(id, recipeId);
+            var recipe = await _userService.GetUserRecipeAsync(id, recipeId, true);
             if (recipe == null)
                 return BadRequest();
 

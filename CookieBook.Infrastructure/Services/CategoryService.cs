@@ -12,66 +12,73 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CookieBook.Infrastructure.Services
 {
-	public class CategoryService : ICategoryService
-	{
-		private readonly CookieContext _context;
-        
+    public class CategoryService : ICategoryService
+    {
+        private readonly CookieContext _context;
+
         public CategoryService(CookieContext context)
         {
-			_context = context;
-		}
+            _context = context;
+        }
 
-		public async Task<Category> GetAsync(int id)
-		{
-			var category = await _context.Categories.GetById(id)
-				.Include(x => x.RecipeCategories).ThenInclude(y => y.Recipe)
-				.SingleOrDefaultAsync();
+        public async Task<Category> GetAsync(int id, bool asNoTracking = false)
+        {
+            var query = _context.Categories.GetById(id)
+                .Include(x => x.RecipeCategories).ThenInclude(y => y.Recipe).AsQueryable();
 
-			if (category == null)
-				throw new CorruptedOperationException("Invalid category id");
+            if (asNoTracking)
+                query = query.AsNoTracking();
 
-			return category;
-		}
+            var category = await query.SingleOrDefaultAsync();
 
-		public async Task<IEnumerable<Category>> GetAsync(CategoryParameters parameters)
-		{
-			var categories = _context.Categories.AsQueryable();
+            if (category == null)
+                throw new CorruptedOperationException("Invalid category id");
 
-			if (!string.IsNullOrEmpty(parameters.Query))
-			{
-				var nameForQuery = parameters.Query.ToLowerInvariant();
+            return category;
+        }
 
-				categories = categories.Where(x => x.Name.ToLowerInvariant().Contains(nameForQuery));
-			}
+        public async Task<IEnumerable<Category>> GetAsync(CategoryParameters parameters, bool asNoTracking = false)
+        {
+            var categories = _context.Categories.AsQueryable();
 
-			categories = categories
-			 	.Include(x => x.RecipeCategories)
-			 	.ThenInclude(y => y.Recipe);
+            if (!string.IsNullOrEmpty(parameters.Query))
+            {
+                var nameForQuery = parameters.Query.ToLowerInvariant();
 
-			return await categories.ToListAsync();
-		}
+                categories = categories.Where(x => x.Name.ToLowerInvariant().Contains(nameForQuery));
+            }
 
-		public async Task<Category> AddAsync(CreateCategory command)
-		{
-			var category = new Category(command.Name);
+            categories = categories
+                 .Include(x => x.RecipeCategories)
+                 .ThenInclude(y => y.Recipe);
 
-			await _context.Categories.AddAsync(category);
-			await _context.SaveChangesAsync();
+            if (asNoTracking)
+                categories = categories.AsNoTracking();
 
-			return category;
-		}
+            return await categories.ToListAsync();
+        }
 
-		public async Task UpdateAsync(int id, UpdateCategory command)
-		{
-			if (await _context.Categories.ExistsInDatabaseAsync(id) == false)
-				throw new CorruptedOperationException("Category doesn't exist.");
+        public async Task<Category> AddAsync(CreateCategory command)
+        {
+            var category = new Category(command.Name);
 
-			var category = await _context.Categories.GetById(id).SingleOrDefaultAsync();
+            await _context.Categories.AddAsync(category);
+            await _context.SaveChangesAsync();
 
-			category.Update(command.Name);
+            return category;
+        }
 
-			_context.Categories.Update(category);
-			await _context.SaveChangesAsync();
-		}
-	}
+        public async Task UpdateAsync(int id, UpdateCategory command)
+        {
+            if (await _context.Categories.ExistsInDatabaseAsync(id) == false)
+                throw new CorruptedOperationException("Category doesn't exist.");
+
+            var category = await _context.Categories.GetById(id).SingleOrDefaultAsync();
+
+            category.Update(command.Name);
+
+            _context.Categories.Update(category);
+            await _context.SaveChangesAsync();
+        }
+    }
 }
