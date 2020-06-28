@@ -44,7 +44,7 @@ namespace CookieBook.WebAPI.Controllers.UserManagement
                 return BadRequest();
             }
 
-            var users = await _userService.GetAsync(parameters);
+            var users = await _userService.GetAsync(parameters, true);
             var usersDto = _mapper.Map<IEnumerable<UserDto>>(users);
 
             return Ok(usersDto.ShapeData(parameters.Fields));
@@ -59,7 +59,7 @@ namespace CookieBook.WebAPI.Controllers.UserManagement
                 return BadRequest();
             }
 
-            var user = await _userService.GetAsync(id);
+            var user = await _userService.GetAsync(id, true);
             var userDto = _mapper.Map<UserDto>(user);
 
             return Ok(userDto.ShapeData(fields));

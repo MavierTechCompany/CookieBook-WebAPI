@@ -44,7 +44,7 @@ namespace CookieBook.WebAPI.Controllers.CategoryManagement
                 return BadRequest();
             }
 
-            var categories = await _categoryService.GetAsync(parameters);
+            var categories = await _categoryService.GetAsync(parameters, true);
             var categoriesDto = _mapper.Map<IEnumerable<CategoryDto>>(categories);
 
             return Ok(categoriesDto.ShapeData(parameters.Fields));
@@ -59,7 +59,7 @@ namespace CookieBook.WebAPI.Controllers.CategoryManagement
                 return BadRequest();
             }
 
-            var category = await _categoryService.GetAsync(id);
+            var category = await _categoryService.GetAsync(id, true);
             var categoryrDto = _mapper.Map<CategoryDto>(category);
 
             return Ok(categoryrDto.ShapeData(fields));

@@ -37,7 +37,7 @@ namespace CookieBook.WebAPI.Controllers.RecipeManagement
                 return BadRequest();
             }
 
-            var recipes = await _recipeService.GetAsync(parameters);
+            var recipes = await _recipeService.GetAsync(parameters, true);
             var recipesDto = _mapper.Map<IEnumerable<RecipeDto>>(recipes);
 
             return Ok(recipesDto.ShapeData(parameters.Fields));
@@ -51,7 +51,7 @@ namespace CookieBook.WebAPI.Controllers.RecipeManagement
                 return BadRequest();
             }
 
-            var recipe = await _recipeService.GetAsync(id);
+            var recipe = await _recipeService.GetAsync(id, true);
             var recipeDto = _mapper.Map<RecipeDto>(recipe);
 
             return Ok(recipeDto.ShapeData(fields));
@@ -76,7 +76,7 @@ namespace CookieBook.WebAPI.Controllers.RecipeManagement
                 return BadRequest();
             }
 
-            var rates = await _rateService.GetByRecipeIdAsync(id, parameters);
+            var rates = await _rateService.GetByRecipeIdAsync(id, parameters, true);
             var ratesDto = _mapper.Map<IEnumerable<RateDto>>(rates);
 
             return Ok(ratesDto.ShapeData(parameters.Fields));
@@ -90,7 +90,7 @@ namespace CookieBook.WebAPI.Controllers.RecipeManagement
                 return BadRequest();
             }
 
-            var rate = await _rateService.GetAsync(rateId);
+            var rate = await _rateService.GetAsync(rateId, true);
             var rateDto = _mapper.Map<RateDto>(rate);
 
             return Ok(rateDto.ShapeData(fields));
