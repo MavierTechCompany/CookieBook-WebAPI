@@ -32,7 +32,7 @@ namespace CookieBook.WebAPI.Controllers.RecipeManagement
         [HttpGet("recipes")]
         public async Task<IActionResult> ReadRecipesAsync(RecipesParameters parameters)
         {
-            if (!string.IsNullOrWhiteSpace(parameters.Fields) && !PropertyManager.PropertiesExists<Recipe>(parameters.Fields))
+            if (!string.IsNullOrWhiteSpace(parameters.Fields) && !PropertyManager.PropertiesExists<RecipeDto>(parameters.Fields))
             {
                 return BadRequest();
             }
