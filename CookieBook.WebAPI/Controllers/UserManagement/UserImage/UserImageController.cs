@@ -15,13 +15,11 @@ namespace CookieBook.WebAPI.Controllers.UserManagement.UserImage
     {
         private readonly IUserService _userService;
         private readonly IUserImageService _userImageService;
-        private readonly IMapper _mapper;
 
-        public UserImageController(IUserService userService, IUserImageService userImageService, IMapper mapper)
+        public UserImageController(IUserService userService, IUserImageService userImageService, IMapper mapper) : base(mapper)
         {
             _userService = userService;
             _userImageService = userImageService;
-            _mapper = mapper;
         }
 
         [Authorize(Roles = "user")]

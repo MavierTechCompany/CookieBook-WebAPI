@@ -19,13 +19,11 @@ namespace CookieBook.WebAPI.Controllers.UserManagement.UserRecipe
     {
         private readonly IUserService _userService;
         private readonly IRecipeService _recipeService;
-        private readonly IMapper _mapper;
 
-        public UserRecipeController(IUserService userService, IRecipeService recipeService, IMapper mapper)
+        public UserRecipeController(IUserService userService, IRecipeService recipeService, IMapper mapper) : base(mapper)
         {
             _userService = userService;
             _recipeService = recipeService;
-            _mapper = mapper;
         }
 
         [Authorize(Roles = "user")]

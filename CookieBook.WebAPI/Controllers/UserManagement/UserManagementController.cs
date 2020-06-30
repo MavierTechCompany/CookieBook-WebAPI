@@ -18,12 +18,10 @@ namespace CookieBook.WebAPI.Controllers.UserManagement
     public class UserManagementController : ApiControllerBase
     {
         private readonly IUserService _userService;
-        private readonly IMapper _mapper;
 
-        public UserManagementController(IUserService userService, IMapper mapper)
+        public UserManagementController(IUserService userService, IMapper mapper) : base(mapper)
         {
             _userService = userService;
-            _mapper = mapper;
         }
 
         [HttpPost]

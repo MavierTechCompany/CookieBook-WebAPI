@@ -1,4 +1,5 @@
-﻿using CookieBook.WebAPI.Controllers.Base;
+﻿using AutoMapper;
+using CookieBook.WebAPI.Controllers.Base;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -11,6 +12,10 @@ namespace CookieBook.WebAPI.Controllers.AdminManagement
     [Route("admin-management/admins")]
     public class AdminManagementController : ApiControllerBase
     {
+        public AdminManagementController(IMapper mapper) : base(mapper)
+        {
+        }
+
         [HttpPost("token")]
         public async Task<IActionResult> LoginAdminAsync() => throw new NotImplementedException();
 

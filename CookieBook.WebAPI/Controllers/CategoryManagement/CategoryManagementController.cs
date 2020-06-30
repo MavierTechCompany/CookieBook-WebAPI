@@ -17,12 +17,10 @@ namespace CookieBook.WebAPI.Controllers.CategoryManagement
     public class CategoryManagementController : ApiControllerBase
     {
         private readonly ICategoryService _categoryService;
-        private readonly IMapper _mapper;
 
-        public CategoryManagementController(ICategoryService categoryService, IMapper mapper)
+        public CategoryManagementController(ICategoryService categoryService, IMapper mapper) : base(mapper)
         {
             _categoryService = categoryService;
-            _mapper = mapper;
         }
 
         [Authorize(Roles = "admin")]
