@@ -74,11 +74,6 @@ It follows the rules of the RESTfull API.
   </tr>
   
   <tr>
-    <td>Commenting cooking recipes</td>
-    <td>:construction:</td>
-  </tr>
-  
-  <tr>
     <td>Cooking recipes ratting</td>
     <td>:construction:</td>
   </tr>
