@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CookieBook.Infrastructure.Services.Interfaces;
 using CookieBook.WebAPI.Controllers.Base;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,8 +13,11 @@ namespace CookieBook.WebAPI.Controllers.AdminManagement
     [Route("admin-management/admins")]
     public class AdminManagementController : ApiControllerBase
     {
-        public AdminManagementController(IMapper mapper) : base(mapper)
+        private readonly IAdminService _adminService;
+
+        public AdminManagementController(IMapper mapper, IAdminService adminService) : base(mapper)
         {
+            _adminService = adminService;
         }
 
         [HttpPost("token")]

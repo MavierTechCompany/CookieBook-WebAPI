@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CookieBook.WebAPI.Migrations
 {
     [DbContext(typeof(CookieContext))]
-    [Migration("20200627083336_InitMigration")]
-    partial class InitMigration
+    [Migration("20200703070111_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,61 +20,6 @@ namespace CookieBook.WebAPI.Migrations
                 .HasAnnotation("ProductVersion", "2.1.14-servicing-32113")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("CookieBook.Domain.Models.Base.Account", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("CreatedAt");
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired();
-
-                    b.Property<decimal>("Login")
-                        .HasConversion(new ValueConverter<decimal, decimal>(v => default(decimal), v => default(decimal), new ConverterMappingHints(precision: 20, scale: 0)));
-
-                    b.Property<string>("Nick");
-
-                    b.Property<byte[]>("PasswordHash");
-
-                    b.Property<string>("RestoreKey");
-
-                    b.Property<string>("Role");
-
-                    b.Property<byte[]>("Salt");
-
-                    b.Property<DateTime>("UpdatedAt");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Accounts");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("Account");
-                });
-
-            modelBuilder.Entity("CookieBook.Domain.Models.Base.Image", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("CreatedAt");
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired();
-
-                    b.Property<string>("ImageContent");
-
-                    b.Property<DateTime>("UpdatedAt");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Images");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("Image");
-                });
 
             modelBuilder.Entity("CookieBook.Domain.Models.Category", b =>
                 {
@@ -190,46 +135,81 @@ namespace CookieBook.WebAPI.Migrations
                     b.ToTable("Recipes");
                 });
 
-            modelBuilder.Entity("CookieBook.Domain.Models.User", b =>
-                {
-                    b.HasBaseType("CookieBook.Domain.Models.Base.Account");
-
-                    b.Property<decimal>("UserEmail")
-                        .HasConversion(new ValueConverter<decimal, decimal>(v => default(decimal), v => default(decimal), new ConverterMappingHints(precision: 20, scale: 0)));
-
-                    b.ToTable("User");
-
-                    b.HasDiscriminator().HasValue("User");
-                });
-
             modelBuilder.Entity("CookieBook.Domain.Models.RecipeImage", b =>
                 {
-                    b.HasBaseType("CookieBook.Domain.Models.Base.Image");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreatedAt");
+
+                    b.Property<string>("ImageContent");
 
                     b.Property<int?>("RecipeId");
+
+                    b.Property<DateTime>("UpdatedAt");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("RecipeId")
                         .IsUnique()
                         .HasFilter("[RecipeId] IS NOT NULL");
 
-                    b.ToTable("RecipeImage");
+                    b.ToTable("RecipeImages");
+                });
 
-                    b.HasDiscriminator().HasValue("RecipeImage");
+            modelBuilder.Entity("CookieBook.Domain.Models.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreatedAt");
+
+                    b.Property<decimal>("Login")
+                        .HasConversion(new ValueConverter<decimal, decimal>(v => default(decimal), v => default(decimal), new ConverterMappingHints(precision: 20, scale: 0)));
+
+                    b.Property<string>("Nick");
+
+                    b.Property<byte[]>("PasswordHash");
+
+                    b.Property<string>("RestoreKey");
+
+                    b.Property<string>("Role");
+
+                    b.Property<byte[]>("Salt");
+
+                    b.Property<DateTime>("UpdatedAt");
+
+                    b.Property<decimal>("UserEmail")
+                        .HasConversion(new ValueConverter<decimal, decimal>(v => default(decimal), v => default(decimal), new ConverterMappingHints(precision: 20, scale: 0)));
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("CookieBook.Domain.Models.UserImage", b =>
                 {
-                    b.HasBaseType("CookieBook.Domain.Models.Base.Image");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreatedAt");
+
+                    b.Property<string>("ImageContent");
+
+                    b.Property<DateTime>("UpdatedAt");
 
                     b.Property<int?>("UserId");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("UserId")
                         .IsUnique()
                         .HasFilter("[UserId] IS NOT NULL");
 
-                    b.ToTable("UserImage");
-
-                    b.HasDiscriminator().HasValue("UserImage");
+                    b.ToTable("UserImages");
                 });
 
             modelBuilder.Entity("CookieBook.Domain.Models.Component", b =>

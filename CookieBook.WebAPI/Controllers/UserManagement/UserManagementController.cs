@@ -11,6 +11,7 @@ using CookieBook.Infrastructure.Services.Interfaces;
 using CookieBook.WebAPI.Controllers.Base;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace CookieBook.WebAPI.Controllers.UserManagement
 {
@@ -78,7 +79,7 @@ namespace CookieBook.WebAPI.Controllers.UserManagement
         public async Task<IActionResult> LoginUserAsync([FromBody] LoginUser command)
         {
             var token = await _userService.LoginAsync(command);
-            return Ok(token);
+            return Ok(new { Token = token });
         }
     }
 }
