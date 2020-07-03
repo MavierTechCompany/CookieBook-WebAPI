@@ -11,7 +11,9 @@ namespace CookieBook.Domain.Models
         public UserImage UserImage { get; set; }
         public virtual ICollection<Recipe> Recipes { get; set; }
 
-        public User() { }
+        public User() : base()
+        {
+        }
 
         public User(string nick, UInt64 login, byte[] salt, byte[] passwordHash,
             string restoreKey, UInt64 userEmail) : base(nick, login, salt, passwordHash, restoreKey)
@@ -23,13 +25,7 @@ namespace CookieBook.Domain.Models
         public void Update(UInt64 login, UInt64 userEmail)
         {
             UserEmail = userEmail;
-			base.Update(login);
-		}
-
-        public void UpdatePassword(byte[] newPassword)
-        {
-            PasswordHash = newPassword;
-			base.Update();
-		}
+            base.Update(login);
+        }
     }
 }

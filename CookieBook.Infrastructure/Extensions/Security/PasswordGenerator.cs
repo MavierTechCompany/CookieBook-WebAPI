@@ -17,15 +17,15 @@ namespace CookieBook.Infrastructure.Extensions.Security
         {
             if (opts == null) opts = new PasswordGenerator()
             {
-            RequiredLength = 12,
-            RequiredUniqueChars = 4,
-            RequireDigit = true,
-            RequireLowercase = true,
-            RequireNonAlphanumeric = true,
-            RequireUppercase = true
+                RequiredLength = 12,
+                RequiredUniqueChars = 4,
+                RequireDigit = true,
+                RequireLowercase = true,
+                RequireNonAlphanumeric = true,
+                RequireUppercase = true
             };
 
-            string[] randomChars = new []
+            string[] randomChars = new[]
             {
                 "ABCDEFGHJKLMNOPQRSTUVWXYZ",
                 "abcdefghijkmnopqrstuvwxyz",

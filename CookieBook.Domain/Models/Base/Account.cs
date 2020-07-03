@@ -15,7 +15,9 @@ namespace CookieBook.Domain.Models.Base
         public string Role { get; set; }
         public string RestoreKey { get; set; }
 
-        public Account() : base() { }
+        public Account() : base()
+        {
+        }
 
         public Account(string nick, UInt64 login, byte[] salt, byte[] passwordHash, string restoreKey) : base()
         {
@@ -29,6 +31,12 @@ namespace CookieBook.Domain.Models.Base
         public void Update(UInt64 login)
         {
             Login = login;
+            base.Update();
+        }
+
+        public void UpdatePassword(byte[] newPassword)
+        {
+            PasswordHash = newPassword;
             base.Update();
         }
     }

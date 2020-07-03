@@ -4,7 +4,7 @@ using FluentValidation;
 
 namespace CookieBook.Infrastructure.Validators.Auth
 {
-    public class LoginUserValidator : AbstractValidator<LoginUser>
+    public class LoginUserValidator : AbstractValidator<LoginAccount>
     {
         public LoginUserValidator()
         {

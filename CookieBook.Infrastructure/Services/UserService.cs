@@ -91,7 +91,7 @@ namespace CookieBook.Infrastructure.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<string> LoginAsync(LoginUser command)
+        public async Task<string> LoginAsync(LoginAccount command)
         {
             var loginOrEmailHash = _hashManager.CalculateDataHash(command.LoginOrEmail);
 

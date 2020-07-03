@@ -91,7 +91,7 @@ namespace CookieBook.WebAPI
             services.AddScoped<IJwtHandler, JwtHandler>();
 
             services.AddTransient<IValidator<CreateUser>, CreateUserValidator>();
-            services.AddTransient<IValidator<LoginUser>, LoginUserValidator>();
+            services.AddTransient<IValidator<LoginAccount>, LoginUserValidator>();
             services.AddTransient<IValidator<UpdateUserData>, UpdateUserValidator>();
             services.AddTransient<IValidator<CreateImage>, CreateUserImageValidator>();
             services.AddTransient<IValidator<UpdateImage>, UpdateUserImageValidator>();

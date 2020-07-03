@@ -76,7 +76,7 @@ namespace CookieBook.WebAPI.Controllers.UserManagement
         }
 
         [HttpPost("token")]
-        public async Task<IActionResult> LoginUserAsync([FromBody] LoginUser command)
+        public async Task<IActionResult> LoginUserAsync([FromBody] LoginAccount command)
         {
             var token = await _userService.LoginAsync(command);
             return Ok(new { Token = token });
