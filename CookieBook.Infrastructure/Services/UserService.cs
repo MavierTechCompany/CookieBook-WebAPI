@@ -36,15 +36,13 @@ namespace CookieBook.Infrastructure.Services
 
         public async Task<User> AddAsync(CreateUser command)
         {
-            byte[] salt, passwordHash;
-
             var loginHash = _hashManager.CalculateDataHash(command.Login);
             var emailHash = _hashManager.CalculateDataHash(command.UserEmail);
 
             if (await _context.Users.ExistsInDatabaseAsync(command.Nick, loginHash, emailHash) == true)
                 throw new CorruptedOperationException("User already exists.");
 
-            _hashManager.CalculatePasswordHash(command.Password, out passwordHash, out salt);
+            _hashManager.CalculatePasswordHash(command.Password, out var passwordHash, out var salt);
             var restoreKey = PasswordGenerator.GenerateRandomPassword();
 
             var user = new User(command.Nick, loginHash, salt, passwordHash, restoreKey, emailHash);
@@ -73,18 +71,15 @@ namespace CookieBook.Infrastructure.Services
 
         public async Task UpdatePasswordAsync(int id, UpdatePassword command)
         {
-            byte[] newPasswordHash;
-
             var user = await _context.Users.GetById(id).SingleOrDefaultAsync();
 
             if (user == null)
                 throw new CorruptedOperationException("Userr doesn't exist.");
 
-            if (_hashManager.VerifyPasswordHash(command.Password, user.PasswordHash,
-                    user.Salt) == false)
+            if (_hashManager.VerifyPasswordHash(command.Password, user.PasswordHash, user.Salt) == false)
                 throw new CorruptedOperationException("Invalid credentials.");
 
-            _hashManager.CalculatePasswordHash(command.NewPassword, user.Salt, out newPasswordHash);
+            _hashManager.CalculatePasswordHash(command.NewPassword, user.Salt, out var newPasswordHash);
             user.UpdatePassword(newPasswordHash);
 
             _context.Users.Update(user);
@@ -98,6 +93,7 @@ namespace CookieBook.Infrastructure.Services
             var user = await _context.Users.GetByEmail(loginOrEmailHash)
                 .Select(x => new { x.PasswordHash, x.Salt, x.Role, x.Id })
                 .AsNoTracking().SingleOrDefaultAsync();
+
             if (user == null)
                 user = await _context.Users.GetByLogin(loginOrEmailHash)
                 .Select(x => new { x.PasswordHash, x.Salt, x.Role, x.Id })
@@ -105,6 +101,7 @@ namespace CookieBook.Infrastructure.Services
 
             if (user == null)
                 throw new CorruptedOperationException("Invlid credentials.");
+
             if (_hashManager.VerifyPasswordHash(command.Password, user.PasswordHash, user.Salt) == false)
                 throw new CorruptedOperationException("Invlid credentials.");
 
