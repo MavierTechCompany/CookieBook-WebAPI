@@ -11,6 +11,7 @@ using CookieBook.Infrastructure.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -63,8 +64,38 @@ namespace CookieBook.Infrastructure.Services
             return admin;
         }
 
-        public Task<string> LoginAsync(LoginAccount command) => throw new NotImplementedException();
+        public async Task<string> LoginAsync(LoginAccount command)
+        {
+            var login = _hashManager.CalculateDataHash(command.LoginOrEmail);
 
-        public Task UpdatePasswordAsync(int id, UpdatePassword command) => throw new NotImplementedException();
+            var admin = await _context.Admins.GetByLogin(login)
+                .Select(x => new { x.PasswordHash, x.Salt, x.Role, x.Id })
+                .AsNoTracking().SingleOrDefaultAsync();
+
+            if (admin == null)
+                throw new CorruptedOperationException("Invalid credentials.");
+
+            if (_hashManager.VerifyPasswordHash(command.Password, admin.PasswordHash, admin.Salt) == false)
+                throw new CorruptedOperationException("Invalid credentials.");
+
+            return await _jwtHandler.CreateTokenAsync(admin.Id, admin.Role);
+        }
+
+        public async Task UpdatePasswordAsync(int id, UpdatePassword command)
+        {
+            var admin = await _context.Admins.GetById(id).SingleOrDefaultAsync();
+
+            if (admin == null)
+                throw new CorruptedOperationException("Userr doesn't exist.");
+
+            if (_hashManager.VerifyPasswordHash(command.Password, admin.PasswordHash, admin.Salt) == false)
+                throw new CorruptedOperationException("Invalid credentials.");
+
+            _hashManager.CalculatePasswordHash(command.NewPassword, admin.Salt, out var newPasswordHash);
+            admin.UpdatePassword(newPasswordHash);
+
+            _context.Admins.Update(admin);
+            await _context.SaveChangesAsync();
+        }
     }
 }

@@ -100,10 +100,10 @@ namespace CookieBook.Infrastructure.Services
                 .AsNoTracking().SingleOrDefaultAsync();
 
             if (user == null)
-                throw new CorruptedOperationException("Invlid credentials.");
+                throw new CorruptedOperationException("Invalid credentials.");
 
             if (_hashManager.VerifyPasswordHash(command.Password, user.PasswordHash, user.Salt) == false)
-                throw new CorruptedOperationException("Invlid credentials.");
+                throw new CorruptedOperationException("Invalid credentials.");
 
             return await _jwtHandler.CreateTokenAsync(user.Id, user.Role);
         }
