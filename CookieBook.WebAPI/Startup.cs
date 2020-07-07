@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
 using AutoMapper;
 using CookieBook.Domain.JWT;
 using CookieBook.Infrastructure.Commands.Account;
+using CookieBook.Infrastructure.Commands.Admin;
 using CookieBook.Infrastructure.Commands.Auth;
 using CookieBook.Infrastructure.Commands.Category;
 using CookieBook.Infrastructure.Commands.Picture;
@@ -18,6 +15,7 @@ using CookieBook.Infrastructure.Extensions.Security;
 using CookieBook.Infrastructure.Extensions.Security.Interface;
 using CookieBook.Infrastructure.Services;
 using CookieBook.Infrastructure.Services.Interfaces;
+using CookieBook.Infrastructure.Validators.Admin;
 using CookieBook.Infrastructure.Validators.Auth;
 using CookieBook.Infrastructure.Validators.Category;
 using CookieBook.Infrastructure.Validators.Recipe;
@@ -31,13 +29,10 @@ using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Serialization;
 
@@ -91,7 +86,7 @@ namespace CookieBook.WebAPI
             services.AddScoped<IJwtHandler, JwtHandler>();
 
             services.AddTransient<IValidator<CreateUser>, CreateUserValidator>();
-            services.AddTransient<IValidator<LoginAccount>, LoginUserValidator>();
+            services.AddTransient<IValidator<LoginAccount>, LoginAccountValidator>();
             services.AddTransient<IValidator<UpdateUserData>, UpdateUserValidator>();
             services.AddTransient<IValidator<CreateImage>, CreateUserImageValidator>();
             services.AddTransient<IValidator<UpdateImage>, UpdateUserImageValidator>();
@@ -100,12 +95,14 @@ namespace CookieBook.WebAPI
             services.AddTransient<IValidator<CreateCategory>, CreateCategoryValidator>();
             services.AddTransient<IValidator<UpdateCategory>, UpdateCategoryValidator>();
             services.AddTransient<IValidator<CreateRate>, CreateRateValidator>();
+            services.AddTransient<IValidator<CreateAdmin>, CreateAdminValidator>();
 
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IUserImageService, UserImageService>();
             services.AddScoped<IRecipeService, RecipeService>();
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IRateService, RateService>();
+            services.AddScoped<IAdminService, AdminService>();
 
             services.AddScoped<IDataHashManager, DataHashManager>();
         }

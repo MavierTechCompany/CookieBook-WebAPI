@@ -1,5 +1,6 @@
 ﻿using CookieBook.Domain.Models;
 using CookieBook.Infrastructure.Commands.Account;
+using CookieBook.Infrastructure.Commands.Admin;
 using CookieBook.Infrastructure.Commands.Auth;
 using CookieBook.Infrastructure.Data;
 using CookieBook.Infrastructure.Data.QueryExtensions;
@@ -30,7 +31,7 @@ namespace CookieBook.Infrastructure.Services
             _jwtHandler = jwtHandler;
         }
 
-        public async Task<Admin> AddAsync(CreateAccount command)
+        public async Task<Admin> AddAsync(CreateAdmin command)
         {
             var login = _hashManager.CalculateDataHash(RandomStringGenerator.GenerateUnique()).ToString();
             var loginHash = _hashManager.CalculateDataHash(login);

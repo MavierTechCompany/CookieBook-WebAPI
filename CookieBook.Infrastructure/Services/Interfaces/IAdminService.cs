@@ -1,5 +1,6 @@
 ﻿using CookieBook.Domain.Models;
 using CookieBook.Infrastructure.Commands.Account;
+using CookieBook.Infrastructure.Commands.Admin;
 using CookieBook.Infrastructure.Commands.Auth;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ namespace CookieBook.Infrastructure.Services.Interfaces
 {
     public interface IAdminService
     {
-        Task<Admin> AddAsync(CreateAccount command);
+        Task<Admin> AddAsync(CreateAdmin command);
 
         Task<string> LoginAsync(LoginAccount command);
 

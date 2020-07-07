@@ -1,11 +1,12 @@
 ﻿using AutoMapper;
+using CookieBook.Infrastructure.Commands.Account;
+using CookieBook.Infrastructure.Commands.Admin;
+using CookieBook.Infrastructure.Commands.Auth;
+using CookieBook.Infrastructure.DTO.Base;
 using CookieBook.Infrastructure.Services.Interfaces;
 using CookieBook.WebAPI.Controllers.Base;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace CookieBook.WebAPI.Controllers.AdminManagement
@@ -21,14 +22,20 @@ namespace CookieBook.WebAPI.Controllers.AdminManagement
         }
 
         [HttpPost("token")]
-        public async Task<IActionResult> LoginAdminAsync() => throw new NotImplementedException();
+        public async Task<IActionResult> LoginAdminAsync([FromBody] LoginAccount command)
+        {
+            var token = await _adminService.LoginAsync(command);
+            return Ok(new { Token = token });
+        }
 
         [HttpPost]
         [Authorize(Roles = "admin")]
-        public async Task<IActionResult> CreateAdminAsync() => throw new NotImplementedException();
+        public async Task<IActionResult> CreateAdminAsync([FromBody] CreateAdmin command)
+        {
+            var admin = await _adminService.AddAsync(command);
+            var userDto = _mapper.Map<AccountDto>(admin);
 
-        [HttpPut("{id}")]
-        [Authorize(Roles = "admin")]
-        public async Task<IActionResult> UpdateAdminAsync() => throw new NotImplementedException();
+            return Created($"{Request.Host}{Request.Path}/{admin.Id}", userDto);
+        }
     }
 }

@@ -4,9 +4,9 @@ using FluentValidation;
 
 namespace CookieBook.Infrastructure.Validators.Auth
 {
-    public class LoginUserValidator : AbstractValidator<LoginAccount>
+    public class LoginAccountValidator : AbstractValidator<LoginAccount>
     {
-        public LoginUserValidator()
+        public LoginAccountValidator()
         {
             RuleFor(req => req.LoginOrEmail)
                 .NotEmpty()

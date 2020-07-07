@@ -2,7 +2,7 @@ using System;
 using CookieBook.Infrastructure.Commands.Account;
 using FluentValidation;
 
-namespace CookieBook.Infrastructure.Validators.User
+namespace CookieBook.Infrastructure.Validators.Auth
 {
     public class UpdatePasswordValidator : AbstractValidator<UpdatePassword>
     {
@@ -23,7 +23,7 @@ namespace CookieBook.Infrastructure.Validators.User
                 .WithMessage("Invalid value!");
         }
 
-        Func<string, bool> IsValidUnsignedLongValue = (string dataHash) =>
+        private Func<string, bool> IsValidUnsignedLongValue = (string dataHash) =>
         {
             try
             {
