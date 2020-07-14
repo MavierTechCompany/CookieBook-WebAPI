@@ -2,6 +2,7 @@ using System.Linq;
 using CookieBook.Domain.Models;
 using CookieBook.Domain.Models.Base;
 using CookieBook.Domain.Models.Intermediate;
+using CookieBook.Infrastructure.Extensions.Security;
 using Microsoft.EntityFrameworkCore;
 
 namespace CookieBook.Infrastructure.Data
@@ -61,6 +62,28 @@ namespace CookieBook.Infrastructure.Data
                 .HasOne(xy => xy.Category)
                 .WithMany(y => y.RecipeCategories)
                 .HasForeignKey(xy => xy.CategoryId);
+
+            modelBuilder.Entity<Admin>()
+                .HasData(CreateDefaultAdmin("Ronald", "@d!RD1", "ron1d.inP?"));
+        }
+
+        private Admin CreateDefaultAdmin(string nick, string login, string password)
+        {
+            var hashManager = new DataHashManager();
+            var restoreKey = PasswordGenerator.GenerateRandomPassword();
+            var loginHash = hashManager.CalculateDataHash(hashManager.CalculateDataHash(login).ToString());
+            hashManager.CalculatePasswordHash(hashManager.CalculateDataHash(password).ToString(), out var passHash, out var passSalt);
+
+            return new Admin()
+            {
+                Id = 1,
+                Nick = nick,
+                Role = "admin",
+                Login = loginHash,
+                PasswordHash = passHash,
+                Salt = passSalt,
+                RestoreKey = restoreKey
+            };
         }
     }
 }

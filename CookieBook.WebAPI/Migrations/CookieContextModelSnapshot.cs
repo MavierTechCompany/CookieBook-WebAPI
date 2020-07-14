@@ -19,6 +19,38 @@ namespace CookieBook.WebAPI.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("CookieBook.Domain.Models.Admin", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreatedAt");
+
+                    b.Property<decimal>("Login")
+                        .HasConversion(new ValueConverter<decimal, decimal>(v => default(decimal), v => default(decimal), new ConverterMappingHints(precision: 20, scale: 0)));
+
+                    b.Property<string>("Nick");
+
+                    b.Property<byte[]>("PasswordHash");
+
+                    b.Property<string>("RestoreKey");
+
+                    b.Property<string>("Role");
+
+                    b.Property<byte[]>("Salt");
+
+                    b.Property<DateTime>("UpdatedAt");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Admins");
+
+                    b.HasData(
+                        new { Id = 1, CreatedAt = new DateTime(2020, 7, 14, 19, 15, 7, 790, DateTimeKind.Utc), Login = 4116719210845653519m, Nick = "Ronald", PasswordHash = new byte[] { 160, 145, 195, 177, 140, 35, 98, 47, 43, 3, 28, 190, 27, 150, 193, 95, 148, 255, 63, 184, 20, 151, 48, 204, 75, 196, 172, 75, 126, 40, 6, 252, 26, 123, 49, 7, 250, 116, 34, 175, 112, 107, 254, 76, 240, 117, 4, 133, 0, 46, 167, 202, 233, 104, 81, 47, 183, 59, 204, 31, 180, 88, 134, 55 }, RestoreKey = "?9ni$w2L3k8V", Role = "admin", Salt = new byte[] { 117, 103, 94, 188, 116, 244, 241, 28, 156, 153, 131, 83, 42, 16, 174, 236, 17, 224, 253, 55, 70, 13, 51, 87, 146, 30, 214, 235, 246, 128, 70, 15, 74, 34, 138, 87, 210, 176, 154, 160, 145, 230, 147, 224, 50, 228, 73, 81, 245, 104, 233, 80, 34, 202, 166, 25, 182, 82, 143, 59, 48, 140, 40, 185, 74, 120, 2, 61, 172, 184, 252, 25, 177, 240, 43, 121, 211, 12, 117, 232, 228, 188, 103, 79, 246, 93, 18, 185, 227, 154, 123, 220, 182, 125, 58, 153, 142, 141, 173, 3, 5, 106, 113, 186, 246, 193, 199, 153, 149, 138, 100, 167, 105, 221, 227, 209, 254, 226, 138, 170, 159, 203, 223, 120, 110, 219, 226, 176 }, UpdatedAt = new DateTime(2020, 7, 14, 19, 15, 7, 790, DateTimeKind.Utc) }
+                    );
+                });
+
             modelBuilder.Entity("CookieBook.Domain.Models.Category", b =>
                 {
                     b.Property<int>("Id")
