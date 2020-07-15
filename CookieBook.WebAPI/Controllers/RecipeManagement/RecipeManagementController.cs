@@ -20,13 +20,11 @@ namespace CookieBook.WebAPI.Controllers.RecipeManagement
     {
         private readonly IRecipeService _recipeService;
         private readonly IRateService _rateService;
-        private readonly IMapper _mapper;
 
-        public RecipeManagementController(IRecipeService recipeService, IRateService rateService, IMapper mapper)
+        public RecipeManagementController(IRecipeService recipeService, IRateService rateService, IMapper mapper) : base(mapper)
         {
             _recipeService = recipeService;
             _rateService = rateService;
-            _mapper = mapper;
         }
 
         [HttpGet("recipes")]

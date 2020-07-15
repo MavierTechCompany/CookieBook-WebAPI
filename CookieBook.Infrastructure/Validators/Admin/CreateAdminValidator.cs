@@ -1,13 +1,15 @@
-using System;
-using CookieBook.Infrastructure.Commands.User;
+﻿using CookieBook.Infrastructure.Commands.Admin;
 using CookieBook.Infrastructure.Extensions;
 using FluentValidation;
+using System;
+using System.Collections.Generic;
+using System.Text;
 
-namespace CookieBook.Infrastructure.Validators.User
+namespace CookieBook.Infrastructure.Validators.Admin
 {
-    public class CreateUserValidator : AbstractValidator<CreateUser>
+    public class CreateAdminValidator : AbstractValidator<CreateAdmin>
     {
-        public CreateUserValidator()
+        public CreateAdminValidator()
         {
             RuleFor(req => req.Nick)
                 .NotEmpty()
@@ -16,21 +18,7 @@ namespace CookieBook.Infrastructure.Validators.User
                 .Matches(RegularExpressions.Nick)
                 .WithMessage(@"Nick must starts with the letter and can contains only letters and digits.");
 
-            RuleFor(req => req.Login)
-                .NotEmpty()
-                .MinimumLength(19)
-                .MaximumLength(20)
-                .Must(a => IsValidUnsignedLongValue(a))
-                .WithMessage("Invalid value!");
-
             RuleFor(req => req.Password)
-                .NotEmpty()
-                .MinimumLength(19)
-                .MaximumLength(20)
-                .Must(a => IsValidUnsignedLongValue(a))
-                .WithMessage("Invalid value!");
-
-            RuleFor(req => req.UserEmail)
                 .NotEmpty()
                 .MinimumLength(19)
                 .MaximumLength(20)

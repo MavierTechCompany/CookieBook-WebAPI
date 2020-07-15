@@ -11,6 +11,7 @@ using CookieBook.Infrastructure.Services.Interfaces;
 using CookieBook.WebAPI.Controllers.Base;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace CookieBook.WebAPI.Controllers.UserManagement
 {
@@ -18,12 +19,10 @@ namespace CookieBook.WebAPI.Controllers.UserManagement
     public class UserManagementController : ApiControllerBase
     {
         private readonly IUserService _userService;
-        private readonly IMapper _mapper;
 
-        public UserManagementController(IUserService userService, IMapper mapper)
+        public UserManagementController(IUserService userService, IMapper mapper) : base(mapper)
         {
             _userService = userService;
-            _mapper = mapper;
         }
 
         [HttpPost]
@@ -39,7 +38,7 @@ namespace CookieBook.WebAPI.Controllers.UserManagement
         public async Task<IActionResult> ReadUsersAsync(AccountsParameters parameters)
         {
             if (!string.IsNullOrWhiteSpace(parameters.Fields) &&
-                !PropertyManager.PropertiesExists<User>(parameters.Fields))
+                !PropertyManager.PropertiesExists<UserDto>(parameters.Fields))
             {
                 return BadRequest();
             }
@@ -54,7 +53,7 @@ namespace CookieBook.WebAPI.Controllers.UserManagement
         public async Task<IActionResult> ReadUserAsync(int id, [FromQuery] string fields)
         {
             if (!string.IsNullOrWhiteSpace(fields) &&
-                !PropertyManager.PropertiesExists<User>(fields))
+                !PropertyManager.PropertiesExists<UserDto>(fields))
             {
                 return BadRequest();
             }
@@ -77,10 +76,10 @@ namespace CookieBook.WebAPI.Controllers.UserManagement
         }
 
         [HttpPost("token")]
-        public async Task<IActionResult> LoginUserAsync([FromBody] LoginUser command)
+        public async Task<IActionResult> LoginUserAsync([FromBody] LoginAccount command)
         {
             var token = await _userService.LoginAsync(command);
-            return Ok(token);
+            return Ok(new { Token = token });
         }
     }
 }

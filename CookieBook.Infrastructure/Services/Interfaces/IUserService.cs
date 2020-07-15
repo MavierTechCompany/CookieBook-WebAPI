@@ -15,7 +15,7 @@ namespace CookieBook.Infrastructure.Services.Interfaces
 
         Task UpdateAsync(int id, UpdateUserData command);
 
-        Task<string> LoginAsync(LoginUser command);
+        Task<string> LoginAsync(LoginAccount command);
 
         Task<User> GetAsync(int id, bool asNoTracking = false);
 

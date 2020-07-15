@@ -1,21 +1,21 @@
 using System;
-using CookieBook.Infrastructure.Commands.Account;
+using CookieBook.Infrastructure.Commands.Auth;
 using FluentValidation;
 
-namespace CookieBook.Infrastructure.Validators.User
+namespace CookieBook.Infrastructure.Validators.Auth
 {
-    public class UpdatePasswordValidator : AbstractValidator<UpdatePassword>
+    public class LoginAccountValidator : AbstractValidator<LoginAccount>
     {
-        public UpdatePasswordValidator()
+        public LoginAccountValidator()
         {
-            RuleFor(req => req.Password)
+            RuleFor(req => req.LoginOrEmail)
                 .NotEmpty()
                 .MinimumLength(19)
                 .MaximumLength(20)
                 .Must(a => IsValidUnsignedLongValue(a))
                 .WithMessage("Invalid value!");
 
-            RuleFor(req => req.NewPassword)
+            RuleFor(req => req.Password)
                 .NotEmpty()
                 .MinimumLength(19)
                 .MaximumLength(20)
