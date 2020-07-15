@@ -31,10 +31,10 @@ namespace CookieBook.Infrastructure.Services
             _jwtHandler = jwtHandler;
         }
 
-        public async Task<Admin> AddAsync(CreateAdmin command)
+        public async Task<(Admin Admin, string Login)> AddAsync(CreateAdmin command)
         {
-            var login = _hashManager.CalculateDataHash(RandomStringGenerator.GenerateUnique()).ToString();
-            var loginHash = _hashManager.CalculateDataHash(login);
+            var login = RandomStringGenerator.GenerateUnique();
+            var loginHash = _hashManager.CalculateDataHash(_hashManager.CalculateDataHash(login).ToString());
 
             if (await _context.Admins.ExistsInDatabaseAsync(command.Nick, loginHash) == true)
                 throw new CorruptedOperationException("Admin already exists.");
@@ -47,7 +47,7 @@ namespace CookieBook.Infrastructure.Services
             await _context.Admins.AddAsync(admin);
             await _context.SaveChangesAsync();
 
-            return admin;
+            return (admin, login);
         }
 
         public async Task<Admin> GetAsync(int id, bool asNoTracking = false)

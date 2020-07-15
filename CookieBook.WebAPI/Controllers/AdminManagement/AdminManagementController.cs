@@ -2,11 +2,13 @@
 using CookieBook.Infrastructure.Commands.Account;
 using CookieBook.Infrastructure.Commands.Admin;
 using CookieBook.Infrastructure.Commands.Auth;
+using CookieBook.Infrastructure.DTO;
 using CookieBook.Infrastructure.DTO.Base;
 using CookieBook.Infrastructure.Services.Interfaces;
 using CookieBook.WebAPI.Controllers.Base;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
 
 namespace CookieBook.WebAPI.Controllers.AdminManagement
@@ -32,10 +34,15 @@ namespace CookieBook.WebAPI.Controllers.AdminManagement
         [Authorize(Roles = "admin")]
         public async Task<IActionResult> CreateAdminAsync([FromBody] CreateAdmin command)
         {
-            var admin = await _adminService.AddAsync(command);
-            var userDto = _mapper.Map<AccountDto>(admin);
+            var adminTuple = await _adminService.AddAsync(command);
+            var adminDto = _mapper.Map<AdminDto>(adminTuple.Admin);
+            adminDto.Login = adminTuple.Login;
 
-            return Created($"{Request.Host}{Request.Path}/{admin.Id}", userDto);
+            return Created($"{Request.Host}{Request.Path}/{adminTuple.Admin.Id}", adminDto);
         }
+
+        [HttpGet("{id}")]
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> ReadAdminAsync(int id) => throw new NotImplementedException();
     }
 }

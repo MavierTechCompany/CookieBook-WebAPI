@@ -11,7 +11,7 @@ namespace CookieBook.Infrastructure.Services.Interfaces
 {
     public interface IAdminService
     {
-        Task<Admin> AddAsync(CreateAdmin command);
+        Task<(Admin Admin, string Login)> AddAsync(CreateAdmin command);
 
         Task<string> LoginAsync(LoginAccount command);
 
