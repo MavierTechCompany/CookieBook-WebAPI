@@ -5,6 +5,7 @@ using CookieBook.Infrastructure.Commands.Auth;
 using CookieBook.Infrastructure.DTO;
 using CookieBook.Infrastructure.DTO.Admin;
 using CookieBook.Infrastructure.DTO.Base;
+using CookieBook.Infrastructure.Extensions;
 using CookieBook.Infrastructure.Services.Interfaces;
 using CookieBook.WebAPI.Controllers.Base;
 using Microsoft.AspNetCore.Authorization;
@@ -44,11 +45,18 @@ namespace CookieBook.WebAPI.Controllers.AdminManagement
 
         [HttpGet("{id}")]
         [Authorize(Roles = "admin")]
-        public async Task<IActionResult> ReadAdminAsync(int id)
+        public async Task<IActionResult> ReadAdminAsync(int id, [FromQuery] string fields)
         {
-            var admin = await _adminService.GetAsync(id, true);
+            if (!string.IsNullOrWhiteSpace(fields) &&
+                !PropertyManager.PropertiesExists<AdminShortDto>(fields))
+            {
+                return BadRequest();
+            }
 
-            return Ok(_mapper.Map<AdminShortDto>(admin));
+            var admin = await _adminService.GetAsync(id, true);
+            var adminDto = _mapper.Map<AdminShortDto>(admin);
+
+            return Ok(adminDto.ShapeData(fields));
         }
     }
 }

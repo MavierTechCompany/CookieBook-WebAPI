@@ -38,7 +38,7 @@ namespace CookieBook.WebAPI.Controllers.UserManagement
         public async Task<IActionResult> ReadUsersAsync(AccountsParameters parameters)
         {
             if (!string.IsNullOrWhiteSpace(parameters.Fields) &&
-                !PropertyManager.PropertiesExists<User>(parameters.Fields))
+                !PropertyManager.PropertiesExists<UserDto>(parameters.Fields))
             {
                 return BadRequest();
             }
@@ -53,7 +53,7 @@ namespace CookieBook.WebAPI.Controllers.UserManagement
         public async Task<IActionResult> ReadUserAsync(int id, [FromQuery] string fields)
         {
             if (!string.IsNullOrWhiteSpace(fields) &&
-                !PropertyManager.PropertiesExists<User>(fields))
+                !PropertyManager.PropertiesExists<UserDto>(fields))
             {
                 return BadRequest();
             }
