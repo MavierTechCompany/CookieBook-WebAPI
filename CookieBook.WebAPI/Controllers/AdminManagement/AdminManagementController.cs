@@ -3,6 +3,7 @@ using CookieBook.Infrastructure.Commands.Account;
 using CookieBook.Infrastructure.Commands.Admin;
 using CookieBook.Infrastructure.Commands.Auth;
 using CookieBook.Infrastructure.DTO;
+using CookieBook.Infrastructure.DTO.Admin;
 using CookieBook.Infrastructure.DTO.Base;
 using CookieBook.Infrastructure.Services.Interfaces;
 using CookieBook.WebAPI.Controllers.Base;
@@ -43,6 +44,11 @@ namespace CookieBook.WebAPI.Controllers.AdminManagement
 
         [HttpGet("{id}")]
         [Authorize(Roles = "admin")]
-        public async Task<IActionResult> ReadAdminAsync(int id) => throw new NotImplementedException();
+        public async Task<IActionResult> ReadAdminAsync(int id)
+        {
+            var admin = await _adminService.GetAsync(id, true);
+
+            return Ok(_mapper.Map<AdminShortDto>(admin));
+        }
     }
 }
