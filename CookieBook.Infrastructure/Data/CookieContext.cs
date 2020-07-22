@@ -82,7 +82,7 @@ namespace CookieBook.Infrastructure.Data
                 Login = loginHash,
                 PasswordHash = passHash,
                 Salt = passSalt,
-                RestoreKey = restoreKey
+                RestoreKey = restoreKey,
             };
         }
     }

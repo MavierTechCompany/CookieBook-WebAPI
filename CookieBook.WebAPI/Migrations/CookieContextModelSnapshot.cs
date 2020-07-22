@@ -27,6 +27,10 @@ namespace CookieBook.WebAPI.Migrations
 
                     b.Property<DateTime>("CreatedAt");
 
+                    b.Property<bool>("IsActive");
+
+                    b.Property<bool>("IsRestoreKeyFresh");
+
                     b.Property<decimal>("Login")
                         .HasConversion(new ValueConverter<decimal, decimal>(v => default(decimal), v => default(decimal), new ConverterMappingHints(precision: 20, scale: 0)));
 
@@ -35,6 +39,8 @@ namespace CookieBook.WebAPI.Migrations
                     b.Property<byte[]>("PasswordHash");
 
                     b.Property<string>("RestoreKey");
+
+                    b.Property<DateTime?>("RestoreKeyUsedAt");
 
                     b.Property<string>("Role");
 
@@ -47,7 +53,7 @@ namespace CookieBook.WebAPI.Migrations
                     b.ToTable("Admins");
 
                     b.HasData(
-                        new { Id = 1, CreatedAt = new DateTime(2020, 7, 14, 19, 15, 7, 790, DateTimeKind.Utc), Login = 4116719210845653519m, Nick = "Ronald", PasswordHash = new byte[] { 160, 145, 195, 177, 140, 35, 98, 47, 43, 3, 28, 190, 27, 150, 193, 95, 148, 255, 63, 184, 20, 151, 48, 204, 75, 196, 172, 75, 126, 40, 6, 252, 26, 123, 49, 7, 250, 116, 34, 175, 112, 107, 254, 76, 240, 117, 4, 133, 0, 46, 167, 202, 233, 104, 81, 47, 183, 59, 204, 31, 180, 88, 134, 55 }, RestoreKey = "?9ni$w2L3k8V", Role = "admin", Salt = new byte[] { 117, 103, 94, 188, 116, 244, 241, 28, 156, 153, 131, 83, 42, 16, 174, 236, 17, 224, 253, 55, 70, 13, 51, 87, 146, 30, 214, 235, 246, 128, 70, 15, 74, 34, 138, 87, 210, 176, 154, 160, 145, 230, 147, 224, 50, 228, 73, 81, 245, 104, 233, 80, 34, 202, 166, 25, 182, 82, 143, 59, 48, 140, 40, 185, 74, 120, 2, 61, 172, 184, 252, 25, 177, 240, 43, 121, 211, 12, 117, 232, 228, 188, 103, 79, 246, 93, 18, 185, 227, 154, 123, 220, 182, 125, 58, 153, 142, 141, 173, 3, 5, 106, 113, 186, 246, 193, 199, 153, 149, 138, 100, 167, 105, 221, 227, 209, 254, 226, 138, 170, 159, 203, 223, 120, 110, 219, 226, 176 }, UpdatedAt = new DateTime(2020, 7, 14, 19, 15, 7, 790, DateTimeKind.Utc) }
+                        new { Id = 1, CreatedAt = new DateTime(2020, 7, 22, 11, 56, 15, 731, DateTimeKind.Utc), IsActive = true, IsRestoreKeyFresh = true, Login = 4116719210845653519m, Nick = "Ronald", PasswordHash = new byte[] { 225, 115, 39, 212, 159, 30, 17, 3, 82, 201, 220, 108, 0, 139, 176, 45, 103, 247, 45, 10, 178, 128, 73, 222, 52, 137, 58, 221, 195, 26, 182, 165, 104, 20, 150, 240, 73, 76, 120, 60, 27, 7, 213, 186, 8, 140, 102, 128, 33, 100, 44, 40, 155, 149, 13, 86, 94, 123, 35, 251, 205, 194, 139, 158 }, RestoreKey = "y@$u!mV657cD", Role = "admin", Salt = new byte[] { 20, 178, 39, 0, 185, 219, 164, 12, 55, 144, 45, 60, 34, 61, 140, 209, 167, 175, 187, 93, 67, 171, 123, 0, 190, 141, 116, 240, 93, 160, 168, 42, 28, 233, 25, 52, 36, 246, 123, 106, 53, 97, 170, 251, 188, 213, 124, 194, 160, 166, 187, 17, 28, 142, 161, 186, 36, 53, 46, 109, 251, 108, 37, 155, 152, 243, 118, 136, 167, 126, 47, 154, 48, 232, 124, 194, 135, 191, 176, 90, 103, 93, 160, 98, 55, 5, 228, 245, 115, 100, 20, 21, 103, 123, 27, 55, 56, 138, 209, 90, 109, 94, 176, 183, 161, 207, 45, 199, 253, 19, 196, 58, 122, 92, 5, 7, 255, 57, 127, 241, 158, 104, 253, 184, 146, 193, 56, 247 }, UpdatedAt = new DateTime(2020, 7, 22, 11, 56, 15, 731, DateTimeKind.Utc) }
                     );
                 });
 
@@ -196,6 +202,10 @@ namespace CookieBook.WebAPI.Migrations
 
                     b.Property<DateTime>("CreatedAt");
 
+                    b.Property<bool>("IsActive");
+
+                    b.Property<bool>("IsRestoreKeyFresh");
+
                     b.Property<decimal>("Login")
                         .HasConversion(new ValueConverter<decimal, decimal>(v => default(decimal), v => default(decimal), new ConverterMappingHints(precision: 20, scale: 0)));
 
@@ -204,6 +214,8 @@ namespace CookieBook.WebAPI.Migrations
                     b.Property<byte[]>("PasswordHash");
 
                     b.Property<string>("RestoreKey");
+
+                    b.Property<DateTime?>("RestoreKeyUsedAt");
 
                     b.Property<string>("Role");
 
