@@ -37,7 +37,7 @@ namespace CookieBook.Infrastructure.Services
         public async Task<User> AddAsync(CreateUser command)
         {
             var loginHash = _hashManager.CalculateDataHash(command.Login);
-            var emailHash = _hashManager.CalculateDataHash(command.UserEmail);
+            var emailHash = _hashManager.CalculateDataHash(command.Email);
 
             if (await _context.Users.ExistsInDatabaseAsync(command.Nick, loginHash, emailHash) == true)
                 throw new CorruptedOperationException("User already exists.");
@@ -64,6 +64,26 @@ namespace CookieBook.Infrastructure.Services
             var user = await _context.Users.GetById(id).SingleOrDefaultAsync();
 
             user.Update(loginHash, emailHash);
+
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task BlockAsync(BlockUser command)
+        {
+            var loginHash = _hashManager.CalculateDataHash(command.Login);
+            var emailHash = _hashManager.CalculateDataHash(command.Email);
+
+            var user = await _context.Users.SingleOrDefaultAsync(x => x.Login == loginHash && x.UserEmail == emailHash);
+
+            if (user == null)
+                throw new CorruptedOperationException("Invalid data");
+
+            if (user.IsActive == false)
+                throw new CorruptedOperationException("Invalid operation");
+
+            user.IsActive = false;
+            user.Update();
 
             _context.Users.Update(user);
             await _context.SaveChangesAsync();

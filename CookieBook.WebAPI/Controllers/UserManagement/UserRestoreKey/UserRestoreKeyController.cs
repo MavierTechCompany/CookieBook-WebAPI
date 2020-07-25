@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using CookieBook.Infrastructure.Commands.User;
+using CookieBook.Infrastructure.Services.Interfaces;
 using CookieBook.WebAPI.Controllers.Base;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,12 +14,16 @@ namespace CookieBook.WebAPI.Controllers.UserManagement.UserRestoreKey
     [Route("user-management/users/")]
     public class UserRestoreKeyController : ApiControllerBase
     {
-        public UserRestoreKeyController(IMapper mapper) : base(mapper)
-        {
-        }
+        private readonly IUserService _userService;
+
+        public UserRestoreKeyController(IMapper mapper, IUserService userService) : base(mapper) => _userService = userService;
 
         [HttpPost("block")]
-        public async Task<IActionResult> BlockUserAsync() => throw new NotImplementedException();
+        public async Task<IActionResult> BlockUserAsync(BlockUser command)
+        {
+            await _userService.BlockAsync(command);
+            return Ok();
+        }
 
         [HttpPost("request-unblock")]
         public async Task<IActionResult> RequestUnblockUserAsync() => throw new NotImplementedException();
