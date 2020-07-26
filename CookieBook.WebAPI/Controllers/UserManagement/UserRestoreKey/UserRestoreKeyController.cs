@@ -19,7 +19,7 @@ namespace CookieBook.WebAPI.Controllers.UserManagement.UserRestoreKey
         public UserRestoreKeyController(IMapper mapper, IUserService userService) : base(mapper) => _userService = userService;
 
         [HttpPost("block")]
-        public async Task<IActionResult> BlockUserAsync(BlockUser command)
+        public async Task<IActionResult> BlockUserAsync([FromBody] BlockUser command)
         {
             await _userService.BlockAsync(command);
             return Ok();

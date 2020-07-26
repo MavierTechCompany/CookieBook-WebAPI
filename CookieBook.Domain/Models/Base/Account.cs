@@ -24,7 +24,7 @@ namespace CookieBook.Domain.Models.Base
             IsRestoreKeyFresh = true;
         }
 
-        public Account(string nick, UInt64 login, byte[] salt, byte[] passwordHash, string restoreKey) : base()
+        public Account(string nick, UInt64 login, byte[] salt, byte[] passwordHash, string restoreKey) : this()
         {
             Nick = nick;
             Login = login;

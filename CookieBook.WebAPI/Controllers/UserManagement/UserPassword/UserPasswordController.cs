@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using AutoMapper;
 using CookieBook.Infrastructure.Commands.Account;
+using CookieBook.Infrastructure.Extensions.CustomExceptions;
 using CookieBook.Infrastructure.Services.Interfaces;
 using CookieBook.WebAPI.Controllers.Base;
 using Microsoft.AspNetCore.Authorization;
@@ -24,6 +25,10 @@ namespace CookieBook.WebAPI.Controllers.UserManagement.UserPassword
         {
             if (id != AccountID)
                 return Forbid();
+
+            var user = await _userService.GetAsync(id);
+            if (user.IsActive == false)
+                throw new CorruptedOperationException("Invalid operation");
 
             await _userService.UpdatePasswordAsync(id, command);
             return NoContent();
