@@ -63,9 +63,6 @@ namespace CookieBook.Infrastructure.Services
 
             var user = await _context.Users.GetById(id).SingleOrDefaultAsync();
 
-            if (user.IsActive == false)
-                throw new CorruptedOperationException("Invalid operation!");
-
             user.Update(loginHash, emailHash);
 
             _context.Users.Update(user);
@@ -82,9 +79,6 @@ namespace CookieBook.Infrastructure.Services
             if (user == null)
                 throw new CorruptedOperationException("Invalid data");
 
-            if (user.IsActive == false)
-                throw new CorruptedOperationException("Invalid operation");
-
             user.IsActive = false;
             user.Update();
 
@@ -98,9 +92,6 @@ namespace CookieBook.Infrastructure.Services
 
             if (user == null)
                 throw new CorruptedOperationException("Userr doesn't exist.");
-
-            if (user.IsActive == false)
-                throw new CorruptedOperationException("Invalid operation");
 
             if (_hashManager.VerifyPasswordHash(command.Password, user.PasswordHash, user.Salt) == false)
                 throw new CorruptedOperationException("Invalid credentials.");
@@ -130,9 +121,6 @@ namespace CookieBook.Infrastructure.Services
 
             if (_hashManager.VerifyPasswordHash(command.Password, user.PasswordHash, user.Salt) == false)
                 throw new CorruptedOperationException("Invalid credentials.");
-
-            if (user.IsActive == false)
-                throw new CorruptedOperationException("Invalid operation");
 
             return await _jwtHandler.CreateTokenAsync(user.Id, user.Role);
         }

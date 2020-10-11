@@ -104,6 +104,7 @@ namespace CookieBook.WebAPI
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IRateService, RateService>();
             services.AddScoped<IAdminService, AdminService>();
+            services.AddScoped<IAccountService, AccountService>();
 
             services.AddScoped<IDataHashManager, DataHashManager>();
         }
@@ -123,6 +124,7 @@ namespace CookieBook.WebAPI
             app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseErrorHandler();
+            app.UseAccountStatusChecker();
             app.UseMvc();
         }
     }
