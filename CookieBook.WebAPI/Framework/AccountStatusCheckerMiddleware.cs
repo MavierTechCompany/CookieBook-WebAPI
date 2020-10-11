@@ -38,19 +38,19 @@ namespace CookieBook.WebAPI.Framework
 
             if (!string.IsNullOrEmpty(bearer))
             {
-                var jwt = bearer.Split(" ")[1];
-
-                var accountId = GetAccountId(jwt);
+                var accountId = GetAccountId(bearer);
                 isActive = await accountService.IsActive(accountId);
             }
 
             return isActive;
         }
 
-        private int GetAccountId(string jwtToken)
+        private int GetAccountId(string bearer)
         {
+            var jwt = bearer.Split(" ")[1];
+
             var handler = new JwtSecurityTokenHandler();
-            var token = handler.ReadJwtToken(jwtToken);
+            var token = handler.ReadJwtToken(jwt);
 
             return int.Parse(token.Claims.First().Value);
         }
