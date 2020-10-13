@@ -9,6 +9,7 @@ using CookieBook.Infrastructure.Extensions;
 using CookieBook.Infrastructure.Parameters.Account;
 using CookieBook.Infrastructure.Services.Interfaces;
 using CookieBook.WebAPI.Controllers.Base;
+using CookieBook.WebAPI.Filters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -65,6 +66,7 @@ namespace CookieBook.WebAPI.Controllers.UserManagement
         }
 
         [Authorize(Roles = "user")]
+        [AccessableByInactiveAccount(false)]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUserAsync(int id, [FromBody] UpdateUserData command)
         {

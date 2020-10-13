@@ -10,6 +10,7 @@ using CookieBook.Infrastructure.Parameters.Recipe;
 using CookieBook.Infrastructure.Parameters.Recipe.Rate;
 using CookieBook.Infrastructure.Services.Interfaces;
 using CookieBook.WebAPI.Controllers.Base;
+using CookieBook.WebAPI.Filters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

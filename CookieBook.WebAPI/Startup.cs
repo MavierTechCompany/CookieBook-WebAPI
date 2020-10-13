@@ -124,7 +124,6 @@ namespace CookieBook.WebAPI
             app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseErrorHandler();
-            app.UseAccountStatusChecker();
             app.UseMvc();
         }
     }
