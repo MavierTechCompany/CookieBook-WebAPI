@@ -17,7 +17,7 @@ namespace CookieBook.WebAPI.Filters
     {
         private bool _canAccess;
 
-        public AccessableByInactiveAccountAttribute(bool canAccess) => _canAccess = canAccess;
+        public AccessableByInactiveAccountAttribute(bool canAccess = true) => _canAccess = canAccess;
 
         public async Task OnResourceExecutionAsync(ResourceExecutingContext context, ResourceExecutionDelegate next)
         {

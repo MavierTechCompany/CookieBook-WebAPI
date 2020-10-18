@@ -2,6 +2,7 @@
 using CookieBook.Infrastructure.Commands.User;
 using CookieBook.Infrastructure.Services.Interfaces;
 using CookieBook.WebAPI.Controllers.Base;
+using CookieBook.WebAPI.Filters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -25,11 +26,12 @@ namespace CookieBook.WebAPI.Controllers.UserManagement.UserRestoreKey
             return Ok();
         }
 
-        [HttpPost("request-unblock")]
-        public async Task<IActionResult> RequestUnblockUserAsync() => throw new NotImplementedException();
+        [HttpPost("unblock")]
+        public async Task<IActionResult> UnblockUserAsync() => throw new NotImplementedException();
 
         [Authorize("user")]
         [HttpPost("{id}/restore-key")]
+        [AccessableByInactiveAccount(false)]
         public async Task<IActionResult> GenerateRestoreKeyAsync(int id) => throw new NotImplementedException();
     }
 }

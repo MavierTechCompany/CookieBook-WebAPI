@@ -4,12 +4,14 @@ using CookieBook.Infrastructure.Commands.Account;
 using CookieBook.Infrastructure.Extensions.CustomExceptions;
 using CookieBook.Infrastructure.Services.Interfaces;
 using CookieBook.WebAPI.Controllers.Base;
+using CookieBook.WebAPI.Filters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CookieBook.WebAPI.Controllers.UserManagement.UserPassword
 {
     [Route("user-management/users/{id}/password")]
+    [AccessableByInactiveAccount(false)]
     public class UserPasswordController : ApiControllerBase
     {
         private readonly IUserService _userService;

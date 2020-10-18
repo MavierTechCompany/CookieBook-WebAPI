@@ -66,8 +66,8 @@ namespace CookieBook.WebAPI.Controllers.UserManagement
         }
 
         [Authorize(Roles = "user")]
-        [AccessableByInactiveAccount(false)]
         [HttpPut("{id}")]
+        [AccessableByInactiveAccount(false)]
         public async Task<IActionResult> UpdateUserAsync(int id, [FromBody] UpdateUserData command)
         {
             if (id != AccountID)
