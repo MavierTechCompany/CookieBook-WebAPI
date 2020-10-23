@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
 using AutoMapper;
 using CookieBook.Domain.JWT;
@@ -67,7 +68,7 @@ namespace CookieBook.WebAPI
             services.AddAuthorization(x => x.AddPolicy("user", p => p.RequireRole("user")));
 
             services.AddDbContextPool<CookieContext>(options => options
-               .UseSqlServer(Configuration.GetConnectionString("CookieBookDatabase"),
+               .UseSqlServer(GetConnectionString(),
                    c => c.MigrationsAssembly("CookieBook.WebAPI")).EnableSensitiveDataLogging(false), 64);
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -125,6 +126,16 @@ namespace CookieBook.WebAPI
             app.UseAuthentication();
             app.UseErrorHandler();
             app.UseMvc();
+        }
+
+        private string GetConnectionString()
+        {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                return Configuration.GetConnectionString("CookieBookDatabaseLinux");
+            }
+
+            return Configuration.GetConnectionString("CookieBookDatabaseWindows");
         }
     }
 }
