@@ -27,7 +27,11 @@ namespace CookieBook.WebAPI.Controllers.UserManagement.UserRestoreKey
         }
 
         [HttpPost("unblock")]
-        public async Task<IActionResult> UnblockUserAsync() => throw new NotImplementedException();
+        public async Task<IActionResult> UnblockUserAsync([FromBody] UnblockUser command)
+        {
+            await _userService.UnblockAsync(command);
+            return Ok();
+        }
 
         [Authorize("user")]
         [HttpPost("{id}/restore-key")]

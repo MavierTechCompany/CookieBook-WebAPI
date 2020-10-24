@@ -79,8 +79,33 @@ namespace CookieBook.Infrastructure.Services
             if (user == null)
                 throw new CorruptedOperationException("Invalid data");
 
+            if (user.IsActive == false)
+                throw new CorruptedOperationException("Invalid operation.");
+
             user.IsActive = false;
             user.Update();
+
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UnblockAsync(UnblockUser command)
+        {
+            var emailHash = _hashManager.CalculateDataHash(command.Email);
+            var user = await _context.Users.GetByEmail(emailHash).SingleOrDefaultAsync();
+
+            if (user == null || user.RestoreKey != command.RestoreKey)
+                throw new CorruptedOperationException("Invalid data");
+
+            if (user.IsActive == true || user.IsRestoreKeyFresh == false)
+                throw new CorruptedOperationException("Invalid operation.");
+
+            _hashManager.CalculatePasswordHash(command.NewPassword, user.Salt, out var newPasswordHash);
+            user.UpdatePassword(newPasswordHash);
+
+            user.RestoreKeyUsedAt = DateTime.UtcNow;
+            user.IsRestoreKeyFresh = false;
+            user.IsActive = true;
 
             _context.Users.Update(user);
             await _context.SaveChangesAsync();
@@ -91,7 +116,7 @@ namespace CookieBook.Infrastructure.Services
             var user = await _context.Users.GetById(id).SingleOrDefaultAsync();
 
             if (user == null)
-                throw new CorruptedOperationException("Userr doesn't exist.");
+                throw new CorruptedOperationException("User doesn't exist.");
 
             if (_hashManager.VerifyPasswordHash(command.Password, user.PasswordHash, user.Salt) == false)
                 throw new CorruptedOperationException("Invalid credentials.");

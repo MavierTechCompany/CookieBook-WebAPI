@@ -19,6 +19,8 @@ namespace CookieBook.Infrastructure.Services.Interfaces
 
         Task BlockAsync(BlockUser command);
 
+        Task UnblockAsync(UnblockUser command);
+
         Task<User> GetAsync(int id, bool asNoTracking = false);
 
         Task<IEnumerable<User>> GetAsync(AccountsParameters parameters, bool asNoTracking = false);
