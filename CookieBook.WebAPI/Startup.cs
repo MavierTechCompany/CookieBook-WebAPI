@@ -128,6 +128,10 @@ namespace CookieBook.WebAPI
             app.UseMvc();
         }
 
+        /// <summary>
+        /// Gets connection string for specyfic runtime/server operation system.
+        /// </summary>
+        /// <returns></returns>
         private string GetConnectionString()
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
