@@ -30,5 +30,7 @@ namespace CookieBook.Infrastructure.Services.Interfaces
         Task<IEnumerable<Recipe>> GetUserRecipesAsync(int id, RecipesParameters parameters, bool asNoTracking = false);
 
         Task<Recipe> GetUserRecipeAsync(int id, int recipeId, bool asNoTracking = false);
+
+        Task<string> GenerateNewRestoreKey(int id);
     }
 }

@@ -219,5 +219,7 @@ namespace CookieBook.Infrastructure.Services
 
             return recipe;
         }
+
+        public Task<string> GenerateNewRestoreKey(int id) => throw new NotImplementedException();
     }
 }
