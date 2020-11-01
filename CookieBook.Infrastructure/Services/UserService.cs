@@ -220,6 +220,26 @@ namespace CookieBook.Infrastructure.Services
             return recipe;
         }
 
-        public Task<string> GenerateNewRestoreKey(int id) => throw new NotImplementedException();
+        public async Task<string> GenerateNewRestoreKey(int id)
+        {
+            var user = await GetAsync(id);
+
+            if (user.IsRestoreKeyFresh == true)
+                throw new CorruptedOperationException("Invalid operation.");
+
+            var hoursSpan = Math.Ceiling(((TimeSpan)(DateTime.UtcNow - user.RestoreKeyUsedAt)).TotalHours);
+            if (hoursSpan < 24)
+                throw new CorruptedOperationException($"Try again in {24 - hoursSpan} hours.");
+
+            var newRestoreKey = PasswordGenerator.GenerateRandomPassword();
+
+            user.RestoreKey = newRestoreKey;
+            user.IsRestoreKeyFresh = true;
+
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
+
+            return newRestoreKey;
+        }
     }
 }

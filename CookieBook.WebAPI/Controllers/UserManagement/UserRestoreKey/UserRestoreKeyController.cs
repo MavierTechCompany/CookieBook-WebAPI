@@ -34,12 +34,15 @@ namespace CookieBook.WebAPI.Controllers.UserManagement.UserRestoreKey
         }
 
         [Authorize("user")]
-        [HttpPost("{id}/restore-key")]
+        [HttpGet("{id}/restore-key")]
         [AccessableByInactiveAccount(false)]
         public async Task<IActionResult> GenerateRestoreKeyAsync(int id)
         {
+            if (id != AccountID)
+                return Forbid();
+
             var key = await _userService.GenerateNewRestoreKey(id);
-            return Ok(key);
+            return Ok(new { RestoreKey = key });
         }
     }
 }
