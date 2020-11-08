@@ -19,13 +19,20 @@ namespace CookieBook.WebAPI.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("CookieBook.Domain.Models.Admin", b =>
+            modelBuilder.Entity("CookieBook.Domain.Models.Base.Account", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTime>("CreatedAt");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired();
+
+                    b.Property<bool>("IsActive");
+
+                    b.Property<bool>("IsRestoreKeyFresh");
 
                     b.Property<decimal>("Login")
                         .HasConversion(new ValueConverter<decimal, decimal>(v => default(decimal), v => default(decimal), new ConverterMappingHints(precision: 20, scale: 0)));
@@ -36,6 +43,8 @@ namespace CookieBook.WebAPI.Migrations
 
                     b.Property<string>("RestoreKey");
 
+                    b.Property<DateTime?>("RestoreKeyUsedAt");
+
                     b.Property<string>("Role");
 
                     b.Property<byte[]>("Salt");
@@ -44,11 +53,9 @@ namespace CookieBook.WebAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Admins");
+                    b.ToTable("Accounts");
 
-                    b.HasData(
-                        new { Id = 1, CreatedAt = new DateTime(2020, 7, 14, 19, 15, 7, 790, DateTimeKind.Utc), Login = 4116719210845653519m, Nick = "Ronald", PasswordHash = new byte[] { 160, 145, 195, 177, 140, 35, 98, 47, 43, 3, 28, 190, 27, 150, 193, 95, 148, 255, 63, 184, 20, 151, 48, 204, 75, 196, 172, 75, 126, 40, 6, 252, 26, 123, 49, 7, 250, 116, 34, 175, 112, 107, 254, 76, 240, 117, 4, 133, 0, 46, 167, 202, 233, 104, 81, 47, 183, 59, 204, 31, 180, 88, 134, 55 }, RestoreKey = "?9ni$w2L3k8V", Role = "admin", Salt = new byte[] { 117, 103, 94, 188, 116, 244, 241, 28, 156, 153, 131, 83, 42, 16, 174, 236, 17, 224, 253, 55, 70, 13, 51, 87, 146, 30, 214, 235, 246, 128, 70, 15, 74, 34, 138, 87, 210, 176, 154, 160, 145, 230, 147, 224, 50, 228, 73, 81, 245, 104, 233, 80, 34, 202, 166, 25, 182, 82, 143, 59, 48, 140, 40, 185, 74, 120, 2, 61, 172, 184, 252, 25, 177, 240, 43, 121, 211, 12, 117, 232, 228, 188, 103, 79, 246, 93, 18, 185, 227, 154, 123, 220, 182, 125, 58, 153, 142, 141, 173, 3, 5, 106, 113, 186, 246, 193, 199, 153, 149, 138, 100, 167, 105, 221, 227, 209, 254, 226, 138, 170, 159, 203, 223, 120, 110, 219, 226, 176 }, UpdatedAt = new DateTime(2020, 7, 14, 19, 15, 7, 790, DateTimeKind.Utc) }
-                    );
+                    b.HasDiscriminator<string>("Discriminator").HasValue("Account");
                 });
 
             modelBuilder.Entity("CookieBook.Domain.Models.Category", b =>
@@ -188,37 +195,6 @@ namespace CookieBook.WebAPI.Migrations
                     b.ToTable("RecipeImages");
                 });
 
-            modelBuilder.Entity("CookieBook.Domain.Models.User", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("CreatedAt");
-
-                    b.Property<decimal>("Login")
-                        .HasConversion(new ValueConverter<decimal, decimal>(v => default(decimal), v => default(decimal), new ConverterMappingHints(precision: 20, scale: 0)));
-
-                    b.Property<string>("Nick");
-
-                    b.Property<byte[]>("PasswordHash");
-
-                    b.Property<string>("RestoreKey");
-
-                    b.Property<string>("Role");
-
-                    b.Property<byte[]>("Salt");
-
-                    b.Property<DateTime>("UpdatedAt");
-
-                    b.Property<decimal>("UserEmail")
-                        .HasConversion(new ValueConverter<decimal, decimal>(v => default(decimal), v => default(decimal), new ConverterMappingHints(precision: 20, scale: 0)));
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Users");
-                });
-
             modelBuilder.Entity("CookieBook.Domain.Models.UserImage", b =>
                 {
                     b.Property<int>("Id")
@@ -240,6 +216,32 @@ namespace CookieBook.WebAPI.Migrations
                         .HasFilter("[UserId] IS NOT NULL");
 
                     b.ToTable("UserImages");
+                });
+
+            modelBuilder.Entity("CookieBook.Domain.Models.Admin", b =>
+                {
+                    b.HasBaseType("CookieBook.Domain.Models.Base.Account");
+
+
+                    b.ToTable("Admin");
+
+                    b.HasDiscriminator().HasValue("Admin");
+
+                    b.HasData(
+                        new { Id = 1, CreatedAt = new DateTime(2020, 10, 11, 14, 57, 34, 246, DateTimeKind.Utc), IsActive = true, IsRestoreKeyFresh = true, Login = 4116719210845653519m, Nick = "Ronald", PasswordHash = new byte[] { 183, 105, 10, 89, 62, 12, 27, 51, 23, 220, 115, 172, 207, 52, 117, 56, 156, 239, 71, 65, 202, 228, 141, 227, 191, 109, 34, 96, 179, 137, 226, 168, 102, 136, 181, 155, 120, 183, 152, 3, 172, 219, 165, 199, 164, 220, 38, 193, 54, 102, 37, 42, 246, 18, 143, 160, 57, 201, 191, 130, 203, 132, 139, 116 }, RestoreKey = "4RgL!i2v?!fH", Role = "admin", Salt = new byte[] { 180, 216, 25, 69, 113, 7, 129, 7, 246, 33, 36, 7, 14, 214, 222, 225, 76, 171, 179, 30, 7, 57, 38, 130, 206, 44, 89, 236, 240, 157, 16, 105, 123, 139, 79, 252, 163, 46, 105, 205, 0, 115, 29, 188, 179, 193, 223, 20, 89, 42, 87, 151, 15, 229, 42, 220, 200, 11, 47, 170, 83, 224, 169, 66, 66, 89, 177, 48, 169, 68, 43, 167, 162, 36, 20, 230, 152, 175, 21, 7, 59, 35, 244, 226, 132, 211, 85, 49, 178, 170, 235, 68, 125, 154, 154, 191, 209, 110, 81, 154, 236, 187, 218, 200, 94, 124, 57, 37, 178, 231, 194, 82, 12, 207, 161, 185, 185, 153, 34, 255, 245, 217, 10, 206, 159, 181, 178, 179 }, UpdatedAt = new DateTime(2020, 10, 11, 14, 57, 34, 246, DateTimeKind.Utc) }
+                    );
+                });
+
+            modelBuilder.Entity("CookieBook.Domain.Models.User", b =>
+                {
+                    b.HasBaseType("CookieBook.Domain.Models.Base.Account");
+
+                    b.Property<decimal>("UserEmail")
+                        .HasConversion(new ValueConverter<decimal, decimal>(v => default(decimal), v => default(decimal), new ConverterMappingHints(precision: 20, scale: 0)));
+
+                    b.ToTable("User");
+
+                    b.HasDiscriminator().HasValue("User");
                 });
 
             modelBuilder.Entity("CookieBook.Domain.Models.Component", b =>

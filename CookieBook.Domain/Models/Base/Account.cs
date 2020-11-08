@@ -14,12 +14,17 @@ namespace CookieBook.Domain.Models.Base
         public byte[] PasswordHash { get; set; }
         public string Role { get; set; }
         public string RestoreKey { get; set; }
+        public bool IsActive { get; set; }
+        public bool IsRestoreKeyFresh { get; set; }
+        public DateTime? RestoreKeyUsedAt { get; set; }
 
         public Account() : base()
         {
+            IsActive = true;
+            IsRestoreKeyFresh = true;
         }
 
-        public Account(string nick, UInt64 login, byte[] salt, byte[] passwordHash, string restoreKey) : base()
+        public Account(string nick, UInt64 login, byte[] salt, byte[] passwordHash, string restoreKey) : this()
         {
             Nick = nick;
             Login = login;

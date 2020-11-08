@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
 using AutoMapper;
 using CookieBook.Domain.JWT;
@@ -67,7 +68,7 @@ namespace CookieBook.WebAPI
             services.AddAuthorization(x => x.AddPolicy("user", p => p.RequireRole("user")));
 
             services.AddDbContextPool<CookieContext>(options => options
-               .UseSqlServer(Configuration.GetConnectionString("CookieBookDatabase"),
+               .UseSqlServer(GetConnectionString(),
                    c => c.MigrationsAssembly("CookieBook.WebAPI")).EnableSensitiveDataLogging(false), 64);
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -96,6 +97,7 @@ namespace CookieBook.WebAPI
             services.AddTransient<IValidator<UpdateCategory>, UpdateCategoryValidator>();
             services.AddTransient<IValidator<CreateRate>, CreateRateValidator>();
             services.AddTransient<IValidator<CreateAdmin>, CreateAdminValidator>();
+            services.AddTransient<IValidator<BlockUser>, BlockUserValidator>();
 
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IUserImageService, UserImageService>();
@@ -103,6 +105,7 @@ namespace CookieBook.WebAPI
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IRateService, RateService>();
             services.AddScoped<IAdminService, AdminService>();
+            services.AddScoped<IAccountService, AccountService>();
 
             services.AddScoped<IDataHashManager, DataHashManager>();
         }
@@ -123,6 +126,20 @@ namespace CookieBook.WebAPI
             app.UseAuthentication();
             app.UseErrorHandler();
             app.UseMvc();
+        }
+
+        /// <summary>
+        /// Gets connection string for specyfic runtime/server operation system.
+        /// </summary>
+        /// <returns></returns>
+        private string GetConnectionString()
+        {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                return Configuration.GetConnectionString("CookieBookDatabaseLinux");
+            }
+
+            return Configuration.GetConnectionString("CookieBookDatabaseWindows");
         }
     }
 }

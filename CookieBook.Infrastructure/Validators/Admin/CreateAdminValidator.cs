@@ -22,21 +22,8 @@ namespace CookieBook.Infrastructure.Validators.Admin
                 .NotEmpty()
                 .MinimumLength(19)
                 .MaximumLength(20)
-                .Must(a => IsValidUnsignedLongValue(a))
+                .Must(a => ValidationExtensions.IsValidUnsignedLongValue(a))
                 .WithMessage("Invalid value!");
         }
-
-        private Func<string, bool> IsValidUnsignedLongValue = (string dataHash) =>
-        {
-            try
-            {
-                var val = ulong.Parse(dataHash);
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        };
     }
 }

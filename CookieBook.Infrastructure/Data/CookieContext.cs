@@ -9,6 +9,7 @@ namespace CookieBook.Infrastructure.Data
 {
     public class CookieContext : DbContext
     {
+        public DbSet<Account> Accounts { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<UserImage> UserImages { get; set; }
         public DbSet<RecipeImage> RecipeImages { get; set; }
@@ -82,7 +83,7 @@ namespace CookieBook.Infrastructure.Data
                 Login = loginHash,
                 PasswordHash = passHash,
                 Salt = passSalt,
-                RestoreKey = restoreKey
+                RestoreKey = restoreKey,
             };
         }
     }

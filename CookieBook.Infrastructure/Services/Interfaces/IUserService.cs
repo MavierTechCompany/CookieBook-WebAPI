@@ -17,6 +17,10 @@ namespace CookieBook.Infrastructure.Services.Interfaces
 
         Task<string> LoginAsync(LoginAccount command);
 
+        Task BlockAsync(BlockUser command);
+
+        Task UnblockAsync(UnblockUser command);
+
         Task<User> GetAsync(int id, bool asNoTracking = false);
 
         Task<IEnumerable<User>> GetAsync(AccountsParameters parameters, bool asNoTracking = false);
@@ -26,5 +30,7 @@ namespace CookieBook.Infrastructure.Services.Interfaces
         Task<IEnumerable<Recipe>> GetUserRecipesAsync(int id, RecipesParameters parameters, bool asNoTracking = false);
 
         Task<Recipe> GetUserRecipeAsync(int id, int recipeId, bool asNoTracking = false);
+
+        Task<string> GenerateNewRestoreKey(int id);
     }
 }

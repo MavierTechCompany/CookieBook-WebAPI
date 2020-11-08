@@ -9,12 +9,14 @@ using CookieBook.Infrastructure.Extensions;
 using CookieBook.Infrastructure.Parameters.Recipe;
 using CookieBook.Infrastructure.Services.Interfaces;
 using CookieBook.WebAPI.Controllers.Base;
+using CookieBook.WebAPI.Filters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CookieBook.WebAPI.Controllers.UserManagement.UserRecipe
 {
     [Route("user-management/users/{id}/recipes")]
+    [AccessableByInactiveAccount(false)]
     public class UserRecipeController : ApiControllerBase
     {
         private readonly IUserService _userService;

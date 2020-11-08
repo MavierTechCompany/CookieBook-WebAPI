@@ -9,7 +9,7 @@ namespace CookieBook.WebAPI.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Admins",
+                name: "Accounts",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -21,11 +21,16 @@ namespace CookieBook.WebAPI.Migrations
                     Salt = table.Column<byte[]>(nullable: true),
                     PasswordHash = table.Column<byte[]>(nullable: true),
                     Role = table.Column<string>(nullable: true),
-                    RestoreKey = table.Column<string>(nullable: true)
+                    RestoreKey = table.Column<string>(nullable: true),
+                    IsActive = table.Column<bool>(nullable: false),
+                    IsRestoreKeyFresh = table.Column<bool>(nullable: false),
+                    RestoreKeyUsedAt = table.Column<DateTime>(nullable: true),
+                    Discriminator = table.Column<string>(nullable: false),
+                    UserEmail = table.Column<decimal>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Admins", x => x.Id);
+                    table.PrimaryKey("PK_Accounts", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -41,27 +46,6 @@ namespace CookieBook.WebAPI.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Categories", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Users",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    CreatedAt = table.Column<DateTime>(nullable: false),
-                    UpdatedAt = table.Column<DateTime>(nullable: false),
-                    Nick = table.Column<string>(nullable: true),
-                    Login = table.Column<decimal>(nullable: false),
-                    Salt = table.Column<byte[]>(nullable: true),
-                    PasswordHash = table.Column<byte[]>(nullable: true),
-                    Role = table.Column<string>(nullable: true),
-                    RestoreKey = table.Column<string>(nullable: true),
-                    UserEmail = table.Column<decimal>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Users", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -84,9 +68,9 @@ namespace CookieBook.WebAPI.Migrations
                 {
                     table.PrimaryKey("PK_Recipes", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Recipes_Users_UserId",
+                        name: "FK_Recipes_Accounts_UserId",
                         column: x => x.UserId,
-                        principalTable: "Users",
+                        principalTable: "Accounts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -106,9 +90,9 @@ namespace CookieBook.WebAPI.Migrations
                 {
                     table.PrimaryKey("PK_UserImages", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_UserImages_Users_UserId",
+                        name: "FK_UserImages_Accounts_UserId",
                         column: x => x.UserId,
-                        principalTable: "Users",
+                        principalTable: "Accounts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -209,9 +193,9 @@ namespace CookieBook.WebAPI.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "Admins",
-                columns: new[] { "Id", "CreatedAt", "Login", "Nick", "PasswordHash", "RestoreKey", "Role", "Salt", "UpdatedAt" },
-                values: new object[] { 1, new DateTime(2020, 7, 14, 19, 15, 7, 790, DateTimeKind.Utc), 4116719210845653519m, "Ronald", new byte[] { 160, 145, 195, 177, 140, 35, 98, 47, 43, 3, 28, 190, 27, 150, 193, 95, 148, 255, 63, 184, 20, 151, 48, 204, 75, 196, 172, 75, 126, 40, 6, 252, 26, 123, 49, 7, 250, 116, 34, 175, 112, 107, 254, 76, 240, 117, 4, 133, 0, 46, 167, 202, 233, 104, 81, 47, 183, 59, 204, 31, 180, 88, 134, 55 }, "?9ni$w2L3k8V", "admin", new byte[] { 117, 103, 94, 188, 116, 244, 241, 28, 156, 153, 131, 83, 42, 16, 174, 236, 17, 224, 253, 55, 70, 13, 51, 87, 146, 30, 214, 235, 246, 128, 70, 15, 74, 34, 138, 87, 210, 176, 154, 160, 145, 230, 147, 224, 50, 228, 73, 81, 245, 104, 233, 80, 34, 202, 166, 25, 182, 82, 143, 59, 48, 140, 40, 185, 74, 120, 2, 61, 172, 184, 252, 25, 177, 240, 43, 121, 211, 12, 117, 232, 228, 188, 103, 79, 246, 93, 18, 185, 227, 154, 123, 220, 182, 125, 58, 153, 142, 141, 173, 3, 5, 106, 113, 186, 246, 193, 199, 153, 149, 138, 100, 167, 105, 221, 227, 209, 254, 226, 138, 170, 159, 203, 223, 120, 110, 219, 226, 176 }, new DateTime(2020, 7, 14, 19, 15, 7, 790, DateTimeKind.Utc) });
+                table: "Accounts",
+                columns: new[] { "Id", "CreatedAt", "Discriminator", "IsActive", "IsRestoreKeyFresh", "Login", "Nick", "PasswordHash", "RestoreKey", "RestoreKeyUsedAt", "Role", "Salt", "UpdatedAt" },
+                values: new object[] { 1, new DateTime(2020, 10, 11, 14, 57, 34, 246, DateTimeKind.Utc), "Admin", true, true, 4116719210845653519m, "Ronald", new byte[] { 183, 105, 10, 89, 62, 12, 27, 51, 23, 220, 115, 172, 207, 52, 117, 56, 156, 239, 71, 65, 202, 228, 141, 227, 191, 109, 34, 96, 179, 137, 226, 168, 102, 136, 181, 155, 120, 183, 152, 3, 172, 219, 165, 199, 164, 220, 38, 193, 54, 102, 37, 42, 246, 18, 143, 160, 57, 201, 191, 130, 203, 132, 139, 116 }, "4RgL!i2v?!fH", null, "admin", new byte[] { 180, 216, 25, 69, 113, 7, 129, 7, 246, 33, 36, 7, 14, 214, 222, 225, 76, 171, 179, 30, 7, 57, 38, 130, 206, 44, 89, 236, 240, 157, 16, 105, 123, 139, 79, 252, 163, 46, 105, 205, 0, 115, 29, 188, 179, 193, 223, 20, 89, 42, 87, 151, 15, 229, 42, 220, 200, 11, 47, 170, 83, 224, 169, 66, 66, 89, 177, 48, 169, 68, 43, 167, 162, 36, 20, 230, 152, 175, 21, 7, 59, 35, 244, 226, 132, 211, 85, 49, 178, 170, 235, 68, 125, 154, 154, 191, 209, 110, 81, 154, 236, 187, 218, 200, 94, 124, 57, 37, 178, 231, 194, 82, 12, 207, 161, 185, 185, 153, 34, 255, 245, 217, 10, 206, 159, 181, 178, 179 }, new DateTime(2020, 10, 11, 14, 57, 34, 246, DateTimeKind.Utc) });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Components_RecipeId",
@@ -251,9 +235,6 @@ namespace CookieBook.WebAPI.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Admins");
-
-            migrationBuilder.DropTable(
                 name: "Components");
 
             migrationBuilder.DropTable(
@@ -275,7 +256,7 @@ namespace CookieBook.WebAPI.Migrations
                 name: "Recipes");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "Accounts");
         }
     }
 }

@@ -37,7 +37,7 @@ namespace CookieBook.Infrastructure.Services
         public async Task<User> AddAsync(CreateUser command)
         {
             var loginHash = _hashManager.CalculateDataHash(command.Login);
-            var emailHash = _hashManager.CalculateDataHash(command.UserEmail);
+            var emailHash = _hashManager.CalculateDataHash(command.Email);
 
             if (await _context.Users.ExistsInDatabaseAsync(command.Nick, loginHash, emailHash) == true)
                 throw new CorruptedOperationException("User already exists.");
@@ -69,12 +69,54 @@ namespace CookieBook.Infrastructure.Services
             await _context.SaveChangesAsync();
         }
 
+        public async Task BlockAsync(BlockUser command)
+        {
+            var loginHash = _hashManager.CalculateDataHash(command.Login);
+            var emailHash = _hashManager.CalculateDataHash(command.Email);
+
+            var user = await _context.Users.SingleOrDefaultAsync(x => x.Login == loginHash && x.UserEmail == emailHash);
+
+            if (user == null)
+                throw new CorruptedOperationException("Invalid data");
+
+            if (user.IsActive == false)
+                throw new CorruptedOperationException("Invalid operation.");
+
+            user.IsActive = false;
+            user.Update();
+
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UnblockAsync(UnblockUser command)
+        {
+            var emailHash = _hashManager.CalculateDataHash(command.Email);
+            var user = await _context.Users.GetByEmail(emailHash).SingleOrDefaultAsync();
+
+            if (user == null || user.RestoreKey != command.RestoreKey)
+                throw new CorruptedOperationException("Invalid data");
+
+            if (user.IsActive == true || user.IsRestoreKeyFresh == false)
+                throw new CorruptedOperationException("Invalid operation.");
+
+            _hashManager.CalculatePasswordHash(command.NewPassword, user.Salt, out var newPasswordHash);
+            user.UpdatePassword(newPasswordHash);
+
+            user.RestoreKeyUsedAt = DateTime.UtcNow;
+            user.IsRestoreKeyFresh = false;
+            user.IsActive = true;
+
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
+        }
+
         public async Task UpdatePasswordAsync(int id, UpdatePassword command)
         {
             var user = await _context.Users.GetById(id).SingleOrDefaultAsync();
 
             if (user == null)
-                throw new CorruptedOperationException("Userr doesn't exist.");
+                throw new CorruptedOperationException("User doesn't exist.");
 
             if (_hashManager.VerifyPasswordHash(command.Password, user.PasswordHash, user.Salt) == false)
                 throw new CorruptedOperationException("Invalid credentials.");
@@ -91,12 +133,12 @@ namespace CookieBook.Infrastructure.Services
             var loginOrEmailHash = _hashManager.CalculateDataHash(command.LoginOrEmail);
 
             var user = await _context.Users.GetByEmail(loginOrEmailHash)
-                .Select(x => new { x.PasswordHash, x.Salt, x.Role, x.Id })
+                .Select(x => new { x.PasswordHash, x.Salt, x.Role, x.Id, x.IsActive })
                 .AsNoTracking().SingleOrDefaultAsync();
 
             if (user == null)
                 user = await _context.Users.GetByLogin(loginOrEmailHash)
-                .Select(x => new { x.PasswordHash, x.Salt, x.Role, x.Id })
+                .Select(x => new { x.PasswordHash, x.Salt, x.Role, x.Id, x.IsActive })
                 .AsNoTracking().SingleOrDefaultAsync();
 
             if (user == null)
@@ -176,6 +218,28 @@ namespace CookieBook.Infrastructure.Services
                 recipe = null;
 
             return recipe;
+        }
+
+        public async Task<string> GenerateNewRestoreKey(int id)
+        {
+            var user = await GetAsync(id);
+
+            if (user.IsRestoreKeyFresh == true)
+                throw new CorruptedOperationException("Invalid operation.");
+
+            var hoursSpan = Math.Ceiling(((TimeSpan)(DateTime.UtcNow - user.RestoreKeyUsedAt)).TotalHours);
+            if (hoursSpan < 24)
+                throw new CorruptedOperationException($"Try again in {24 - hoursSpan} hours.");
+
+            var newRestoreKey = PasswordGenerator.GenerateRandomPassword();
+
+            user.RestoreKey = newRestoreKey;
+            user.IsRestoreKeyFresh = true;
+
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
+
+            return newRestoreKey;
         }
     }
 }
