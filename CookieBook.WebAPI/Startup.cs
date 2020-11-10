@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using AutoMapper;
@@ -35,6 +36,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Serialization;
 
 namespace CookieBook.WebAPI
@@ -63,6 +65,25 @@ namespace CookieBook.WebAPI
                     options.SerializerSettings.ContractResolver =
                         new CamelCasePropertyNamesContractResolver();
                 });
+
+            services.AddSwaggerGen(conf =>
+            {
+                conf.SwaggerDoc("v1.0", new OpenApiInfo
+                {
+                    Version = "v1.0",
+                    Title = "CookieBook WebAPI",
+                    Contact = new OpenApiContact
+                    {
+                        Name = "Mavier Tech Company",
+                        Url = new Uri("https://github.com/MavierTechCompany")
+                    },
+                    License = new OpenApiLicense
+                    {
+                        Name = "Non-Profit Open Software License",
+                        Url = new Uri("https://github.com/MavierTechCompany/CookieBook-WebAPI/blob/master/LICENSE")
+                    }
+                });
+            });
 
             services.AddAuthorization(x => x.AddPolicy("admin", p => p.RequireRole("admin")));
             services.AddAuthorization(x => x.AddPolicy("user", p => p.RequireRole("user")));
@@ -126,6 +147,11 @@ namespace CookieBook.WebAPI
             app.UseAuthentication();
             app.UseErrorHandler();
             app.UseMvc();
+            app.UseSwagger();
+            app.UseSwaggerUI(conf =>
+            {
+                conf.SwaggerEndpoint("/swagger/v1/swagger.json", "CookieBook API v1.0");
+            });
         }
 
         /// <summary>
