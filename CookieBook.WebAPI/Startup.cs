@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -83,6 +84,10 @@ namespace CookieBook.WebAPI
                         Url = new Uri("https://github.com/MavierTechCompany/CookieBook-WebAPI/blob/master/LICENSE")
                     }
                 });
+
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                conf.IncludeXmlComments(xmlPath);
             });
 
             services.AddAuthorization(x => x.AddPolicy("admin", p => p.RequireRole("admin")));
@@ -150,7 +155,7 @@ namespace CookieBook.WebAPI
             app.UseSwagger();
             app.UseSwaggerUI(conf =>
             {
-                conf.SwaggerEndpoint("/swagger/v1/swagger.json", "CookieBook API v1.0");
+                conf.SwaggerEndpoint("/swagger/v1.0/swagger.json", "CookieBook API v1.0");
             });
         }
 

@@ -23,6 +23,11 @@ namespace CookieBook.WebAPI.Controllers.CategoryManagement
             _categoryService = categoryService;
         }
 
+        /// <summary>
+        /// Creates new category
+        /// </summary>
+        /// <param name="command"></param>
+        /// <returns></returns>
         [Authorize(Roles = "admin")]
         [HttpPost]
         public async Task<IActionResult> CreateCategoryAsync([FromBody] CreateCategory command)
