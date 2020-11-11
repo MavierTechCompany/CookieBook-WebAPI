@@ -7,12 +7,14 @@ using CookieBook.Infrastructure.DTO;
 using CookieBook.Infrastructure.Extensions;
 using CookieBook.Infrastructure.Parameters.Category;
 using CookieBook.Infrastructure.Services.Interfaces;
+using CookieBook.Infrastructure.Validators.Category;
 using CookieBook.WebAPI.Controllers.Base;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CookieBook.WebAPI.Controllers.CategoryManagement
 {
+    [Produces("application/json")]
     [Route("category-management/categories")]
     public class CategoryManagementController : ApiControllerBase
     {
@@ -27,15 +29,19 @@ namespace CookieBook.WebAPI.Controllers.CategoryManagement
         /// Creates new category
         /// </summary>
         /// <param name="command"></param>
-        /// <returns></returns>
-        [Authorize(Roles = "admin")]
+        /// <returns>Newly category</returns>
+        /// <response code="201">Returns the newly created category</response>
+        /// <response code="400">Returns information about failed validation</response>
         [HttpPost]
+        [Authorize(Roles = "admin")]
+        [ProducesResponseType(typeof(CategoryDto), 201)]
+        [ProducesResponseType(400)]
         public async Task<IActionResult> CreateCategoryAsync([FromBody] CreateCategory command)
         {
             var category = await _categoryService.AddAsync(command);
-            var categoryrDto = _mapper.Map<CategoryDto>(category);
+            var categoryDto = _mapper.Map<CategoryDto>(category);
 
-            return Created($"{Request.Host}{Request.Path}/{category.Id}", categoryrDto);
+            return Created($"{Request.Host}{Request.Path}/{category.Id}", categoryDto);
         }
 
         [HttpGet]
