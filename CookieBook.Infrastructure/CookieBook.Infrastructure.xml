@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CookieBook.Infrastructure</name>
+    </assembly>
+    <members>
+        <member name="P:CookieBook.Infrastructure.Commands.Category.CreateCategory.Name">
+            <summary>
+            A name of the category.
+            </summary>
+            <example>Fast Food</example>
+        </member>
+    </members>
+</doc>

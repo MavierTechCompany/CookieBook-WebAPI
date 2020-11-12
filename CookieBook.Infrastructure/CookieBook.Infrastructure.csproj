@@ -11,10 +11,15 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.1.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.1.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.1.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
   </ItemGroup>
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>obj\Debug\netstandard2\CookieBook.Infrastructure.xml</DocumentationFile>
   </PropertyGroup>
 
 </Project>

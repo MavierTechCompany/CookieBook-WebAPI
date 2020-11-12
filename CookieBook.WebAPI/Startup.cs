@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -88,6 +89,19 @@ namespace CookieBook.WebAPI
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 conf.IncludeXmlComments(xmlPath);
+
+                // Get referenced assemblies xml documentations
+                // TODO: This needs to be a separate method. Maybe with code for including main assembly XML
+                var currentAssembly = Assembly.GetExecutingAssembly();
+                var xmlDocs = currentAssembly.GetReferencedAssemblies()
+                .Union(new AssemblyName[] { currentAssembly.GetName() })
+                .Select(a => Path.Combine(Path.GetDirectoryName(currentAssembly.Location), $"{a.Name}.xml"))
+                .Where(f => File.Exists(f)).ToArray();
+
+                Array.ForEach(xmlDocs, (d) =>
+                {
+                    conf.IncludeXmlComments(d);
+                });
             });
 
             services.AddAuthorization(x => x.AddPolicy("admin", p => p.RequireRole("admin")));
@@ -156,6 +170,7 @@ namespace CookieBook.WebAPI
             app.UseSwaggerUI(conf =>
             {
                 conf.SwaggerEndpoint("/swagger/v1.0/swagger.json", "CookieBook API v1.0");
+                conf.RoutePrefix = "docs";
             });
         }
 
