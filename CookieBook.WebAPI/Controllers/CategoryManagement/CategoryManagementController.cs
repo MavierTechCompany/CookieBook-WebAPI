@@ -31,7 +31,16 @@ namespace CookieBook.WebAPI.Controllers.CategoryManagement
         /// <param name="command"></param>
         /// <returns>Newly category</returns>
         /// <response code="201">Returns the newly created category</response>
-        /// <response code="400">Returns information about failed validation</response>
+        /// <response code="400">
+        /// Returns information about failed validation
+        ///
+        ///     {
+        ///        "key": "0e7ad584-7788-4ab1-95a6-ca0a5b444cbb",
+        ///        "name": "Item1",
+        ///        "isComplete": true
+        ///     }
+        /// </response>
+
         [HttpPost]
         [Authorize(Roles = "admin")]
         [ProducesResponseType(typeof(CategoryDto), 201)]

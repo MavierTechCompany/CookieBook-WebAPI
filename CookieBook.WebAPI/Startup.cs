@@ -40,6 +40,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Serialization;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace CookieBook.WebAPI
 {
@@ -102,6 +103,8 @@ namespace CookieBook.WebAPI
                 {
                     conf.IncludeXmlComments(d);
                 });
+
+                conf.AddFluentValidationRules();
             });
 
             services.AddAuthorization(x => x.AddPolicy("admin", p => p.RequireRole("admin")));
