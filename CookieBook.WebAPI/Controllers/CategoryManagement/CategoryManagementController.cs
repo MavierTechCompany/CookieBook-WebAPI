@@ -68,12 +68,6 @@ namespace CookieBook.WebAPI.Controllers.CategoryManagement
             return Ok(categoriesDto.ShapeData(parameters.Fields));
         }
 
-        /// <summary>
-        /// Reads the category with specified id.
-        /// </summary>
-        /// <param name="id" example="1"></param>
-        /// <param name="fields" example="Id,Name"></param>
-        /// <returns></returns>
         [HttpGet("{id}")]
         public async Task<IActionResult> ReadCategoryAsync(int id, [FromQuery] string fields)
         {
