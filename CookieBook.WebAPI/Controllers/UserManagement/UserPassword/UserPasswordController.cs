@@ -21,8 +21,16 @@ namespace CookieBook.WebAPI.Controllers.UserManagement.UserPassword
             _userService = userService;
         }
 
-        [Authorize(Roles = "user")]
+        /// <summary>
+        /// Updates user password
+        /// </summary>
+        /// <param name="id" example="1">Id of the user that wants to change his/her password</param>
+        /// <param name="command"></param>
         [HttpPut]
+        [Authorize(Roles = "user")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(403)]
         public async Task<IActionResult> UpdatePasswordAsync(int id, [FromBody] UpdatePassword command)
         {
             if (id != AccountID)
