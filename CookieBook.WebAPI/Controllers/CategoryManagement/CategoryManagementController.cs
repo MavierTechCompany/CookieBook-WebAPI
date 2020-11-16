@@ -14,6 +14,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CookieBook.WebAPI.Controllers.CategoryManagement
 {
+    /// <summary>
+    /// CRUD operations for Category
+    /// </summary>
     [Produces("application/json")]
     [Route("category-management/categories")]
     public class CategoryManagementController : ApiControllerBase
@@ -69,7 +72,7 @@ namespace CookieBook.WebAPI.Controllers.CategoryManagement
         }
 
         /// <summary>
-        /// Returns category with the given ID
+        /// Returns category with given ID
         /// </summary>
         /// <param name="id" example="1">Category ID</param>
         /// <param name="fields" example="Name,Id,CreatedAt">Names of categry's fields that caller wants to get. Must contains names that are a part of the category object. Names must be separated by a comma</param>
@@ -92,8 +95,19 @@ namespace CookieBook.WebAPI.Controllers.CategoryManagement
             return Ok(categoryrDto.ShapeData(fields));
         }
 
-        [Authorize(Roles = "admin")]
+        /// <summary>
+        /// Updates category with given ID
+        /// </summary>
+        /// <param name="id" example="1">Category ID</param>
+        /// <param name="command"></param>
+        /// <response code="204">Returned when the update is successful</response>
+        /// <response code="400">Returns information about failed validation</response>
+        /// <response code="401">Returned when caller/sender doesn't have permission to do this action</response>
         [HttpPut("{id}")]
+        [Authorize(Roles = "admin")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
         public async Task<IActionResult> UpdateUserAsync(int id, [FromBody] UpdateCategory command)
         {
             await _categoryService.UpdateAsync(id, command);

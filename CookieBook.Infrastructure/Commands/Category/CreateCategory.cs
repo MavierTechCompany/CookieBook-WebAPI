@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 namespace CookieBook.Infrastructure.Commands.Category
 {
     /// <summary>
-    /// Represents a set of data used to create a category.
+    /// Represents a set of data used to create the category.
     /// </summary>
     public class CreateCategory
     {
