@@ -26,6 +26,9 @@ namespace CookieBook.WebAPI.Controllers.UserManagement.UserPassword
         /// </summary>
         /// <param name="id" example="1">Id of the user that wants to change his/her password</param>
         /// <param name="command"></param>
+        /// <response code="204">Returned when the password update is successful</response>
+        /// <response code="400">Returned when validation failds or user is inactive</response>
+        /// <response code="403">Returned when the caller / sender wants to update someone else's password</response>
         [HttpPut]
         [Authorize(Roles = "user")]
         [ProducesResponseType(204)]
