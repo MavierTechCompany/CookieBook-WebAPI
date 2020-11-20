@@ -64,11 +64,15 @@ namespace CookieBook.WebAPI.Controllers.AdminManagement
         /// Returns selected admin
         /// </summary>
         /// <param name="id" example="1">Id of admin that you want to get</param>
-        /// <param name="fields"></param>
+        /// <param name="fields" example="Id,CreatedAt,Nick">Names of admin's fields that caller wants to get. Must contains names that are a part of the <b>AdminShortDto</b>. Names must be separated by a comma</param>
         /// <response code="200">Returns selected admin</response>
+        /// <response code="400">Returned when parameter <b>Fields</b> contains name of a field that isn't a part of the object.</response>
+        /// <response code="401">Returned when caller/sender doesn't have permission to do this action</response>
         [HttpGet("{id}")]
         [Authorize(Roles = "admin")]
         [ProducesResponseType(typeof(AdminShortDto), 200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
         public async Task<IActionResult> ReadAdminAsync(int id, [FromQuery] string fields)
         {
             if (!string.IsNullOrWhiteSpace(fields) &&
