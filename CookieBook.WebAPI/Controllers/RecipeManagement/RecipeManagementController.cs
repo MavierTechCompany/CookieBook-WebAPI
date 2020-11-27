@@ -28,7 +28,15 @@ namespace CookieBook.WebAPI.Controllers.RecipeManagement
             _rateService = rateService;
         }
 
+        /// <summary>
+        /// Returns collection of recipes
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <response code="200">Returns collection of recipes that matched given criteria. May be empty if no item matching the search criteria could be found.</response>
+        /// <response code="400">Returned when parameter <b>Fields</b> contains name of a field that isn't a part of the <b>Recipe</b> object.</response>
         [HttpGet("recipes")]
+        [ProducesResponseType(typeof(IEnumerable<RecipeDto>), 200)]
+        [ProducesResponseType(400)]
         public async Task<IActionResult> ReadRecipesAsync(RecipesParameters parameters)
         {
             if (!string.IsNullOrWhiteSpace(parameters.Fields) && !PropertyManager.PropertiesExists<RecipeDto>(parameters.Fields))
