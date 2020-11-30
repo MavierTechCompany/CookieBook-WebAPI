@@ -50,7 +50,16 @@ namespace CookieBook.WebAPI.Controllers.RecipeManagement
             return Ok(recipesDto.ShapeData(parameters.Fields));
         }
 
+        /// <summary>
+        /// Returns recipe with given ID
+        /// </summary>
+        /// <param name="id" example="2"></param>
+        /// <param name="fields" example="Name,Id,CreatedAt"></param>
+        /// <response code="200">Returns a specific recipe based on the given id.</response>
+        /// <response code="400">Returned when parameter <b>Fields</b> contains name of a field that isn't a part of the <b>Recipe</b> object.</response>
         [HttpGet("recipes/{id}")]
+        [ProducesResponseType(typeof(RecipeDto), 200)]
+        [ProducesResponseType(400)]
         public async Task<IActionResult> ReadRecipeAsync(int id, [FromQuery] string fields)
         {
             if (!string.IsNullOrWhiteSpace(fields) && !PropertyManager.PropertiesExists<Recipe>(fields))
@@ -64,8 +73,19 @@ namespace CookieBook.WebAPI.Controllers.RecipeManagement
             return Ok(recipeDto.ShapeData(fields));
         }
 
+        /// <summary>
+        /// Creates new rate for a specific recipe
+        /// </summary>
+        /// <param name="id" example="2"></param>
+        /// <param name="command"></param>
+        /// <response code="201">Returns the newly created rate.</response>
+        /// <response code="400">Returns information about failed validation.</response>
+        /// <response code="401">Returned when caller/sender doesn't have permission to do this action.</response>
         [Authorize(Roles = "user")]
         [HttpPost("recipes/{id}/rates")]
+        [ProducesResponseType(typeof(RateDto), 201)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
         public async Task<IActionResult> CreateRateAsync(int id, [FromBody] CreateRate command)
         {
             var recipe = await _recipeService.GetAsync(id);

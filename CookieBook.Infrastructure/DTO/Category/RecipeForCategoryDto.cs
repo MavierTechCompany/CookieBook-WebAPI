@@ -44,6 +44,7 @@ namespace CookieBook.Infrastructure.DTO
         /// <summary>
         /// The id of the user who created the recipe
         /// </summary>
+        /// <example>3</example>
         public int UserId { get; set; }
 
         /// <summary>
