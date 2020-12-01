@@ -84,7 +84,7 @@ It follows the rules of the RESTfull API.
   </tr>
   
   <tr>
-    <td>Restoring account access (user)</td>
+    <td>Restoring account access (admin)</td>
     <td>:construction:</td>
   </tr>
   
