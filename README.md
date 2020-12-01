@@ -75,7 +75,17 @@ It follows the rules of the RESTfull API.
   
   <tr>
     <td>Cooking recipes ratting</td>
-    <td>:construction:</td>
+    <td>:heavy_check_mark:</td>
+  </tr>
+  
+  <tr>
+    <td>Restoring account access (user)</td>
+    <td>:heavy_check_mark:</td>
+  </tr>
+  
+  <tr>
+    <td>Restoring account access (user)</td>
+    <td>:constructionk:</td>
   </tr>
   
   <tr>
