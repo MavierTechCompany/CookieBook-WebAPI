@@ -5,6 +5,7 @@ using CookieBook.Domain.Models;
 using CookieBook.Infrastructure.Commands.Auth;
 using CookieBook.Infrastructure.Commands.User;
 using CookieBook.Infrastructure.DTO;
+using CookieBook.Infrastructure.DTO.Base;
 using CookieBook.Infrastructure.Extensions;
 using CookieBook.Infrastructure.Parameters.Account;
 using CookieBook.Infrastructure.Services.Interfaces;
@@ -77,11 +78,18 @@ namespace CookieBook.WebAPI.Controllers.UserManagement
             return NoContent();
         }
 
+        /// <summary>
+        /// Returns JWT token for valid user
+        /// </summary>
+        /// <param name="command"></param>
+        /// <response code="200">Returns JWT token that is used to perform certain actions</response>
         [HttpPost("token")]
+        [ProducesResponseType(typeof(JwtDto), 200)]
         public async Task<IActionResult> LoginUserAsync([FromBody] LoginAccount command)
         {
             var token = await _userService.LoginAsync(command);
-            return Ok(new { Token = token });
+            var tokenDto = _mapper.Map<JwtDto>(token);
+            return Ok(tokenDto);
         }
     }
 }
