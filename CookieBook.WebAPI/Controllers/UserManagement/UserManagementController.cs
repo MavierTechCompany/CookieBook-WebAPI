@@ -27,7 +27,15 @@ namespace CookieBook.WebAPI.Controllers.UserManagement
             _userService = userService;
         }
 
+        /// <summary>
+        /// Creates new user
+        /// </summary>
+        /// <param name="command"></param>
+        /// <response code="201">Returns newly created user</response>
+        /// <response code="400">Returns information about failed validation</response>
         [HttpPost]
+        [ProducesResponseType(typeof(UserDto), 201)]
+        [ProducesResponseType(400)]
         public async Task<IActionResult> CreateUserAsync([FromBody] CreateUser command)
         {
             var user = await _userService.AddAsync(command);
@@ -36,7 +44,15 @@ namespace CookieBook.WebAPI.Controllers.UserManagement
             return Created($"{Request.Host}{Request.Path}/{user.Id}", userDto);
         }
 
+        /// <summary>
+        /// Returns collection of users
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <response code="200">Returns collection of users that matched given criteria. May be empty if no item matching the search criteria could be found.</response>
+        /// <response code="400">Returned when parameter <b>Fields</b> contains name of a field that isn't a part of the <b>User</b> object.</response>
         [HttpGet]
+        [ProducesResponseType(typeof(IEnumerable<UserDto>), 200)]
+        [ProducesResponseType(400)]
         public async Task<IActionResult> ReadUsersAsync(AccountsParameters parameters)
         {
             if (!string.IsNullOrWhiteSpace(parameters.Fields) &&

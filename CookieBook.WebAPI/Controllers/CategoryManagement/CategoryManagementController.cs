@@ -108,7 +108,7 @@ namespace CookieBook.WebAPI.Controllers.CategoryManagement
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
-        public async Task<IActionResult> UpdateUserAsync(int id, [FromBody] UpdateCategory command)
+        public async Task<IActionResult> UpdateCategoryAsync(int id, [FromBody] UpdateCategory command)
         {
             await _categoryService.UpdateAsync(id, command);
             return NoContent();
