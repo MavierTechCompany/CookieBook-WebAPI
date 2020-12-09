@@ -28,8 +28,21 @@ namespace CookieBook.WebAPI.Controllers.UserManagement.UserRecipe
             _recipeService = recipeService;
         }
 
-        [Authorize(Roles = "user")]
+        /// <summary>
+        /// Returns collection of user recipes
+        /// </summary>
+        /// <param name="id" example="1">Id of the user that wants to get his/her recipes</param>
+        /// <param name="parameters"></param>
+        /// <response code="200">Returns collection of recipes that belongs to this user</response>
+        /// <response code="400">Returned when validation failds or user is inactive</response>
+        /// <response code="401">Returned when caller/sender doesn't have permission to do this action</response>
+        /// <response code="403">Returned when the caller / sender wants to get someone else's recipes</response>
         [HttpGet]
+        [Authorize(Roles = "user")]
+        [ProducesResponseType(typeof(IEnumerable<RecipeDto>), 200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
         public async Task<IActionResult> ReadRecipesAsync(int id, [FromQuery] RecipesParameters parameters)
         {
             if (id != AccountID)
@@ -83,6 +96,13 @@ namespace CookieBook.WebAPI.Controllers.UserManagement.UserRecipe
             return Ok(recipeDto.ShapeData(fields));
         }
 
+        /// <summary>
+        /// Updates category with given ID
+        /// </summary>
+        /// <param name="id" example="2">Id of the user that wants to update his/her recipe</param>
+        /// <param name="recipeId" example="1">Id of the recipe that user wants to update</param>
+        /// <param name="command"></param>
+        /// <returns></returns>
         [Authorize(Roles = "user")]
         [HttpPut("{recipeId}")]
         public async Task<IActionResult> UpdateRecipeAsync(int id, int recipeId, [FromBody] UpdateRecipe command)

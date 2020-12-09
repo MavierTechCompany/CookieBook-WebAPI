@@ -67,7 +67,16 @@ namespace CookieBook.WebAPI.Controllers.UserManagement
             return Ok(usersDto.ShapeData(parameters.Fields));
         }
 
+        /// <summary>
+        /// Returns user with given ID
+        /// </summary>
+        /// <param name="id" example="1"></param>
+        /// <param name="fields" example="Nick,Id,CreatedAt"></param>
+        /// <response code="200">Returns a specific user based on the given id.</response>
+        /// <response code="400">Returned when parameter <b>Fields</b> contains name of a field that isn't a part of the <b>User</b> object.</response>
         [HttpGet("{id}")]
+        [ProducesResponseType(typeof(UserDto), 200)]
+        [ProducesResponseType(400)]
         public async Task<IActionResult> ReadUserAsync(int id, [FromQuery] string fields)
         {
             if (!string.IsNullOrWhiteSpace(fields) &&
@@ -82,9 +91,22 @@ namespace CookieBook.WebAPI.Controllers.UserManagement
             return Ok(userDto.ShapeData(fields));
         }
 
+        /// <summary>
+        /// Updates user
+        /// </summary>
+        /// <param name="id" example="1">Id of the user that wants to change his/her data</param>
+        /// <param name="command"></param>
+        /// <response code="204">Returned when update is successful</response>
+        /// <response code="400">Returned when validation failds or user is inactive</response>
+        /// <response code="401">Returned when caller/sender doesn't have permission to do this action</response>
+        /// <response code="403">Returned when the caller / sender wants to update someone else's data</response>
         [Authorize(Roles = "user")]
         [HttpPut("{id}")]
         [AccessableByInactiveAccount(false)]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
         public async Task<IActionResult> UpdateUserAsync(int id, [FromBody] UpdateUserData command)
         {
             if (id != AccountID)

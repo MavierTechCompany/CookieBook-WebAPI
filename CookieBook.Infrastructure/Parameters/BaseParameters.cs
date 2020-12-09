@@ -9,7 +9,7 @@ namespace CookieBook.Infrastructure.Parameters
         /// <summary>
         /// String you want to search for. It may be a full phrase or part of it. Search doesn't happen if <b>Query</b> is empty.
         /// </summary>
-        /// <example>John</example>
+        /// <example>Excl</example>
         public string Query { get; set; }
 
         /// <summary>
