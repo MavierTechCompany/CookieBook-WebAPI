@@ -30,7 +30,7 @@ namespace CookieBook.Infrastructure.Validators.Auth
                 ulong val = ulong.Parse(dataHash);
                 return true;
             }
-            catch (System.Exception)
+            catch (Exception)
             {
                 return false;
             }

@@ -1,4 +1,8 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using AutoMapper;
@@ -35,7 +39,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Serialization;
+using Swashbuckle.AspNetCore;
 
 namespace CookieBook.WebAPI
 {
@@ -63,6 +69,71 @@ namespace CookieBook.WebAPI
                     options.SerializerSettings.ContractResolver =
                         new CamelCasePropertyNamesContractResolver();
                 });
+
+            services.AddSwaggerGen(conf =>
+            {
+                conf.SwaggerDoc("v1.0", new OpenApiInfo
+                {
+                    Version = "v1.0",
+                    Title = "CookieBook WebAPI",
+                    Contact = new OpenApiContact
+                    {
+                        Name = "Mavier Tech Company",
+                        Url = new Uri("https://github.com/MavierTechCompany")
+                    },
+                    License = new OpenApiLicense
+                    {
+                        Name = "Non-Profit Open Software License",
+                        Url = new Uri("https://github.com/MavierTechCompany/CookieBook-WebAPI/blob/master/LICENSE")
+                    }
+                });
+
+                conf.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Description = @"JWT Authorization header using the Bearer scheme. \r\n\r\n
+                      Enter 'Bearer' [space] and then your token in the text input below.
+                      \r\n\r\nExample: 'Bearer 12345abcdef'",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer"
+                });
+
+                conf.AddSecurityRequirement(new OpenApiSecurityRequirement()
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            },
+                            Scheme = "oauth2",
+                            Name = "Bearer",
+                            In = ParameterLocation.Header
+                        },
+                        new List<string>()
+                    }
+                });
+
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                conf.IncludeXmlComments(xmlPath);
+
+                // Get referenced assemblies xml documentations
+                // TODO: This needs to be a separate method. Maybe with code for including main assembly XML
+                var currentAssembly = Assembly.GetExecutingAssembly();
+                var xmlDocs = currentAssembly.GetReferencedAssemblies()
+                .Union(new AssemblyName[] { currentAssembly.GetName() })
+                .Select(a => Path.Combine(Path.GetDirectoryName(currentAssembly.Location), $"{a.Name}.xml"))
+                .Where(f => File.Exists(f)).ToArray();
+
+                Array.ForEach(xmlDocs, (d) =>
+                {
+                    conf.IncludeXmlComments(d);
+                });
+            });
 
             services.AddAuthorization(x => x.AddPolicy("admin", p => p.RequireRole("admin")));
             services.AddAuthorization(x => x.AddPolicy("user", p => p.RequireRole("user")));
@@ -126,6 +197,12 @@ namespace CookieBook.WebAPI
             app.UseAuthentication();
             app.UseErrorHandler();
             app.UseMvc();
+            app.UseSwagger();
+            app.UseSwaggerUI(conf =>
+            {
+                conf.SwaggerEndpoint("/swagger/v1.0/swagger.json", "CookieBook API v1.0");
+                conf.RoutePrefix = "docs";
+            });
         }
 
         /// <summary>

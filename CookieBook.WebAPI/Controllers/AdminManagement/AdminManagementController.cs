@@ -25,15 +25,32 @@ namespace CookieBook.WebAPI.Controllers.AdminManagement
             _adminService = adminService;
         }
 
+        /// <summary>
+        /// Returns JWT token for valid admin
+        /// </summary>
+        /// <param name="command"></param>
+        /// <response code="200">Returns JWT token that is used to perform certain actions</response>
         [HttpPost("token")]
+        [ProducesResponseType(typeof(JwtDto), 200)]
         public async Task<IActionResult> LoginAdminAsync([FromBody] LoginAccount command)
         {
             var token = await _adminService.LoginAsync(command);
-            return Ok(new { Token = token });
+            var tokenDto = _mapper.Map<JwtDto>(token);
+            return Ok(tokenDto);
         }
 
+        /// <summary>
+        /// Creates new admin
+        /// </summary>
+        /// <param name="command"></param>
+        /// <response code="201">Returns newly created admin</response>
+        /// <response code="400">Returns information about failed validation</response>
+        /// <response code="401">Returned when caller/sender doesn't have permission to do this action</response>
         [HttpPost]
         [Authorize(Roles = "admin")]
+        [ProducesResponseType(typeof(AdminDto), 201)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
         public async Task<IActionResult> CreateAdminAsync([FromBody] CreateAdmin command)
         {
             var adminTuple = await _adminService.AddAsync(command);
@@ -43,8 +60,19 @@ namespace CookieBook.WebAPI.Controllers.AdminManagement
             return Created($"{Request.Host}{Request.Path}/{adminTuple.Admin.Id}", adminDto);
         }
 
+        /// <summary>
+        /// Returns selected admin
+        /// </summary>
+        /// <param name="id" example="1">Id of admin that you want to get</param>
+        /// <param name="fields" example="Id,CreatedAt,Nick">Names of admin's fields that caller wants to get. Must contains names that are a part of the <b>AdminShortDto</b>. Names must be separated by a comma</param>
+        /// <response code="200">Returns selected admin</response>
+        /// <response code="400">Returned when parameter <b>Fields</b> contains name of a field that isn't a part of the object.</response>
+        /// <response code="401">Returned when caller/sender doesn't have permission to do this action</response>
         [HttpGet("{id}")]
         [Authorize(Roles = "admin")]
+        [ProducesResponseType(typeof(AdminShortDto), 200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
         public async Task<IActionResult> ReadAdminAsync(int id, [FromQuery] string fields)
         {
             if (!string.IsNullOrWhiteSpace(fields) &&

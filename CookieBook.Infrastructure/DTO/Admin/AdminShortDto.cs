@@ -7,6 +7,10 @@ namespace CookieBook.Infrastructure.DTO.Admin
 {
     public class AdminShortDto : EntityDto
     {
+        /// <summary>
+        /// Admin nick that will be displayed to everyone
+        /// </summary>
+        /// <example>Steave77</example>
         public string Nick { get; set; }
     }
 }

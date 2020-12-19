@@ -2,6 +2,7 @@
 using CookieBook.Infrastructure.Commands.Account;
 using CookieBook.Infrastructure.Commands.Admin;
 using CookieBook.Infrastructure.Commands.Auth;
+using CookieBook.Infrastructure.DTO.Base;
 using System;
 using System.Collections.Generic;
 using System.Text;
