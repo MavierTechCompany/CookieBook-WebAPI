@@ -60,8 +60,21 @@ namespace CookieBook.WebAPI.Controllers.UserManagement.UserRecipe
             return Ok(recipesDto.ShapeData(parameters.Fields));
         }
 
+        /// <summary>
+        /// Creates new recipe for given user
+        /// </summary>
+        /// <param name="id" example="2">Id of the user that wants to create recipe</param>
+        /// <param name="command"></param>
+        /// <response code="201">Returns the newly created recipe</response>
+        /// <response code="400">Returns information about failed validation</response>
+        /// <response code="401">Returned when caller/sender doesn't have permission to do this action</response>
+        /// <response code="403">Returned when caller/sender wants to create recipe for user other than himself/herself</response>
         [Authorize(Roles = "user")]
         [HttpPost]
+        [ProducesResponseType(typeof(RecipeDto), 201)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
         public async Task<IActionResult> CreateRecipeAsync(int id, [FromBody] CreateRecipe command)
         {
             if (id != AccountID)
@@ -74,8 +87,22 @@ namespace CookieBook.WebAPI.Controllers.UserManagement.UserRecipe
             return Created($"{Request.Host}{Request.Path}/{recipe.Id}", recipeDto);
         }
 
+        /// <summary>
+        /// Returns recipe with given ID
+        /// </summary>
+        /// <param name="id" example="2">Id of the user that wants to create recipe</param>
+        /// <param name="recipeId" example="1">Recipe ID</param>
+        /// <param name="fields" example="Name,Id,CreatedAt">Names of recipe's fields that caller wants to get. Must contains names that are a part of the recipe object. Names must be separated by a comma</param>
+        /// <response code="200">Returns data on the selected recipe or a subset of it, as specified in the fields.</response>
+        /// <response code="400">Returned when parameter <b>Fields</b> contains name of a field that isn't a part of the <b>Recipe</b> object.</response>
+        /// <response code="401">Returned when caller/sender doesn't have permission to do this action</response>
+        /// <response code="403">Returned when caller/sender wants to read recipe of user other than himself/herself</response>
         [Authorize(Roles = "user")]
         [HttpGet("{recipeId}")]
+        [ProducesResponseType(typeof(RecipeDto), 200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
         public async Task<IActionResult> ReadRecipeAsync(int id, int recipeId, [FromQuery] string fields)
         {
             if (id != AccountID)
