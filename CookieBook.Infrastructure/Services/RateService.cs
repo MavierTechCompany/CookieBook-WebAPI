@@ -36,7 +36,7 @@ namespace CookieBook.Infrastructure.Services
 
         public async Task<Rate> GetAsync(int id, bool asNoTracking = false)
         {
-            var query = _context.Rates.Where(x => x.Id == id).AsQueryable();
+            var query = _context.Rates.Where(x => x.Id == id && x.Deleted == false).AsQueryable();
 
             if (asNoTracking)
                 query = query.AsNoTracking();
@@ -51,7 +51,7 @@ namespace CookieBook.Infrastructure.Services
 
         public async Task<IEnumerable<Rate>> GetByRecipeIdAsync(int recipeId, RatesParameters parameters, bool asNoTracking = false)
         {
-            var rates = _context.Rates.Where(x => x.RecipeId == recipeId).AsQueryable();
+            var rates = _context.Rates.Where(x => x.RecipeId == recipeId && x.Deleted == false).AsQueryable();
 
             if (parameters.CreatedAt != default(DateTime))
             {
@@ -74,6 +74,19 @@ namespace CookieBook.Infrastructure.Services
                 rates = rates.AsNoTracking();
 
             return await rates.ToListAsync();
+        }
+
+        public async Task DeleteAsync(int recipeId, int rateId)
+        {
+            var rate = await _context.Rates.FirstOrDefaultAsync(x => x.Id == rateId && x.RecipeId == recipeId);
+
+            if (rate == null || rate.Deleted == true)
+                throw new CorruptedOperationException("Rate doesn't exist.");
+
+            rate.Deleted = true;
+
+            _context.Rates.Update(rate);
+            await _context.SaveChangesAsync();
         }
     }
 }

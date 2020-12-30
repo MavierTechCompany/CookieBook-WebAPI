@@ -4,6 +4,7 @@ namespace CookieBook.Domain.Models
 {
     public class Rate : Entity
     {
+        public bool Deleted { get; set; }
         public float Value { get; set; }
         public string Description { get; set; }
 
@@ -12,6 +13,7 @@ namespace CookieBook.Domain.Models
 
         public Rate(float value, string description) : base()
         {
+            Deleted = false;
             Value = value;
             Description = description;
         }

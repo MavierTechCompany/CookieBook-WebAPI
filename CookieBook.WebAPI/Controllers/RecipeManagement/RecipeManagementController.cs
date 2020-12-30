@@ -99,7 +99,7 @@ namespace CookieBook.WebAPI.Controllers.RecipeManagement
         /// Returns collection of rates for recipe with given ID
         /// </summary>
         /// <param name="id" example="2"></param>
-        /// <param name="fields" example="Name,Id,CreatedAt"></param>
+        /// <param name="parameters" example="Name,Id,CreatedAt"></param>
         /// <response code="200">Returns a collection of rates that belongs to recipe with given id.</response>
         /// <response code="400">Returned when parameter <b>Fields</b> contains name of a field that isn't a part of the <b>Rate</b> object.</response>
         [HttpGet("recipes/{id}/rates")]
@@ -140,6 +140,27 @@ namespace CookieBook.WebAPI.Controllers.RecipeManagement
             var rateDto = _mapper.Map<RateDto>(rate);
 
             return Ok(rateDto.ShapeData(fields));
+        }
+
+        /// <summary>
+        /// Deletes rate with given ID, that belongs to specyfic recipe
+        /// </summary>
+        /// <param name="id" example="2">ID of the recipe</param>
+        /// <param name="rateId" example= "1">ID of the rate</param>
+        /// <response code="204">Returned if rate was deleted successfully.</response>
+        /// <response code="400">Returned if rate doesn't exist.</response>
+        /// <response code="401">Returned when caller/sender in an anonymous person for the system (isn't authorized).</response>
+        /// <response code="403">Returned when caller/sender doesn't have permission to do this action.</response>
+        [Authorize(Roles = "admin")]
+        [HttpDelete("recipes/{id}/rates/{rateId}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
+        public async Task<IActionResult> DeleteRateAsync(int id, int rateId)
+        {
+            await _rateService.DeleteAsync(id, rateId);
+            return NoContent();
         }
     }
 }
