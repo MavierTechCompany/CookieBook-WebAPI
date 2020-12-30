@@ -14,7 +14,8 @@ namespace CookieBook.Infrastructure.Profiles
             CreateMap<Category, CategoryForRecipeDto>();
             CreateMap<Recipe, RecipeDto>()
                 .ForMember(dto => dto.Components, opt => opt.MapFrom(src => src.Components))
-                .ForMember(dto => dto.AverageRate, opt => opt.MapFrom(src => CalculateAverageRate(src.Rates)))
+                .ForMember(dto => dto.Rates, opt => opt.MapFrom(src => src.Rates.Where(x => x.Deleted == false)))
+                .ForMember(dto => dto.AverageRate, opt => opt.MapFrom(src => CalculateAverageRate(src.Rates.Where(x => x.Deleted == false).ToList())))
                 .ForMember(dto => dto.Categories, opt => opt.MapFrom(src => src.RecipeCategories.Select(x => x.Category).ToList()));
         }
 

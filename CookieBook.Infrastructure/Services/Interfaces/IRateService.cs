@@ -16,5 +16,7 @@ namespace CookieBook.Infrastructure.Services.Interfaces
         Task<Rate> GetAsync(int id, bool asNoTracking = false);
 
         Task<IEnumerable<Rate>> GetByRecipeIdAsync(int recipeId, RatesParameters parameters, bool asNoTracking = false);
+
+        Task DeleteAsync(int recipeId, int rateId);
     }
 }
