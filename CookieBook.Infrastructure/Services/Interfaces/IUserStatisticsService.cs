@@ -8,6 +8,8 @@ namespace CookieBook.Infrastructure.Services.Interfaces
 {
     public interface IUserStatisticsService
     {
-        Task<ulong> GetUsersAmountFromPeriod(TimePeriod command);
+        Task<long> GetUsersAmountFromPeriodAsync(TimePeriod command);
+
+        Task<Dictionary<DateTime, long>> GetUsersSumPerDayAsync(TimePeriod command);
     }
 }

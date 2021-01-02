@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CookieBook.WebAPI.Controllers.Base
 {
+    [Produces("application/json")]
     [Route("[controller]")]
     public class ApiControllerBase : Controller
     {

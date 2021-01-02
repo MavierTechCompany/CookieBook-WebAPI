@@ -20,12 +20,21 @@ namespace CookieBook.WebAPI.Controllers.StatisticManagement
             _userStatisticsService = userStatisticsService;
         }
 
-        //TODO Need to wrap parameters into a class
         [HttpGet("sum")]
-        public async Task<IActionResult> ReadSumAsync([FromQuery] TimePeriod command) => Ok();
+        public async Task<IActionResult> ReadSumAsync([FromQuery] TimePeriod command)
+        {
+            var count = await _userStatisticsService.GetUsersAmountFromPeriodAsync(command);
+
+            return Ok(new { Count = count });
+        }
 
         [HttpGet("sumPerDay")]
-        public async Task<IActionResult> ReadSumPerDayAsync([FromQuery] TimePeriod command) => throw new NotImplementedException();
+        public async Task<IActionResult> ReadSumPerDayAsync([FromQuery] TimePeriod command)
+        {
+            var sumPerDay = await _userStatisticsService.GetUsersSumPerDayAsync(command);
+
+            return Ok(sumPerDay);
+        }
 
         [HttpGet("average")]
         public async Task<IActionResult> ReadAverageAsync([FromQuery] TimePeriod command) => throw new NotImplementedException();
