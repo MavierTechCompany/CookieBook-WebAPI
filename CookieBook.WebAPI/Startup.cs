@@ -14,6 +14,7 @@ using CookieBook.Infrastructure.Commands.Category;
 using CookieBook.Infrastructure.Commands.Picture;
 using CookieBook.Infrastructure.Commands.Recipe;
 using CookieBook.Infrastructure.Commands.Recipe.Rate;
+using CookieBook.Infrastructure.Commands.Statistics;
 using CookieBook.Infrastructure.Commands.User;
 using CookieBook.Infrastructure.Data;
 using CookieBook.Infrastructure.Extensions.Security;
@@ -25,6 +26,7 @@ using CookieBook.Infrastructure.Validators.Auth;
 using CookieBook.Infrastructure.Validators.Category;
 using CookieBook.Infrastructure.Validators.Recipe;
 using CookieBook.Infrastructure.Validators.Recipe.Rate;
+using CookieBook.Infrastructure.Validators.Statistics;
 using CookieBook.Infrastructure.Validators.User;
 using CookieBook.Infrastructure.Validators.UserImage;
 using CookieBook.WebAPI.Framework;
@@ -169,6 +171,7 @@ namespace CookieBook.WebAPI
             services.AddTransient<IValidator<CreateRate>, CreateRateValidator>();
             services.AddTransient<IValidator<CreateAdmin>, CreateAdminValidator>();
             services.AddTransient<IValidator<BlockUser>, BlockUserValidator>();
+            services.AddTransient<IValidator<TimePeriod>, TimePeriodValidator>();
 
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IUserImageService, UserImageService>();
@@ -177,6 +180,7 @@ namespace CookieBook.WebAPI
             services.AddScoped<IRateService, RateService>();
             services.AddScoped<IAdminService, AdminService>();
             services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<IUserStatisticsService, UserStatisticsService>();
 
             services.AddScoped<IDataHashManager, DataHashManager>();
         }
