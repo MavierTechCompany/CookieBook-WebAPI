@@ -1,5 +1,6 @@
 ﻿using CookieBook.Infrastructure.Commands.Statistics;
 using CookieBook.Infrastructure.Data;
+using CookieBook.Infrastructure.Extensions;
 using CookieBook.Infrastructure.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -27,8 +28,7 @@ namespace CookieBook.Infrastructure.Services
             return await _context.Users.Where(x => x.CreatedAt.Date >= startDate && x.CreatedAt.Date <= endDate).LongCountAsync();
         }
 
-        //TODO Change this to list of custom objects that have date and userCount. Then it will be serialized as a JSON array
-        public async Task<Dictionary<DateTime, long>> GetUsersSumPerDayAsync(TimePeriod command)
+        public async Task<List<ValueInTime<long>>> GetUsersSumPerDayAsync(TimePeriod command)
         {
             var startDate = DateTime.SpecifyKind(command.StartDate, DateTimeKind.Utc);
             var endDate = DateTime.SpecifyKind(command.EndDate, DateTimeKind.Utc);
@@ -36,7 +36,8 @@ namespace CookieBook.Infrastructure.Services
             return await _context.Users
                 .Where(x => x.CreatedAt.Date >= startDate && x.CreatedAt.Date <= endDate)
                 .GroupBy(x => x.CreatedAt.Date)
-                .ToDictionaryAsync(y => y.Key.Date, y => y.LongCount());
+                .Select(x => new ValueInTime<long>() { Value = x.LongCount(), Date = x.Key })
+                .ToListAsync();
         }
     }
 }

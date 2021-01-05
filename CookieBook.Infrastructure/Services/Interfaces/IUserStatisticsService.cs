@@ -1,4 +1,5 @@
 ﻿using CookieBook.Infrastructure.Commands.Statistics;
+using CookieBook.Infrastructure.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -10,6 +11,6 @@ namespace CookieBook.Infrastructure.Services.Interfaces
     {
         Task<long> GetUsersAmountFromPeriodAsync(TimePeriod command);
 
-        Task<Dictionary<DateTime, long>> GetUsersSumPerDayAsync(TimePeriod command);
+        Task<List<ValueInTime<long>>> GetUsersSumPerDayAsync(TimePeriod command);
     }
 }
