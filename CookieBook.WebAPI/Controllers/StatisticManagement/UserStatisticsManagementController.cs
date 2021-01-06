@@ -36,10 +36,15 @@ namespace CookieBook.WebAPI.Controllers.StatisticManagement
             return Ok(sumPerDay);
         }
 
-        [HttpGet("average")]
-        public async Task<IActionResult> ReadAverageAsync([FromQuery] TimePeriod command) => throw new NotImplementedException();
+        [HttpGet("averagePerDay")]
+        public async Task<IActionResult> ReadAveragePerDayAsync([FromQuery] TimePeriod command)
+        {
+            var average = await _userStatisticsService.GetAveragePerDayAsync(command);
 
-        [HttpGet("topCreators")]
+            return Ok(new { Average = average });
+        }
+
+        [HttpGet("top")]
         public async Task<IActionResult> ReadTopCreatorsAsync([FromQuery] TopFromTimePeriod command) => throw new NotImplementedException();
     }
 }

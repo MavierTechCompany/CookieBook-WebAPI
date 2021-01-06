@@ -12,5 +12,7 @@ namespace CookieBook.Infrastructure.Services.Interfaces
         Task<long> GetUsersAmountFromPeriodAsync(TimePeriod command);
 
         Task<List<ValueInTime<long>>> GetUsersSumPerDayAsync(TimePeriod command);
+
+        Task<double> GetAveragePerDayAsync(TimePeriod command);
     }
 }
