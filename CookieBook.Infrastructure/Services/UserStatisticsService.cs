@@ -1,4 +1,5 @@
-﻿using CookieBook.Infrastructure.Commands.Statistics;
+﻿using CookieBook.Domain.Models;
+using CookieBook.Infrastructure.Commands.Statistics;
 using CookieBook.Infrastructure.Data;
 using CookieBook.Infrastructure.Extensions;
 using CookieBook.Infrastructure.Services.Interfaces;
@@ -30,6 +31,19 @@ namespace CookieBook.Infrastructure.Services
                 .Where(x => x.CreatedAt.Date >= startDate && x.CreatedAt.Date <= endDate).LongCountAsync();
 
             return count / days;
+        }
+
+        public async Task<IEnumerable<User>> GetTopCreatorsAsync(TopFromTimePeriod command)
+        {
+            var startDate = DateTime.SpecifyKind(command.StartDate, DateTimeKind.Utc);
+            var endDate = DateTime.SpecifyKind(command.EndDate, DateTimeKind.Utc);
+
+            var usersWithScore = await _context.Recipes
+                .Where(x => x.CreatedAt.Date >= startDate && x.CreatedAt.Date <= endDate)
+                .GroupBy(x => x.User)
+                .ToDictionaryAsync(x => x.Key, x => x.Count());
+
+            return usersWithScore.OrderByDescending(x => x.Value).Take(command.Amount).Select(x => x.Key);
         }
 
         public async Task<long> GetUsersAmountFromPeriodAsync(TimePeriod command)

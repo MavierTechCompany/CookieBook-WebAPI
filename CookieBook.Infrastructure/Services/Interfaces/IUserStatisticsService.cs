@@ -1,4 +1,5 @@
-﻿using CookieBook.Infrastructure.Commands.Statistics;
+﻿using CookieBook.Domain.Models;
+using CookieBook.Infrastructure.Commands.Statistics;
 using CookieBook.Infrastructure.Extensions;
 using System;
 using System.Collections.Generic;
@@ -14,5 +15,7 @@ namespace CookieBook.Infrastructure.Services.Interfaces
         Task<List<ValueInTime<long>>> GetUsersSumPerDayAsync(TimePeriod command);
 
         Task<double> GetAveragePerDayAsync(TimePeriod command);
+
+        Task<IEnumerable<User>> GetTopCreatorsAsync(TopFromTimePeriod command);
     }
 }

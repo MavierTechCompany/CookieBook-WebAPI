@@ -6,6 +6,6 @@ namespace CookieBook.Infrastructure.Commands.Statistics
 {
     public class TopFromTimePeriod : TimePeriod
     {
-        public uint Amount { get; set; }
+        public int Amount { get; set; }
     }
 }
