@@ -70,6 +70,12 @@ namespace CookieBook.WebAPI.Controllers.StatisticManagement
             return Ok(new { Average = average });
         }
 
+        /// <summary>
+        /// Returns the N users with the most recipes created in a given time period.
+        /// </summary>
+        /// <param name="command"></param>
+        /// <response code="200">Returns the list of users with the most recipes created in a given time period. </response>
+        /// <response code="401">Returned when caller/sender doesn't have permission to do this action</response>
         [HttpGet("top")]
         public async Task<IActionResult> ReadTopCreatorsAsync([FromQuery] TopFromTimePeriod command)
         {
