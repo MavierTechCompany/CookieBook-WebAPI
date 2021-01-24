@@ -181,6 +181,7 @@ namespace CookieBook.WebAPI
             services.AddScoped<IAdminService, AdminService>();
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IUserStatisticsService, UserStatisticsService>();
+            services.AddScoped<IRecipeStatisticsService, RecipeStatisticsService>();
 
             services.AddScoped<IDataHashManager, DataHashManager>();
         }

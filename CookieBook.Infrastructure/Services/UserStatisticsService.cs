@@ -16,10 +16,7 @@ namespace CookieBook.Infrastructure.Services
     {
         private readonly CookieContext _context;
 
-        public UserStatisticsService(CookieContext context)
-        {
-            _context = context;
-        }
+        public UserStatisticsService(CookieContext context) => _context = context;
 
         public async Task<double> GetAveragePerDayAsync(TimePeriod command)
         {
