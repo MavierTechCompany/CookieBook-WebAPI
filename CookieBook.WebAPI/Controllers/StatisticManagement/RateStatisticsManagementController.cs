@@ -2,6 +2,7 @@
 using CookieBook.Infrastructure.Commands.Statistics;
 using CookieBook.Infrastructure.Services.Interfaces;
 using CookieBook.WebAPI.Controllers.Base;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,8 @@ using System.Threading.Tasks;
 
 namespace CookieBook.WebAPI.Controllers.StatisticManagement
 {
+    [Authorize(Roles = "admin")]
+    [Route("statistic-management/rates")]
     public class RateStatisticsManagementController : ApiControllerBase
     {
         private readonly IRateStatisticsService _rateStatisticsService;
