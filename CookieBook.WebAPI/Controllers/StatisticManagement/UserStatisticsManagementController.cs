@@ -19,9 +19,7 @@ namespace CookieBook.WebAPI.Controllers.StatisticManagement
         private readonly IUserStatisticsService _userStatisticsService;
 
         public UserStatisticsManagementController(IMapper mapper, IUserStatisticsService userStatisticsService) : base(mapper)
-        {
-            _userStatisticsService = userStatisticsService;
-        }
+            => _userStatisticsService = userStatisticsService;
 
         /// <summary>
         /// Returns the number of users created in the given date range.

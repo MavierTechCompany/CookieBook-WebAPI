@@ -18,7 +18,7 @@ namespace CookieBook.Infrastructure.Services
 
         public RecipeStatisticsService(CookieContext context) => _context = context;
 
-        public async Task<List<ValueInTime<long>>> GeRecipesSumPerDayAsync(TimePeriod command)
+        public async Task<List<ValueInTime<long>>> GetRecipesSumPerDayAsync(TimePeriod command)
         {
             var startDate = DateTime.SpecifyKind(command.StartDate, DateTimeKind.Utc);
             var endDate = DateTime.SpecifyKind(command.EndDate, DateTimeKind.Utc);
