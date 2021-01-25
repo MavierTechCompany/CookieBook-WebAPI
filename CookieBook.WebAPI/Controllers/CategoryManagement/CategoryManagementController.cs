@@ -17,7 +17,6 @@ namespace CookieBook.WebAPI.Controllers.CategoryManagement
     /// <summary>
     /// CRUD operations for Category
     /// </summary>
-    [Produces("application/json")]
     [Route("category-management/categories")]
     public class CategoryManagementController : ApiControllerBase
     {
