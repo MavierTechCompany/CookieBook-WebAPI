@@ -79,23 +79,18 @@ It follows the rules of the RESTfull API.
   </tr>
   
   <tr>
-    <td>Restoring account access (user)</td>
+    <td>Restoring account access</td>
     <td>:heavy_check_mark:</td>
   </tr>
   
   <tr>
-    <td>Restoring account access (admin)</td>
-    <td>:construction:</td>
-  </tr>
-  
-  <tr>
-    <td>...</td>
-    <td>...</td>
+    <td>Statistics for admin</td>
+    <td>:heavy_check_mark:</td>
   </tr>
 </table>
 
 ## Project status
-Current status: WORK IN PROGRESS :construction:
+Current status: DONE :heavy_check_mark:
 
 Application is before it's first release.
 
